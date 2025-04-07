@@ -1,0 +1,1067 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#style-6::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#style-6::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-6::-webkit-scrollbar-thumb
+{
+	background-color: #F90;	
+	background-image: -webkit-linear-gradient(45deg,
+	                                          rgba(255, 255, 255, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(255, 255, 255, .2) 50%,
+											  rgba(255, 255, 255, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Fira Code', monospace; /* Aplica Fira Code a todo el cuerpo */
+}
+
+h1, h2, h3, p {
+    font-family: 'Fira Code', monospace; /* Aplica Fira Code a elementos específicos */
+}
+
+/* Estilos para el header */
+header {
+    background-color: rgba(0, 0, 0, 0); /* Fondo completamente transparente */
+    padding: 5px;
+    color: #000;
+    position: relative;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transition: transform 0.3s ease; /* Transición para suavizar el ocultamiento/mostrado */
+}
+
+
+nav {
+    text-align: left; /* Alinea el contenido del nav a la izquierda */
+}
+
+nav ul {
+    list-style: none;
+    display: flex; /* Alinea los elementos de la lista en una línea */
+}
+
+nav ul li {
+    margin-right: 20px; /* Espacio entre los enlaces */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilos para la section principal */
+.principal {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+}
+
+#bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra todo el fondo */
+    filter: brightness(0.9); /* Oscurece la imagen para mejorar la legibilidad del texto */
+    z-index: 1; /* Asegura que la imagen esté detrás del contenido */
+}
+
+.principal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 10px;
+    z-index: 2; /* Asegura que el contenido esté por encima de la imagen */
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #f0b700;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.2em;
+    margin: 10px;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.cta-button:hover {
+    background-color: #0096c7;
+    transform: scale(1.05);
+}
+
+
+
+/* Estilos para la sección "About" */
+#about {
+    position: relative;
+    padding: 50px;
+    background-color: #242424;
+    color: #ffffff; /* Color del texto */
+    text-align: center; /* Centra el texto del título */
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; /* Oculta elementos fuera de la vista */
+}
+
+.carousel-btn {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%; /* Botones redondeados */
+    z-index: 2; /* Asegura que los botones están sobre las imágenes */
+    transition: background-color 0.3s; /* Transición al pasar el ratón */
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Color más oscuro al pasar el ratón */
+}
+
+.carousel-images {
+    display: flex;
+    transition: transform 0.5s ease; /* Transición suave al cambiar de imagen */
+}
+
+.carousel-item {
+    min-width: 100%; /* Cada imagen ocupa el 100% del contenedor */
+    text-align: center; /* Centra el texto */
+}
+
+.carousel-icon {
+    max-width: 100%; /* Ajusta el ancho máximo al 100% del contenedor */
+    max-height: 700px; /* Ajusta la altura máxima */
+    object-fit: contain; 
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+
+
+.thumbnail-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Espacio superior para separación */
+    gap: 10px; /* Espacio entre las miniaturas */
+}
+
+.thumbnail {
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    border: 2px solid transparent; /* Borde por defecto */
+    transition: border-color 0.3s; /* Transición suave del borde */
+}
+
+.thumbnail:hover {
+    border-color: #007bff; /* Color del borde al pasar el ratón */
+}
+
+.thumbnail-img {
+    max-width: 80px; /* Ajusta el tamaño de las miniaturas */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+
+#about2 {
+    position: relative;
+    padding: 50px;
+    background-color: #dcdcd9;
+    color: #000000; /* Color del texto */
+    text-align: center; /* Centra el texto del título */
+}
+
+.carousel2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; /* Oculta elementos fuera de la vista */
+}
+
+.carousel-btn2 {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%; /* Botones redondeados */
+    z-index: 2; /* Asegura que los botones están sobre las imágenes */
+    transition: background-color 0.3s; /* Transición al pasar el ratón */
+}
+
+.carousel-btn2:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Color más oscuro al pasar el ratón */
+}
+
+.carousel-images2 {
+    display: flex;
+    transition: transform 0.5s ease; /* Transición suave al cambiar de imagen */
+}
+
+.carousel-item2 {
+    min-width: 100%; /* Cada imagen ocupa el 100% del contenedor */
+    text-align: center; /* Centra el texto */
+}
+
+.carousel-icon2 {
+    max-width: 100%; /* Ajusta el ancho máximo al 100% del contenedor */
+    max-height: 700px; /* Ajusta la altura máxima */
+    object-fit: contain; /* Ajusta la imagen para que quepa dentro del área sin recortar */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.thumbnail-container2 {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Espacio superior para separación */
+    gap: 10px; /* Espacio entre las miniaturas */
+}
+
+.thumbnail2 {
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    border: 2px solid transparent; /* Borde por defecto */
+    transition: border-color 0.3s; /* Transición suave del borde */
+}
+
+.thumbnail2:hover {
+    border-color: #007bff; /* Color del borde al pasar el ratón */
+}
+
+.thumbnail-img2 {
+    max-width: 80px; /* Ajusta el tamaño de las miniaturas */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+
+/* El about-me de abajo */
+
+#sobre-mi {
+    padding: 130px 80px; /* Espaciado superior e inferior */
+    background-image: url('yo.webp'); /* Imagen de fondo */
+    background-size: cover; /* Cubrir toda la sección */
+    background-position: center;
+    position: relative; /* Permite overlay */
+    color: #f9f9f9; /* Color del texto claro */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 0; /* Asegura que no se superponga */
+}
+
+#sobre-mi::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Overlay oscuro */
+    z-index: -1; /* Detrás del contenido de la sección */
+}
+
+#sobre-mi h2, 
+#sobre-mi p {
+    position: relative;
+    z-index: 1; /* Texto sobre overlay */
+    margin-bottom: 20px; /* Espaciado entre elementos */
+}
+
+#sobre-mi h2 {
+    font-size: 2.5em; /* Tamaño de los encabezados */
+    margin: 15px 0; /* Margen adicional para separación */
+    font-weight: bold; /* Negrita para resaltar */
+}
+
+#sobre-mi p {
+    font-size: 1.2em; /* Tamaño del texto */
+    line-height: 1.6; /* Altura de línea para legibilidad */
+    max-width: 800px; /* Limitar ancho de párrafos */
+}
+
+/* Añadir espaciado extra para evitar superposición */
+#sobre-mi + * {
+    margin-top: 100px; /* Ajustar según sea necesario */
+}
+
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px 30px; /* Espaciado del botón */
+    background-color: #f7c600; /* Color amarillo */
+    color: #333; /* Color del texto */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 1em; /* Tamaño de la fuente */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
+    cursor: pointer; /* Cambia el cursor al pasar */
+}
+
+.button:hover {
+    background-color: #e6b800; /* Color del botón al pasar el ratón */
+    transform: translateY(-3px); /* Sutil efecto al pasar el ratón */
+}
+
+#sobre-mi + #projects {
+    margin-top: 0; /* Elimina el margen superior de proyectos */
+}
+
+#projects {
+    padding: 50px;
+    background-color: #242424;
+    background-size: cover; /* Asegura que la imagen cubra toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+#projects h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff; /* Cambia el color del texto del título a blanco para mayor contraste */
+}
+
+.projects-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #ffffff; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.project-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; /* Añadimos transición para el filtro */
+}
+
+.project-item {
+    position: relative;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.259);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 30%;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden; /* Oculta la superposición cuando no está visible */
+}
+
+.project-item:hover {
+    transform: translateY(-20px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.project-item:hover .project-img {
+    transform: scale(1.1); /* Ampliar imagen al hacer hover */
+    filter: brightness(1.3); /* Aplicar filtro blanco (más brillante) */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro para el texto */
+    color: #fff;
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.3s ease-in-out;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+
+.project-item:hover .overlay {
+    opacity: 1; /* Mostrar al hacer hover */
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 80%;
+    position: relative; /* Añadido para posicionar los botones de navegación */
+    overflow: hidden; /* Evitar que se salgan del contenedor */
+}
+
+.lightbox-img {
+    max-width: 90%; /* Limitar el ancho máximo */
+    max-height: 90vh; /* Limitar la altura máxima */
+    object-fit: contain; /* Mantener la proporción de la imagen */
+}
+
+
+.fade-in {
+    opacity: 1;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 24px; /* Tamaño de fuente más grande */
+    user-select: none;
+    transition: background-color 0.3s, transform 0.3s; /* Añadir transición para transformación */
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo más claro en hover */
+    transform: scale(1.1); /* Escalar el botón en hover */
+}
+
+.prev {
+    left: 20px; /* Espaciado ajustado */
+}
+
+.next {
+    right: 20px; /* Espaciado ajustado */
+}
+
+
+#projects2 {
+    padding: 50px;
+    background-color: #242424;
+    background-size: cover; /* Asegura que la imagen cubra toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+#projects2 h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff; /* Cambia el color del texto del título a blanco para mayor contraste */
+}
+
+.projects2-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #ffffff; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.project2-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; /* Añadimos transición para el filtro */
+}
+
+.project2-item {
+    position: relative;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.259);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 30%;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden; /* Oculta la superposición cuando no está visible */
+}
+
+.project2-item:hover {
+    transform: translateY(-20px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.project2-item:hover .project2-img {
+    transform: scale(1.1); /* Ampliar imagen al hacer hover */
+    filter: brightness(1.3); /* Aplicar filtro blanco (más brillante) */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro para el texto */
+    color: #fff;
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.3s ease-in-out;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+
+.project2-item:hover .overlay {
+    opacity: 1; /* Mostrar al hacer hover */
+}
+
+.lightbox2 {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox2-content {
+    max-width: 90%;
+    max-height: 80%;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: 0.3s;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prev {
+    left: 0;
+}
+
+.next {
+    right: 0;
+}
+
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+section {
+    padding: 50px;
+    background-color: #fff;
+}
+
+section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    max-width: 200px;
+    border-radius: 50%;
+    margin-top: 20px;
+    filter: sepia(20%) blur(2px);
+}
+
+.services-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre los elementos de servicio */
+    justify-content: center; /* Centra los elementos de servicio horizontalmente */
+}
+
+.service-item {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    width: 30%;
+}
+
+.service-icon {
+    max-width: 80px;
+}
+
+/* Estilo para la sección de referencias de alumnos */
+#referencias-alumnos {
+    text-align: center;
+    padding: 40px;
+    background-color: #242424; /* Fondo oscuro similar */
+    color: white; /* Color del texto en blanco */
+}
+
+#referencias-alumnos h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #f4f4f4; /* Color del título */
+}
+
+.opiniones-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px; /* Ajustar el espacio entre opiniones */
+}
+
+.opinión {
+    background-color: #2a2a2a; /* Color de fondo de las opiniones */
+    color: white; /* Cambia el color del texto a blanco */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 30px; /* Espaciado interno */
+    width: 300px; /* Ancho de las opiniones */
+    text-align: center; /* Centrar texto */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+}
+
+.opinión:hover {
+    transform: translateY(-10px); /* Efecto de desplazamiento al pasar el ratón */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el ratón */
+    color: lightgray; /* Cambia el color al pasar el ratón, si deseas */
+}
+
+.foto-alumno {
+    width: 90px; /* Ancho de la foto */
+    height: 80px; /* Alto de la foto */
+    border-radius: 50%; /* Hace la imagen circular */
+    margin: 0 auto 10px; /* Alineación centrada con margen inferior */
+    object-fit: cover; /* Asegura que la imagen llene el contenedor */
+    object-position: center; /* Centra la imagen dentro del contenedor */
+}
+
+.oculta {
+    display: none; /* Oculta las opiniones inicialmente */
+}
+
+#ver-mas,
+#ver-menos {
+    display: inline-block; /* Mostrar como bloque en línea */
+    padding: 10px 20px;
+    background-color: #f0db4f; /* Color de fondo amarillo */
+    color: #1e1e1e; /* Color del texto oscuro */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 1.1rem; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+    margin-top: 20px; /* Margen superior */
+}
+
+#ver-mas:hover,
+#ver-menos:hover {
+    background-color: #e5c842; /* Color de fondo más oscuro al pasar el mouse */
+}
+
+/* Estilos para el contacto */
+
+#contact {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgb(36, 36, 36); 
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+    text-align: center;
+    transition: transform 0.3s ease; /* Añadir transición suave para el zoom */
+}
+
+#contact:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Fondo un poco más oscuro al hacer hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada en hover */
+    transform: scale(1.05); /* Escalar el elemento al 105% de su tamaño original */
+}
+#contact h4 {
+    margin-bottom: 15px;
+    color: #ffffff; /* Color oscuro para un buen contraste sobre el fondo claro */
+    font-size: 1.6em;
+    transition: color 0.3s ease;
+}
+
+#contact h4:hover {
+    color: #e6b800; /* Color amarillo para resaltar al hacer hover */
+}
+
+#contact a {
+    color: #007bff; /* Color azul predeterminado para los enlaces */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#contact a:hover {
+    text-decoration: underline;
+    color: #0056b3; /* Azul más oscuro al hacer hover */
+}
+
+#contact p {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #ffffff; /* Color oscuro para mejor contraste */
+    transition: color 0.3s ease;
+}
+
+#contact p:hover {
+    color: #e6b800; /* Color amarillo al hacer hover */
+}
+
+.social-icons {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.social-icons a {
+    margin-right: 15px;
+    font-size: 2em;
+    color: #007bff; /* Color azul para los íconos */
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #0056b3; /* Azul más oscuro en hover */
+}
+
+
+
+
+
+
+
+@keyframes wave {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(20px); /* Mayor desplazamiento vertical para olas más pronunciadas */
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.section-mapa {
+    background-color: #242424;
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 25%; /* Relación de aspecto más estrecha */
+    margin-bottom: 10px;
+    border-radius: 15px; /* Bordes redondeados */
+    overflow: hidden; /* Evita que los bordes sobresalgan */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Sombra suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para efectos */
+}
+
+.map-container:hover {
+    transform: scale(1.02); /* Efecto de zoom al pasar el ratón */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1); /* Aumenta la sombra en hover */
+}
+
+.map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: inherit; /* Los bordes redondeados coinciden con el contenedor */
+}
+
+/* Footer styles */
+.footer {
+    position: relative; /* Necesario para el pseudo-elemento */
+    background-image: url('bg.jpg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 60px 0;
+    overflow: hidden; /* Asegura que el pseudo-elemento no se desborde */
+}
+
+.footer::before {
+    content: ""; /* Necesario para crear un pseudo-elemento */
+    position: absolute; /* Posicionarlo sobre el contenido */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Color negro semi-transparente */
+    z-index: 1; /* Asegura que el overlay esté por encima de la imagen */
+}
+
+.footer * {
+    position: relative; /* Asegura que el contenido esté por encima del overlay */
+    z-index: 2; /* Asegura que el contenido esté por encima del overlay */
+}
+
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-col {
+    flex: 1;
+    margin: 0 15px;
+    min-width: 200px;
+}
+
+.footer-col h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li i {
+    margin-right: 10px;
+}
+
+.retroceder a {
+    color: #fff;
+    margin-right: 15px;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.retroceder a:hover {
+    color: #f0db4f; /* Yellow hover color */
+}
+
+.footer-col form {
+    display: flex;
+    align-items: center;
+}
+
+.footer-col form input[type="email"] {
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.footer-col form button {
+    padding: 10px 20px;
+    background-color: #f0db4f;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 40px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+
+
+/* Versión para móviles */
+
+/* Media Queries para pantallas pequeñas (smartphones) */
+@media (max-width: 768px) {
+    
+    /* Ajustes para los elementos de navegación */
+    nav ul {
+        display: flex; /* Usar flexbox para que se alineen en una fila */
+        padding: 0; /* Eliminar padding por defecto */
+        margin: 0; /* Eliminar margen por defecto */
+    }
+
+    nav ul li {
+        margin: 5px 15; /* Espaciado entre los elementos de la lista */
+    }
+
+    nav ul li a {
+        font-size: 0.8rem; /* Ajustar el tamaño de la fuente */
+        text-decoration: none; /* Eliminar subrayado */
+        color: white; /* Cambiar el color de texto para mejor contraste (ajustar según tu esquema de color) */
+    }
+
+    nav ul li a:hover {
+        text-decoration: underline; /* Añadir subrayado en hover para mejorar la interacción */
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem; /* Tamaño de fuente para h1 */
+    }
+
+    .hero-content h2 {
+        font-size: 1rem; /* Tamaño de fuente para h2 */
+    }
+
+    .hero-content p, .hero-content .cta-button {
+        font-size: 1rem; /* Tamaño de fuente para párrafo y botón */
+    }
+
+    .principal-content {
+        top: 60%;
+    }
+
+    .principal-content h1 {
+        font-size: 24px;
+    }
+
+    .principal-content p {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+    /* Botones más pequeños */
+    .cta-button {
+        padding: 8px 15px;
+        font-size: 16px;
+    }
+    
+
+    /* Ajustes para el carrusel */
+    .carousel-images {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .carousel-item {
+        min-width: 100%;
+        scroll-snap-align: start;
+    }
+
+    .carousel-icon {
+        width: 100%;
+        height: auto;
+    }
+
+    .carousel-btn {
+        display: none; /* Ocultar botones de navegación en móviles para facilitar el uso táctil */
+    }
+
+    /* Miniaturas del carrusel */
+    .thumbnail-container {
+        display: flex;
+        overflow-x: auto;
+        justify-content: center;
+    }
+
+    .thumbnail-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Ajustes para la segunda galería */
+    .carousel2-images {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .carousel-item2 {
+        min-width: 100%;
+        scroll-snap-align: start;
+    }
+
+    .carousel-icon2 {
+        width: 100%;
+        height: auto;
+    }
+
+
+    .thumbnail-container2 {
+        display: flex;
+        overflow-x: auto;
+        justify-content: center;
+    }
+
+    .thumbnail-img2 {
+        width: 50px;
+        height: 50px;
+    }
+
+
+    #projects,
+    #projects2 {
+        display: none;
+    }
+
+
+}
+
+
