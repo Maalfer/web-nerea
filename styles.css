@@ -1,0 +1,1177 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#style-6::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#style-6::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-6::-webkit-scrollbar-thumb
+{
+	background-color: #F90;	
+	background-image: -webkit-linear-gradient(45deg,
+	                                          rgba(255, 255, 255, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(255, 255, 255, .2) 50%,
+											  rgba(255, 255, 255, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Fira Code', monospace; /* Aplica Fira Code a todo el cuerpo */
+}
+
+h1, h2, h3, p {
+    font-family: 'Fira Code', monospace; /* Aplica Fira Code a elementos específicos */
+}
+
+/* Estilos para el header */
+header {
+    background-color: rgba(0, 0, 0, 0); /* Fondo completamente transparente */
+    padding: 5px;
+    color: #000;
+    position: relative;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transition: transform 0.3s ease; /* Transición para suavizar el ocultamiento/mostrado */
+}
+
+
+nav {
+    text-align: left; /* Alinea el contenido del nav a la izquierda */
+}
+
+nav ul {
+    list-style: none;
+    display: flex; /* Alinea los elementos de la lista en una línea */
+}
+
+nav ul li {
+    margin-right: 20px; /* Espacio entre los enlaces */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilos para la section principal */
+.principal {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+}
+
+#bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra todo el fondo */
+    filter: brightness(0.9); /* Oscurece la imagen para mejorar la legibilidad del texto */
+    z-index: 1; /* Asegura que la imagen esté detrás del contenido */
+}
+
+.principal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 10px;
+    z-index: 2; /* Asegura que el contenido esté por encima de la imagen */
+}
+
+.bubble-buttons {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+    margin-top: 30px;
+    gap: 20px;
+  }
+  
+  .bubble-buttons a {
+    text-decoration: none;
+    display: contents; /* Este truco mantiene el efecto original pero permite href */
+  }
+  
+  .bubble-buttons li {
+    --c: rgb(40, 177, 152);
+    color: var(--c);
+    background-color: #f0b700;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 0.5em;
+    width: 12em;
+    height: 3em;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 3em;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: 0.5s;
+  }
+  
+  .bubble-buttons li:hover {
+    color: black;
+    transform: scale(1.15);
+  }
+  
+  .bubble-buttons li span {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    background-color: var(--c);
+    transform: translateY(150%);
+    border-radius: 50%;
+    transition: 0.5s;
+    z-index: -1;
+  }
+  
+  .bubble-buttons li:hover span {
+    transform: translateY(0) scale(2);
+  }
+  
+  .bubble-buttons li span:nth-child(2) {
+    --n: 1;
+    left: 0%;
+    transition-delay: 0s;
+  }
+  .bubble-buttons li span:nth-child(3) {
+    --n: 2;
+    left: 25%;
+    transition-delay: 0.1s;
+  }
+  .bubble-buttons li span:nth-child(4) {
+    --n: 3;
+    left: 50%;
+    transition-delay: 0.2s;
+  }
+  .bubble-buttons li span:nth-child(5) {
+    --n: 4;
+    left: 75%;
+    transition-delay: 0.3s;
+  }
+  
+
+  .scroll-from-left,
+  .scroll-from-right,
+  .scroll-from-bottom {
+      opacity: 0;
+      will-change: transform, opacity;
+      transition: opacity 1.3s ease-out, transform 1.3s ease-out;
+  }
+  
+  
+  .scroll-from-left {
+      transform: translateX(-40px);
+  }
+  
+  .scroll-from-right {
+      transform: translateX(40px);
+  }
+  
+  .scroll-from-bottom {
+      transform: translateY(40px);
+  }
+  
+  .scroll-from-left.visible,
+  .scroll-from-right.visible,
+  .scroll-from-bottom.visible {
+      opacity: 1;
+      transform: translate(0, 0);
+  }
+  
+
+
+
+
+
+/* Estilos para la sección "About" - Galerías */
+#about {
+    position: relative;
+    padding: 60px 20px;
+    background-color: #242424;
+    color: #fff;
+    text-align: center;
+  }
+  
+  #about h1,
+  #about h2 {
+    font-size: 2.8em;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #f0b700;
+    display: inline-block;
+    padding-bottom: 10px;
+  }
+  
+  #about h4 {
+    font-size: 1.5em;
+    color: #ccc;
+    margin-bottom: 30px;
+  }
+  
+  /* Carrusel compartido por ambas secciones */
+  .carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .carousel-btn {
+    background: rgba(0, 0, 0, 0.6);
+    color: #f0b700;
+    border: none;
+    font-size: 2em;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.3s, transform 0.2s;
+  }
+  
+  .carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+    transform: scale(1.1);
+  }
+  
+  .carousel-images {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+  }
+  
+  /* Galería de Illustrations */
+  .carousel-item {
+    min-width: 100%;
+    text-align: center;
+    display: none;
+  }
+  
+  .carousel-item img {
+    max-width: 90%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .carousel-item img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #f0b700;
+  }
+  
+  /* Galería de Sculpture */
+  .carousel-item2 {
+    min-width: 100%;
+    text-align: center;
+    display: none;
+  }
+  
+  .carousel-item2 img {
+    max-width: 90%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .carousel-item2 img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #f0b700;
+  }
+  
+  /* Miniaturas compartidas */
+  .thumbnail-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  
+  /* Miniaturas para Illustration */
+  .thumbnail {
+    cursor: pointer;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  
+  .thumbnail-img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: transform 0.3s;
+  }
+  
+  .thumbnail:hover .thumbnail-img,
+  .thumbnail.selected .thumbnail-img {
+    transform: scale(1.1);
+  }
+  
+  .thumbnail.selected {
+    border-color: #f0b700;
+  }
+  
+  /* Miniaturas para Sculpture */
+  .thumbnail2 {
+    cursor: pointer;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  
+  .thumbnail2:hover .thumbnail-img,
+  .thumbnail2.selected .thumbnail-img {
+    transform: scale(1.1);
+  }
+  
+  .thumbnail2.selected {
+    border-color: #f0b700;
+  }
+  
+  
+
+
+
+
+#sobre-mi {
+    padding: 130px 80px; /* Espaciado superior e inferior */
+    background-image: url('yo.webp'); /* Imagen de fondo */
+    background-size: cover; /* Cubrir toda la sección */
+    background-position: center;
+    position: relative; /* Permite overlay */
+    color: #f9f9f9; /* Color del texto claro */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 0; /* Asegura que no se superponga */
+}
+
+#sobre-mi::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Overlay oscuro */
+    z-index: -1; /* Detrás del contenido de la sección */
+}
+
+#sobre-mi h2, 
+#sobre-mi p {
+    position: relative;
+    z-index: 1; /* Texto sobre overlay */
+    margin-bottom: 20px; /* Espaciado entre elementos */
+}
+
+#sobre-mi h2 {
+    font-size: 2.5em; /* Tamaño de los encabezados */
+    margin: 15px 0; /* Margen adicional para separación */
+    font-weight: bold; /* Negrita para resaltar */
+}
+
+#sobre-mi p {
+    font-size: 1.2em; /* Tamaño del texto */
+    line-height: 1.6; /* Altura de línea para legibilidad */
+    max-width: 800px; /* Limitar ancho de párrafos */
+}
+
+/* Añadir espaciado extra para evitar superposición */
+#sobre-mi + * {
+    margin-top: 100px; /* Ajustar según sea necesario */
+}
+
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px 30px; /* Espaciado del botón */
+    background-color: #f7c600; /* Color amarillo */
+    color: #333; /* Color del texto */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 1em; /* Tamaño de la fuente */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
+    cursor: pointer; /* Cambia el cursor al pasar */
+}
+
+.button:hover {
+    background-color: #e6b800; /* Color del botón al pasar el ratón */
+    transform: translateY(-3px); /* Sutil efecto al pasar el ratón */
+}
+
+#sobre-mi + #projects {
+    margin-top: 0; /* Elimina el margen superior de proyectos */
+}
+
+/* Animación de aparición al hacer scroll */
+.scroll-fade-in {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+#projects {
+    padding: 50px;
+    background-color: #242424;
+    background-size: cover; /* Asegura que la imagen cubra toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+#projects h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff; /* Cambia el color del texto del título a blanco para mayor contraste */
+}
+
+.projects-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #ffffff; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.project-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; /* Añadimos transición para el filtro */
+}
+
+.project-item {
+    position: relative;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.259);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 30%;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden; /* Oculta la superposición cuando no está visible */
+}
+
+.project-item:hover {
+    transform: translateY(-20px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.project-item:hover .project-img {
+    transform: scale(1.1); /* Ampliar imagen al hacer hover */
+    filter: brightness(1.3); /* Aplicar filtro blanco (más brillante) */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro para el texto */
+    color: #fff;
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.3s ease-in-out;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+
+.project-item:hover .overlay {
+    opacity: 1; /* Mostrar al hacer hover */
+}
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+}
+
+#lightbox-img {
+    transition: opacity 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 85%;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.lightbox-content:hover {
+    transform: scale(1.01);
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    line-height: 50px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.prev:hover, .next:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.prev {
+    left: 30px;
+}
+
+.next {
+    right: 30px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.close:hover {
+    transform: rotate(90deg);
+}
+
+
+
+#projects2 {
+    padding: 50px;
+    background-color: #242424;
+    background-size: cover; /* Asegura que la imagen cubra toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+#projects2 h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff; /* Cambia el color del texto del título a blanco para mayor contraste */
+}
+
+.projects2-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #ffffff; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.project2-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; /* Añadimos transición para el filtro */
+}
+
+.project2-item {
+    position: relative;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.259);
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    width: 30%;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden; /* Oculta la superposición cuando no está visible */
+}
+
+.project2-item:hover {
+    transform: translateY(-20px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.project2-item:hover .project2-img {
+    transform: scale(1.1); /* Ampliar imagen al hacer hover */
+    filter: brightness(1.3); /* Aplicar filtro blanco (más brillante) */
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro para el texto */
+    color: #fff;
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.3s ease-in-out;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+
+
+section {
+    padding: 50px;
+    background-color: #fff;
+}
+
+section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    max-width: 200px;
+    border-radius: 50%;
+    margin-top: 20px;
+    filter: sepia(20%) blur(2px);
+}
+
+.services-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre los elementos de servicio */
+    justify-content: center; /* Centra los elementos de servicio horizontalmente */
+}
+
+.service-item {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    width: 30%;
+}
+
+.service-icon {
+    max-width: 80px;
+}
+
+/* Estilo para la sección de referencias de alumnos */
+#referencias-alumnos {
+    text-align: center;
+    padding: 40px;
+    background-color: #242424; /* Fondo oscuro similar */
+    color: white; /* Color del texto en blanco */
+}
+
+#referencias-alumnos h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #f4f4f4; /* Color del título */
+}
+
+.opiniones-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px; /* Ajustar el espacio entre opiniones */
+}
+
+.opinión {
+    background-color: #2a2a2a; /* Color de fondo de las opiniones */
+    color: white; /* Cambia el color del texto a blanco */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 30px; /* Espaciado interno */
+    width: 300px; /* Ancho de las opiniones */
+    text-align: center; /* Centrar texto */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+}
+
+.opinión:hover {
+    transform: translateY(-10px); /* Efecto de desplazamiento al pasar el ratón */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el ratón */
+    color: lightgray; /* Cambia el color al pasar el ratón, si deseas */
+}
+
+.foto-alumno {
+    width: 90px; /* Ancho de la foto */
+    height: 80px; /* Alto de la foto */
+    border-radius: 50%; /* Hace la imagen circular */
+    margin: 0 auto 10px; /* Alineación centrada con margen inferior */
+    object-fit: cover; /* Asegura que la imagen llene el contenedor */
+    object-position: center; /* Centra la imagen dentro del contenedor */
+}
+
+.oculta {
+    display: none; /* Oculta las opiniones inicialmente */
+}
+
+#ver-mas,
+#ver-menos {
+    display: inline-block; /* Mostrar como bloque en línea */
+    padding: 10px 20px;
+    background-color: #f0db4f; /* Color de fondo amarillo */
+    color: #1e1e1e; /* Color del texto oscuro */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 1.1rem; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+    margin-top: 20px; /* Margen superior */
+}
+
+#ver-mas:hover,
+#ver-menos:hover {
+    background-color: #e5c842; /* Color de fondo más oscuro al pasar el mouse */
+}
+
+.scroll-from-right {
+    opacity: 0;
+    transform: translateX(40px); /* más suave que 100px */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-from-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-from-right.visible,
+.scroll-from-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+
+
+/* Estilos para el contacto */
+
+#contact {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgb(36, 36, 36); 
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+    text-align: center;
+    transition: transform 0.3s ease; /* Añadir transición suave para el zoom */
+}
+
+#contact:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Fondo un poco más oscuro al hacer hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada en hover */
+    transform: scale(1.05); /* Escalar el elemento al 105% de su tamaño original */
+}
+#contact h4 {
+    margin-bottom: 15px;
+    color: #ffffff; /* Color oscuro para un buen contraste sobre el fondo claro */
+    font-size: 1.6em;
+    transition: color 0.3s ease;
+}
+
+#contact h4:hover {
+    color: #e6b800; /* Color amarillo para resaltar al hacer hover */
+}
+
+#contact a {
+    color: #007bff; /* Color azul predeterminado para los enlaces */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#contact a:hover {
+    text-decoration: underline;
+    color: #0056b3; /* Azul más oscuro al hacer hover */
+}
+
+#contact p {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #ffffff; /* Color oscuro para mejor contraste */
+    transition: color 0.3s ease;
+}
+
+#contact p:hover {
+    color: #e6b800; /* Color amarillo al hacer hover */
+}
+
+.social-icons {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.social-icons a {
+    margin-right: 15px;
+    font-size: 2em;
+    color: #007bff; /* Color azul para los íconos */
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #0056b3; /* Azul más oscuro en hover */
+}
+
+
+
+
+
+
+
+@keyframes wave {
+    0% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(20px); /* Mayor desplazamiento vertical para olas más pronunciadas */
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.section-mapa {
+    background-color: #242424;
+}
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 25%; /* Relación de aspecto más estrecha */
+    margin-bottom: 10px;
+    border-radius: 15px; /* Bordes redondeados */
+    overflow: hidden; /* Evita que los bordes sobresalgan */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.map-container:hover {
+    transform: scale(1.02); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.map-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: inherit; /* Los bordes redondeados coinciden con el contenedor */
+}
+
+.footer {
+    position: relative;
+    background-image: url('fondo-footer.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 60px 20px 30px;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-overlay {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.footer * {
+    position: relative;
+    z-index: 2;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-col h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #f0db4f;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footer-col p {
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 16px;
+}
+
+.footer-col ul li a:hover {
+    color: #f0db4f;
+}
+
+.footer-col form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.footer-col form input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.footer-col form button {
+    padding: 10px 20px;
+    background-color: #f0db4f;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.footer-col form button:hover {
+    background-color: #e5c944;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.footer-bottom a {
+    color: #f0db4f;
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+/* Versión para móviles */
+
+@media (max-width: 768px) {
+    
+    /* Ajustes para los elementos de navegación */
+    nav ul {
+        display: flex; /* Usar flexbox para que se alineen en una fila */
+        padding: 0; /* Eliminar padding por defecto */
+        margin: 0; /* Eliminar margen por defecto */
+    }
+
+    nav ul li {
+        margin: 5px 15; /* Espaciado entre los elementos de la lista */
+    }
+
+    nav ul li a {
+        font-size: 0.8rem; /* Ajustar el tamaño de la fuente */
+        text-decoration: none; /* Eliminar subrayado */
+        color: white; /* Cambiar el color de texto para mejor contraste (ajustar según tu esquema de color) */
+    }
+
+    nav ul li a:hover {
+        text-decoration: underline; /* Añadir subrayado en hover para mejorar la interacción */
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem; /* Tamaño de fuente para h1 */
+    }
+
+    .hero-content h2 {
+        font-size: 1rem; /* Tamaño de fuente para h2 */
+    }
+
+    .hero-content p, .hero-content .cta-button {
+        font-size: 1rem; /* Tamaño de fuente para párrafo y botón */
+    }
+
+    .principal-content {
+        top: 60%;
+    }
+
+    .principal-content h1 {
+        font-size: 24px;
+    }
+
+    .principal-content p {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+    /* Botones más pequeños */
+    .cta-button {
+        padding: 8px 15px;
+        font-size: 16px;
+    }
+    
+
+    /* Ajustes para el carrusel */
+    .carousel-images {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .carousel-item {
+        min-width: 100%;
+        scroll-snap-align: start;
+    }
+
+    .carousel-icon {
+        width: 100%;
+        height: auto;
+    }
+
+    .carousel-btn {
+        display: none; 
+    }
+
+    /* Miniaturas del carrusel */
+    .thumbnail-container {
+        display: flex;
+        overflow-x: auto;
+        justify-content: center;
+    }
+
+    .thumbnail-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Ajustes para la segunda galería */
+    .carousel2-images {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+    .carousel-item2 {
+        min-width: 100%;
+        scroll-snap-align: start;
+    }
+
+    .carousel-icon2 {
+        width: 100%;
+        height: auto;
+    }
+
+
+    .thumbnail-container2 {
+        display: flex;
+        overflow-x: auto;
+        justify-content: center;
+    }
+
+    .thumbnail-img2 {
+        width: 50px;
+        height: 50px;
+    }
+
+
+    #projects,
+    #projects2 {
+        display: none;
+    }
+
+
+}
+
+

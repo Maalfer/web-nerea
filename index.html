@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nerea’s art portfolio">
+    <title>Nerea’s art portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+    <section class="principal">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="#sobre-mi">About me</a></li>
+                    <li><a href="#projects">Comic Projects</a></li>
+                    <li><a href="#dragon">Sculpture Works</a></li>
+                    <li><a href="#referencias-alumnos">Referencias</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        <img src="images/ilustracion/tenista.webp" alt="Fondo hero" id="bg-image">
+        <div class="principal-content">
+            <h1>Nerea’s art portfolio</h1>
+            <p id="dynamic-text">A versatile artist with abilities in illustration, sculpture and design.</p>
+            <ul class="bubble-buttons">
+              <a href="#dragon">
+                <li class="scroll-from-left">
+                  Sculpture
+                  <span></span><span></span><span></span><span></span>
+                </li>
+              </a>
+              <a href="#projects">
+                <li class="scroll-from-bottom">
+                  Comic
+                  <span></span><span></span><span></span><span></span>
+                </li>
+              </a>
+              <a href="#about">
+                <li class="scroll-from-right">
+                  Illustration
+                  <span></span><span></span><span></span><span></span>
+                </li>
+              </a>
+            </ul>            
+        </div>
+    </section>
+    
+
+    <section id="sobre-mi">
+      <div class="scroll-fade-in">
+        <h2><strong>Certified Sculpture Artist</strong></h2>
+        <p><strong>MYLIDEAS, Company from Spain</strong></p>
+        <p>Participated in the carving and polychrome painting of the Valerion skull, featured in HBO’s “House of the Dragon.” This piece was exhibited in shopping centers throughout Spain. Worked on various projects for the Smurfs franchise, including creating several villages for children and designing eyewear displays in collaboration with Armani. Additionally, fabricated cars for “Paw Patrol.”</p>
+      
+        <p><strong>PROASUR, Company from Spain</strong></p>
+        <p>Contributed to the polychrome decoration for Berty’s Burger restaurant, and created a large-scale model of the Picos de Europa for the Posada de Valdeón center. Also designed scenic elements for the Oman Botanic Garden Museum.</p>
+      
+        <h2><strong>Certified Illustrator</strong></h2>
+        <p>Worked on vectorizing designs for video games at Liquid Games, participated in various freelance projects, served as a colorist for Devil Reign comic books, and painted murals in Avilés as part of a community project.</p>
+      
+        <ul class="bubble-buttons">
+            <a href="sculpture_works.pdf" target="_blank">
+              <li>
+                Sculpture Portfolio
+                <span></span><span></span><span></span><span></span>
+              </li>
+            </a>
+            <a href="CV.pdf" target="_blank">
+              <li>
+                PDF CV
+                <span></span><span></span><span></span><span></span>
+              </li>
+            </a>
+            <a href="illustration-works.pdf" target="_blank">
+              <li>
+                Illustration Portfolio
+                <span></span><span></span><span></span><span></span>
+              </li>
+            </a>
+        </ul>   
+      </div>  
+    </section>
+    
+    
+    <section id="projects">
+        <h2><strong>Comic Project</strong></h2>
+        <div class="projects-grid">
+            <div class="project-item">
+                <h3>Scars: Volume 0</h3>
+                <br>
+                <img src="images/comics/cover.webp" alt="Proyecto 1" class="project-img" onclick="openLightbox(0)">
+                <div class="overlay">Scars: Volume 0</div> 
+            </div>
+            <div class="project-item">
+                <h3>Devil Reign</h3>
+                <br>
+                <img src="images/cartelitos/devil_reign.webp" alt="Proyecto 2" class="project-img" onclick="openLightbox(1)">
+                <div class="overlay">Discover Devil Reign</div>
+            </div>
+            <div class="project-item">
+                <h3>The Blind, Graphic Novel</h3>
+                <br>
+                <img src="images/cartelitos/the blind.webp" alt="Proyecto 4" class="project-img" onclick="openLightbox(2)">
+                <div class="overlay">Unveil The Blind</div> 
+            </div>
+        </div>
+    
+        <div id="lightbox" class="lightbox">
+            <span class="close" onclick="closeLightbox()">&times;</span>
+            <img class="lightbox-content" id="lightbox-img">
+            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+            <a class="next" onclick="changeSlide(1)">&#10095;</a>
+        </div>
+    </section>  
+
+
+    <section id="about">
+        <h2><strong>Illustration Works</strong></h2>
+        <div class="carousel">
+          <button class="carousel-btn prev" onclick="moveSlide5(-1)">&#10094;</button>
+          <div class="carousel-images">
+            <div class="carousel-item active"><img src="images/ilustracion/ascension.webp" alt="Securización de servidores" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/mural/mural1.webp" alt="Desarrollo Web" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/tarjeta.webp" alt="Docencia" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/llaveros.webp" alt="Linux" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/llaveros3.webp" alt="Informática general" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/comics/1.webp" alt="Nueva Ilustración 1" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/comics/3i.webp" alt="Nueva Ilustración 2" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/character design/Sabaeth_arkeyr79_49395484.webp" alt="Nueva Ilustración 3" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/character design/Caeden_arkeyr79_52203774.webp" alt="Nueva Ilustración 4" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/Mileva.webp" alt="Nueva Ilustración 5" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/character design/58545263_MythDancer.webp" alt="Nueva Ilustración 6" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/4.webp" alt="Nueva Ilustración 7" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/comics/maybe_not.webp" alt="Nueva Ilustración 8" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/9_1.webp" alt="Nueva Ilustración 9" class="carousel-icon"></div>
+            <div class="carousel-item"><img src="images/ilustracion/8.webp" alt="Nueva Ilustración 10" class="carousel-icon"></div>
+          </div>
+          <button class="carousel-btn next" onclick="moveSlide5(1)">&#10095;</button>
+        </div>
+      
+        <div class="thumbnail-container">
+          <div class="thumbnail" onclick="selectSlide5(0)"><img src="images/ilustracion/ascension.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(1)"><img src="images/ilustracion/mural/mural1.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(2)"><img src="images/ilustracion/tarjeta.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(3)"><img src="images/ilustracion/llaveros.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(4)"><img src="images/ilustracion/llaveros3.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(5)"><img src="images/comics/1.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(6)"><img src="images/comics/3i.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(7)"><img src="images/ilustracion/character design/Sabaeth_arkeyr79_49395484.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(8)"><img src="images/ilustracion/character design/Caeden_arkeyr79_52203774.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(9)"><img src="images/ilustracion/Mileva.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(10)"><img src="images/ilustracion/character design/58545263_MythDancer.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(11)"><img src="images/ilustracion/4.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(12)"><img src="images/comics/maybe_not.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(13)"><img src="images/ilustracion/9_1.webp" class="thumbnail-img"></div>
+          <div class="thumbnail" onclick="selectSlide5(14)"><img src="images/ilustracion/8.webp" class="thumbnail-img"></div>
+        </div>
+      </section>
+      
+    
+
+      <section id="about">
+        <h1><strong>Sculpture Works</strong></h1>
+        <br>
+        <h4 id="dragon">Valerion Skull HBO Project</h4>
+        <br>
+        <div class="carousel">
+          <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+          <div class="carousel-images">
+            <div class="carousel-item2 active">
+              <img src="images/escultura_new/Dragon/drag2.webp" alt="Valerion Skull" class="carousel-icon">
+            </div>
+            <div class="carousel-item2">
+              <img src="images/escultura_new/Dragon/drag.webp" alt="Sculpture 1" class="carousel-icon">
+            </div>
+            <div class="carousel-item2">
+              <img src="images/escultura_new/Dragon/drag3.webp" alt="Sculpture 2" class="carousel-icon">
+            </div>
+            <div class="carousel-item2">
+              <img src="images/escultura_new/Dragon/drag4.webp" alt="Sculpture 3" class="carousel-icon">
+            </div>
+            <div class="carousel-item2">
+              <img src="images/escultura_new/Dragon/teeth1.webp" alt="Sculpture Teeth 1" class="carousel-icon">
+            </div>
+            <div class="carousel-item2">
+              <img src="images/escultura_new/Dragon/teeth2.webp" alt="Sculpture Teeth 2" class="carousel-icon">
+            </div>
+          </div>
+          <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+      
+        <div class="thumbnail-container">
+          <div class="thumbnail2" onclick="selectSlide(0)">
+            <img src="images/escultura_new/Dragon/drag2.webp" class="thumbnail-img">
+          </div>
+          <div class="thumbnail2" onclick="selectSlide(1)">
+            <img src="images/escultura_new/Dragon/drag.webp" class="thumbnail-img">
+          </div>
+          <div class="thumbnail2" onclick="selectSlide(2)">
+            <img src="images/escultura_new/Dragon/drag3.webp" class="thumbnail-img">
+          </div>
+          <div class="thumbnail2" onclick="selectSlide(3)">
+            <img src="images/escultura_new/Dragon/drag4.webp" class="thumbnail-img">
+          </div>
+          <div class="thumbnail2" onclick="selectSlide(4)">
+            <img src="images/escultura_new/Dragon/teeth1.webp" class="thumbnail-img">
+          </div>
+          <div class="thumbnail2" onclick="selectSlide(5)">
+            <img src="images/escultura_new/Dragon/teeth2.webp" class="thumbnail-img">
+          </div>
+        </div>
+      </section>
+      
+     
+
+    <section id="projects2">
+        
+      <div class="projects-grid">
+        <div class="project-item">
+            <h3>Smurfs</h3>
+            <div class="overlay">Smuffets Project</div>
+            <img src="images/cartelitos/smurfets.webp" alt="Proyecto 1" class="project-img" onclick="openLightbox2(0)">
+        </div>
+        <div class="project-item">
+            <h3>Diorama</h3>
+            <div class="overlay">Diorama Project</div>
+            <img src="images/cartelitos/diorama.webp" alt="Proyecto 2" class="project-img" onclick="openLightbox2(1)">
+        </div>
+        <div class="project-item">
+            <h3>Paw Patrol</h3>
+            <div class="overlay">Paw Patrol Project</div>
+            <img src="images/cartelitos/paw patrol.webp" alt="Proyecto 3" class="project-img" onclick="openLightbox2(2)">
+        </div>
+        <div class="project-item">
+            <h3>Mold Making</h3>
+            <div class="overlay">Mold Making Project</div>
+            <img src="images/cartelitos/mold_making.webp" alt="Proyecto 4" class="project-img" onclick="openLightbox2(3)">
+        </div>
+        <div class="project-item">
+            <h3>Berty's Burguer</h3>
+            <div class="overlay">Berty's Burguer Project</div>
+            <img src="images/cartelitos/bertis_burger.webp" alt="Proyecto 5" class="project-img" onclick="openLightbox2(4)">
+        </div>
+        <div class="project-item">
+            <h3>Other Projects</h3>
+            <div class="overlay">Other Projects</div>
+            <img src="images/other-projects/0_PORTADA_other projects.webp" alt="Proyecto 6" class="project-img" onclick="openLightbox2(5)">
+        </div>
+    </div>
+    
+    <!-- Lightbox separado para este grupo -->
+    <div id="lightbox2" class="lightbox">
+        <span class="close" onclick="closeLightbox2()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img2">
+        <a class="prev" onclick="changeSlide2(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide2(1)">&#10095;</a>
+    </div>
+    
+    
+
+        <br>
+
+        <section id="referencias-alumnos">
+          <h2>Referencias</h2>
+          <div class="opiniones-container">
+              <a href="https://www.davidabrevaya.com/" target="_blank" class="opinión scroll-from-right">
+                  <img src="images/david.jpeg" alt="Foto de David Abrevaya" class="foto-alumno">
+                  <h3>David Abrevaya</h3>
+                  <p>I have hired Nerea on several freelance assignments to assist my projects. She is a hard worker and a very skilled professional. I encourage taking a look at her website, where her creativity and technique are on display. She is a hard worker and strives to make her mark everywhere she travels. Nerea is a warm and mature woman who shows tremendous potential in her commitment to create great art in a variety of mediums. She is diligent, relatable, and is eager to collaborate on projects.</p>
+              </a>
+              
+              <a href="https://www.proasur.com/" target="_blank" class="opinión scroll-from-right">
+                  <img src="images/proasur.jpg" alt="Foto de Proasur" class="foto-alumno">
+                  <h3>Proasur</h3>
+                  <p>Nerea Gonzalez López ha realizado 100 horas de prácticas en PROASUR, S.L. siendo parte activa, a través de mi supervisión como jefe de proyectos, de la realización de la decoración para el restaurante Berty’s Burger, la maqueta de grandes dimensiones de Picos de Europa para el Centro de Visitantes de Posada de Valdeón y los elementos escenográficos e interactivos para el Oman Botanic Garden Museum. Su colaboración ha abarcado desde el desarrollo de las técnicas a utilizar hasta su ejecución, dejando constancia durante todo el proceso de su profesionalidad y buen hacer.</p>
+              </a>
+      
+              <a href="https://elpinguinodemario.es/" target="_blank" class="opinión scroll-from-left">
+                  <img src="images/mario.png" alt="Foto de Mario Álvarez" class="foto-alumno">
+                  <h3>Mario Álvarez</h3>
+                  <p>Tuve el placer de contar con la ayuda de Nerea en varios de mis proyectos informáticos, tales como mi academia https://elrincondelhacker.es como mi canal de YouTube "El Pingüino de Mario" , donde su aporte como diseñadora fue clave para mejorar significativamente el aspecto visual de mi marca personal. Su creatividad, atención al detalle y habilidad para entender mis necesidades hicieron que el diseño final fuera no solo estético, sino también funcional. Recomiendo encarecidamente a Nerea para cualquier proyecto que requiera un toque creativo y profesional en el área de diseño.</p>
+              </a>
+      
+              <a href="https://mylideas.com/" target="_blank" class="opinión scroll-from-left">
+                  <img src="images/MYL.png" alt="Foto de MYLIDEAS" class="foto-alumno">
+                  <h3>MYLIDEAS</h3>
+                  <p>Tuve el placer de contar con la ayuda de Nerea en varios de mis proyectos informáticos, tales como mi academia https://elrincondelhacker.es como mi canal de YouTube "El Pingüino de Mario" , donde su aporte como diseñadora fue clave para mejorar significativamente el aspecto visual de mi marca personal. Su creatividad, atención al detalle y habilidad para entender mis necesidades hicieron que el diseño final fuera no solo estético, sino también funcional. Recomiendo encarecidamente a Nerea para cualquier proyecto que requiera un toque creativo y profesional en el área de diseño.</p>
+              </a>
+          </div>    
+      </section>
+      
+      
+
+
+        <div id="contact">
+            <h4>Questions or Comments</h4>
+            <p>Send me a message or ask me a question using the following contact information. I will do my best to get back to you soon!</p>
+            <p><strong>Nerea’s Art Portfolio</strong></p>
+            <p>Piedras Blancas, Castrillón, Asturias 33450, Spain</p>
+            <p>Spain: +34 689 040 797</p>
+            <p>Email: <a href="mailto:rene.art98@gmail.com">rene.art98@gmail.com</a></p>
+        
+            <div class="social-icons">
+                <a href="mailto:rene.art98@gmail.com" title="Email">
+                    <i class="bi bi-envelope-fill"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/nerea-gonz%C3%A1lez-l%C3%B3pez-6a4471132/" title="LinkedIn" target="_blank">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="https://www.instagram.com/ren_d_vincent/" title="Instagram" target="_blank">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-mapa">
+    <div class="map-container">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1401.6359686765366!2d-5.928339300000001!3d43.5575788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd3689f7f45b3f2f%3A0xd745a7e730918e8!2sPiedras%20Blancas%2C%20Asturias!5e0!3m2!1ses!2ses!4v1697205567894!5m2!1ses!2ses"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+    </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-overlay"></div>
+  
+      <div class="container footer-grid">
+          <div class="footer-col about">
+              <h3>SOBRE MÍ</h3>
+              <p>Mi nombre es Nerea González, artista y diseñadora especializada en escultura. NereaArt es el reflejo de mi pasión por crecer como profesional en el mundo del arte y el diseño. Me he especializado en la creación de obras escultóricas y proyectos de diseño que fusionan estética y funcionalidad.</p>
+          </div>
+  
+          <div class="footer-col">
+              <h3>PORTFOLIO</h3>
+              <ul>
+                  <li><a href="#projects2">Escultura</a></li>
+                  <li><a href="#projects">Cómic</a></li>
+                  <li><a href="#about">Ilustración</a></li>
+              </ul>
+          </div>
+  
+          <div class="footer-col">
+              <h3>¿CONTACTAMOS?</h3>
+              <p>Déjame tu correo o teléfono y me pondré en contacto contigo:</p>
+              <form onsubmit="event.preventDefault(); alert('Mensaje enviado :)')">
+                  <input type="text" placeholder="Correo o Teléfono" required>
+                  <button type="submit">Enviar</button>
+              </form>
+          </div>
+      </div>
+  
+      <div class="footer-bottom">
+          <p>&copy; 2025 - Todos los derechos reservados. Diseñado por 
+              <a href="https://www.linkedin.com/in/maalfer1" target="_blank">El Pingüino de Mario</a>
+          </p>
+      </div>
+    </footer>
+  
+    
+    <script src="lightbox_sculpture.js"></script>
+    <script src="lightbox_proyectos.js"></script>
+    <script src="carrusel.js"></script>
+    <script src="carrusel2.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
