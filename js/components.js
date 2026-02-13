@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderHeader(activePage);
     renderFooter();
-    initScrollHeader();
+    // initScrollHeader(); // Disabled for non-sticky header
 });
 
 function renderHeader(activePage) {
@@ -32,7 +32,7 @@ function renderHeader(activePage) {
     const getStyle = (page) => activePage === page ? 'color: #f0b700;' : '';
 
     const headerHTML = `
-    <header id="main-header" class="main-header">
+    <header id="absolute-header" class="absolute-header" style="position: absolute !important; top: 0; left: 0; width: 100%; z-index: 1000; background: transparent;">
         <nav>
             <ul class="nav-list">
                 <li class="nav-item"><a href="${homeLink}#sobre-mi" class="nav-link">About me</a></li>
@@ -84,7 +84,7 @@ function renderFooter() {
       </div>
   
       <div class="footer-bottom" style="position: relative; z-index: 2; text-align: center; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 20px;">
-          <p>&copy; 2025 - Todos los derechos reservados. Diseñado por 
+          <p>&copy; 2026 - Todos los derechos reservados. Diseñado por 
               <a href="https://www.linkedin.com/in/maalfer1" target="_blank" style="color: #f0db4f; text-decoration: none;">El Pingüino de Mario</a>
           </p>
       </div>
@@ -94,15 +94,4 @@ function renderFooter() {
     footerContainer.innerHTML = footerHTML;
 }
 
-function initScrollHeader() {
-    window.addEventListener('scroll', function () {
-        const header = document.getElementById('main-header');
-        if (header) {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        }
-    });
-}
+

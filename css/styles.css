@@ -400,7 +400,7 @@ nav ul li a {
 #sobre-mi {
     padding: 130px 80px;
     /* Espaciado superior e inferior */
-    background-image: url('yo.webp');
+    background-image: url('../images/yo.webp');
     /* Imagen de fondo */
     background-size: cover;
     /* Cubrir toda la sección */
@@ -1067,7 +1067,7 @@ section h2 {
 
 .footer {
     position: relative;
-    background-image: url('fondo-footer.jpg');
+    background-image: url('../images/fondo-footer.jpg');
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -1556,8 +1556,8 @@ section h2 {
 
 /* --- NEW PREMIUM HEADER STYLES --- */
 
-.main-header {
-    position: fixed;
+.absolute-header {
+    position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
@@ -1567,16 +1567,8 @@ section h2 {
     background: transparent;
 }
 
-.main-header.scrolled {
-    padding: 10px 0;
-    background: rgba(18, 18, 18, 0.85);
-    /* Dark semi-transparent */
-    backdrop-filter: blur(12px);
-    /* Glassmorphism blur */
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
+/* Scrolled styles removed as header is no longer sticky */
+
 
 .nav-list {
     display: flex;
@@ -1650,13 +1642,13 @@ section h2 {
         transition: clip-path 0.4s ease-in-out;
     }
 
-    .main-header:hover .nav-list,
-    .main-header.menu-open .nav-list {
+    .absolute-header:hover .nav-list,
+    .absolute-header.menu-open .nav-list {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         /* Revealed */
     }
 
-    .main-header::after {
+    .absolute-header::after {
         content: 'MENU ☰';
         display: block;
         text-align: center;
@@ -1677,7 +1669,7 @@ body.teatro-page {
 
 .opera-hero {
     height: 60vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url('images/teatro/carmen/carmen-1.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url('../images/teatro/carmen/carmen-1.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
