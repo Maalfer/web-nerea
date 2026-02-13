@@ -33,11 +33,12 @@ function renderHeader(activePage) {
 
     const headerHTML = `
     <header id="absolute-header" class="absolute-header" style="position: absolute !important; top: 0; left: 0; width: 100%; z-index: 1000; background: transparent;">
-        <nav>
+        <nav style="position: relative; padding: 0 20px;">
+            <button class="menu-toggle" aria-label="Abrir menú" style="display: none; background: none; border: none; color: #f0b700; font-size: 2rem; cursor: pointer; position: absolute; top: 5px; right: 20px; z-index: 2000; pointer-events: auto;">☰</button>
             <ul class="nav-list">
                 <li class="nav-item"><a href="${homeLink}#sobre-mi" class="nav-link">About me</a></li>
                 <li class="nav-item"><a href="${homeLink}#projects" class="nav-link">Comic Projects</a></li>
-                <li class="nav-item"><a href="${homeLink}#dragon" class="nav-link">Sculpture Works</a></li>
+                <li class="nav-item"><a href="${homeLink}#sculpture" class="nav-link">Sculpture Works</a></li>
                 <li class="nav-item"><a href="${teatroLink}" class="nav-link ${isActive('teatro')}" ${activePage === 'teatro' ? 'data-active="true"' : ''}>Teatro</a></li>
                 <li class="nav-item"><a href="${homeLink}#referencias-alumnos" class="nav-link">Referencias</a></li>
                 <li class="nav-item"><a href="${homeLink}#contact" class="nav-link">Contact</a></li>
@@ -47,6 +48,28 @@ function renderHeader(activePage) {
     `;
 
     headerContainer.innerHTML = headerHTML;
+
+    // Initialize mobile menu functionality using Event Delegation
+    // This is more robust for dynamically injected content
+    document.addEventListener('click', function (event) {
+        const toggleBtn = event.target.closest('.menu-toggle');
+        const navList = document.querySelector('.nav-list');
+        const headerLink = event.target.closest('.nav-link');
+
+        // Handle Toggle Click
+        if (toggleBtn && navList) {
+            event.preventDefault(); // Prevent default if it's a button
+            navList.classList.toggle('active');
+            toggleBtn.innerHTML = navList.classList.contains('active') ? '✕' : '☰';
+        }
+
+        // Handle Close on Link Click
+        if (headerLink && navList && navList.classList.contains('active')) {
+            navList.classList.remove('active');
+            const btn = document.querySelector('.menu-toggle');
+            if (btn) btn.innerHTML = '☰';
+        }
+    });
 }
 
 function renderFooter() {
@@ -68,7 +91,7 @@ function renderFooter() {
               <ul style="list-style: none; padding: 0;">
                   <li style="margin-bottom: 10px;"><a href="index.html#projects2" style="color: #fff; text-decoration: none;">Escultura</a></li>
                   <li style="margin-bottom: 10px;"><a href="index.html#projects" style="color: #fff; text-decoration: none;">Cómic</a></li>
-                  <li style="margin-bottom: 10px;"><a href="index.html#about" style="color: #fff; text-decoration: none;">Ilustración</a></li>
+                  <li style="margin-bottom: 10px;"><a href="index.html#illustrations" style="color: #fff; text-decoration: none;">Ilustración</a></li>
                   <li style="margin-bottom: 10px;"><a href="teatro.html" style="color: #fff; text-decoration: none;">Teatro</a></li>
               </ul>
           </div>
@@ -77,7 +100,7 @@ function renderFooter() {
               <h3 style="border-bottom: 2px solid #f0db4f; display: inline-block; padding-bottom: 5px; margin-bottom: 20px;">¿CONTACTAMOS?</h3>
               <p>Déjame tu correo o teléfono y me pondré en contacto contigo:</p>
               <form onsubmit="event.preventDefault(); alert('Mensaje enviado :)')" style="display: flex; gap: 10px; margin-top: 10px;">
-                  <input type="text" placeholder="Correo o Teléfono" required style="flex: 1; padding: 10px; border-radius: 5px; border: none;">
+                  <input type="text" placeholder="Correo o Teléfono" required style="flex: 1; padding: 10px; background: transparent; border: none; border-bottom: 2px solid #f0b700; color: #fff; outline: none; font-family: 'Fira Code', monospace;">
                   <button type="submit" style="padding: 10px 20px; background-color: #f0db4f; border: none; font-weight: bold; border-radius: 5px; cursor: pointer;">Enviar</button>
               </form>
           </div>

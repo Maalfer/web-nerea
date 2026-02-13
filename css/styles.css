@@ -13,12 +13,12 @@ html {
 
 #style-6::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #F5F5F5;
+    background-color: #1a1a1a;
 }
 
 #style-6::-webkit-scrollbar {
     width: 10px;
-    background-color: #F5F5F5;
+    background-color: #2a2a2a;
 }
 
 #style-6::-webkit-scrollbar-thumb {
@@ -41,6 +41,8 @@ html {
     overflow-x: hidden;
     font-family: 'Fira Code', monospace;
     /* Aplica Fira Code a todo el cuerpo */
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
 h1,
@@ -153,8 +155,10 @@ nav ul li a {
     height: 3em;
     text-transform: uppercase;
     font-weight: bold;
-    font-family: sans-serif;
-    letter-spacing: 0.1em;
+    font-family: 'Fira Code', monospace;
+    /* Updated to tech font */
+    letter-spacing: 0.2em;
+    /* Increased spacing for premium feel */
     text-align: center;
     line-height: 3em;
     position: relative;
@@ -241,17 +245,20 @@ nav ul li a {
 
 
 
-/* Estilos para la sección "About" - Galerías */
-#about {
+/* Estilos para la sección "Illustrations" y "Sculpture" - Galerías */
+#illustrations,
+#sculpture {
     position: relative;
     padding: 60px 20px;
-    background-color: #242424;
+    background-color: #121212;
     color: #fff;
     text-align: center;
 }
 
-#about h1,
-#about h2 {
+#illustrations h1,
+#illustrations h2,
+#sculpture h1,
+#sculpture h2 {
     font-size: 2.8em;
     margin-bottom: 30px;
     border-bottom: 2px solid #f0b700;
@@ -259,7 +266,8 @@ nav ul li a {
     padding-bottom: 10px;
 }
 
-#about h4 {
+#illustrations h4,
+#sculpture h4 {
     font-size: 1.5em;
     color: #ccc;
     margin-bottom: 30px;
@@ -514,7 +522,7 @@ nav ul li a {
 
 #projects {
     padding: 50px;
-    background-color: #242424;
+    background-color: #121212;
     background-size: cover;
     /* Asegura que la imagen cubra toda la sección */
     background-position: center;
@@ -688,7 +696,7 @@ nav ul li a {
 
 #projects2 {
     padding: 50px;
-    background-color: #242424;
+    background-color: #121212;
     background-size: cover;
     /* Asegura que la imagen cubra toda la sección */
     background-position: center;
@@ -767,7 +775,7 @@ nav ul li a {
 
 section {
     padding: 50px;
-    background-color: #fff;
+    background-color: #121212;
 }
 
 section h2 {
@@ -794,7 +802,7 @@ section h2 {
 .service-item {
     text-align: center;
     padding: 20px;
-    background-color: #f0f0f0;
+    background-color: #1e1e1e;
     border-radius: 10px;
     width: 30%;
 }
@@ -1031,7 +1039,7 @@ section h2 {
 }
 
 .section-mapa {
-    background-color: #242424;
+    background-color: #121212;
 }
 
 .map-container {
@@ -1627,36 +1635,49 @@ section h2 {
 
 /* Mobile Responsiveness for Header */
 @media (max-width: 768px) {
+    .menu-toggle {
+        display: block !important;
+        /* Show hamburger on mobile */
+    }
+
     .nav-list {
         flex-direction: column;
-        /* Stack vertically for now */
-        background: rgba(0, 0, 0, 0.95);
-        position: absolute;
-        top: 100%;
+        background: rgba(18, 18, 18, 0.98);
+        /* Solid dark background */
+        position: fixed;
+        /* Fixed to cover screen if needed, or absolute */
+        top: 60px;
+        /* Adjust based on header height */
         left: 0;
         width: 100%;
         padding: 20px 0;
-        gap: 15px;
+        gap: 20px;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        /* Hidden by default */
+        /* Hidden */
         transition: clip-path 0.4s ease-in-out;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     }
 
-    .absolute-header:hover .nav-list,
-    .absolute-header.menu-open .nav-list {
+    .nav-list.active {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        /* Revealed */
+        /* Visible */
     }
 
     .absolute-header::after {
-        content: 'MENU ☰';
-        display: block;
-        text-align: center;
-        color: #f0b700;
-        font-family: 'Fira Code', monospace;
-        cursor: pointer;
-        font-size: 1.2rem;
+        display: none;
+        /* Remove old text button */
+    }
+
+    /* Ensure links touch targets are large enough */
+    .nav-list li {
         width: 100%;
+        text-align: center;
+    }
+
+    .nav-list li a {
+        display: block;
+        padding: 10px;
+        font-size: 1.2rem;
     }
 }
 
@@ -1778,4 +1799,11 @@ body.teatro-page {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     z-index: 10;
     border-color: #f0b700;
+}
+
+#contact {
+    padding: 60px 20px;
+    background-color: #121212;
+    text-align: center;
+    color: #e0e0e0;
 }
