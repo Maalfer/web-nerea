@@ -174,8 +174,12 @@
             (b.items || []).forEach(function (link) {
                 var a = el('a', link.primary ? 'btn-bubble' : 'btn-ghost', link.label);
                 a.href = link.href;
-                a.target = '_blank';
-                a.rel = 'noopener';
+                if (link.download) {
+                    a.setAttribute('download', link.download);
+                } else {
+                    a.target = '_blank';
+                    a.rel = 'noopener';
+                }
                 if (link.primary) {
                     a.innerHTML = link.label + '<span></span><span></span><span></span><span></span>';
                 }
@@ -241,7 +245,10 @@
 
             if (b.pdf) {
                 wrap.appendChild(blocks.links({
-                    items: [{ label: 'Descargar la memoria en PDF', href: b.pdf, primary: true }]
+                    items: [{
+                        label: 'Descargar la memoria en PDF', href: b.pdf, primary: true,
+                        download: 'Memoria del diorama - Nerea Gonzalez Lopez.pdf'
+                    }]
                 }));
             }
 

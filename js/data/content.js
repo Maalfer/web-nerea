@@ -17,9 +17,9 @@ window.CONTENT = {
             title: 'Ilustración',
             text: 'Currículum y portfolio completo de ilustración, cómic y diseño gráfico.',
             links: [
-                { label: 'Portfolio ilustración', href: 'assets/pdf/portfolio-ilustracion.pdf', primary: true },
-                { label: 'CV español', href: 'assets/pdf/cv-es.pdf' },
-                { label: 'CV english', href: 'assets/pdf/cv-en.pdf' }
+                { label: 'Portfolio ilustración', href: 'assets/pdf/portfolio-ilustracion.pdf', primary: true, download: 'Portfolio ilustracion - Nerea Gonzalez Lopez.pdf' },
+                { label: 'CV español', href: 'assets/pdf/cv-es.pdf', download: 'CV Nerea Gonzalez Lopez (ES).pdf' },
+                { label: 'CV english', href: 'assets/pdf/cv-en.pdf', download: 'CV Nerea Gonzalez Lopez (EN).pdf' }
             ]
         },
         {
@@ -27,9 +27,9 @@ window.CONTENT = {
             title: 'Escultura',
             text: 'Currículum y portfolio completo de escultura aplicada al espectáculo y la publicidad.',
             links: [
-                { label: 'Portfolio escultura', href: 'assets/pdf/portfolio-escultura.pdf', primary: true },
-                { label: 'CV español', href: 'assets/pdf/cv-es.pdf' },
-                { label: 'CV english', href: 'assets/pdf/cv-en.pdf' }
+                { label: 'Portfolio escultura', href: 'assets/pdf/portfolio-escultura.pdf', primary: true, download: 'Portfolio escultura - Nerea Gonzalez Lopez.pdf' },
+                { label: 'CV español', href: 'assets/pdf/cv-es.pdf', download: 'CV Nerea Gonzalez Lopez (ES).pdf' },
+                { label: 'CV english', href: 'assets/pdf/cv-en.pdf', download: 'CV Nerea Gonzalez Lopez (EN).pdf' }
             ]
         }
     ],

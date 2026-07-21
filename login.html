@@ -4,11 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Escultura de Nerea González López: escultura publicitaria en porexpan (cráneo de Valerion para HBO, Paw Patrol, Pitufos), dioramas, cursos, moldes y reproducciones.">
-  <meta property="og:title" content="Escultura — Nerea González López">
-  <meta property="og:image" content="images/escultura/dragon/02.webp">
-  <title>Escultura — Nerea González López</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Acceso — Nerea González López</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,24 +21,29 @@
 
   <div id="header-container"></div>
 
-  <main id="app" data-page="escultura"></main>
+  <main class="auth-page">
+    <form class="auth-card" id="login-form" autocomplete="on">
+      <span class="eyebrow">Zona privada</span>
+      <h1>Acceso</h1>
+      <p class="auth-intro">Entra para actualizar el currículum y los portfolios.</p>
 
-  <noscript>
-    <p class="noscript-note">Esta página necesita JavaScript para mostrar las galerías.
-      También puedes <a href="assets/pdf/portfolio-escultura.pdf">descargar el portfolio en PDF</a>.</p>
-  </noscript>
+      <label for="username">Usuario</label>
+      <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+      <button type="submit" class="btn-bubble auth-submit">Entrar<span></span><span></span><span></span><span></span></button>
+
+      <p class="auth-msg" id="login-msg" role="status"></p>
+    </form>
+  </main>
 
   <div id="footer-container"></div>
 
-  <script src="js/data/media.js"></script>
   <script src="js/data/content.js"></script>
-  <script src="js/api.js"></script>
   <script src="js/components.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/lightbox.js"></script>
-  <script src="js/carousel.js"></script>
-  <script src="js/flipbook.js"></script>
-  <script src="js/render.js"></script>
   <script src="js/main.js"></script>
 </body>
 

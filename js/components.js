@@ -8,7 +8,8 @@
         { label: 'Teatro', href: 'teatro.html', key: 'teatro' },
         { label: 'Sobre mí', href: 'index.html#sobre-mi', key: '' },
         { label: 'Descargas', href: 'index.html#descargas', key: '' },
-        { label: 'Contacto', href: 'index.html#contacto', key: '' }
+        { label: 'Contacto', href: 'index.html#contacto', key: '' },
+        { label: 'Acceder', href: 'login.html', key: 'login', id: 'nav-account' }
     ];
 
     function currentKey() {
@@ -16,6 +17,7 @@
         if (file.indexOf('ilustracion') === 0) return 'ilustracion';
         if (file.indexOf('escultura') === 0) return 'escultura';
         if (file.indexOf('teatro') === 0) return 'teatro';
+        if (file.indexOf('login') === 0 || file.indexOf('dashboard') === 0) return 'login';
         return 'home';
     }
 
@@ -23,7 +25,8 @@
         var active = currentKey();
         var links = NAV.map(function (item) {
             var cls = 'nav-link' + (item.key && item.key === active ? ' active' : '');
-            return '<li><a class="' + cls + '" href="' + item.href + '">' + item.label + '</a></li>';
+            var id = item.id ? ' id="' + item.id + '"' : '';
+            return '<li><a class="' + cls + '"' + id + ' href="' + item.href + '">' + item.label + '</a></li>';
         }).join('');
 
         return '' +
@@ -95,6 +98,15 @@
                 button.setAttribute('aria-expanded', 'false');
             }
         });
+
+        var account = document.getElementById('nav-account');
+        if (account && window.Auth) {
+            window.Auth.session().then(function (data) {
+                if (!data.authenticated) return;
+                account.textContent = 'Panel';
+                account.href = 'dashboard.html';
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', mount);

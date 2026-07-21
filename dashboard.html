@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel — Nerea González López</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
+    rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div id="header-container"></div>
+
+  <main class="panel">
+    <div class="wrap">
+
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">Panel</span>
+          <h1>Hola, <span id="panel-user">…</span></h1>
+          <p>Desde aquí actualizas los documentos que se descargan en la web y cambias tus datos de acceso.</p>
+        </div>
+        <button type="button" class="btn-ghost" id="logout">Cerrar sesión</button>
+      </div>
+
+      <section class="panel-section">
+        <h2>Documentos</h2>
+        <p class="panel-note">Sustituye cualquier PDF: el archivo nuevo queda publicado al instante y se guarda una
+          copia del anterior.</p>
+        <div class="doc-list" id="documents"></div>
+      </section>
+
+      <section class="panel-section">
+        <h2>Cuenta</h2>
+        <p class="panel-note">Cambia tu usuario, tu contraseña o ambos. Necesitas escribir la contraseña actual.</p>
+        <form class="account-form" id="account-form">
+          <div class="field">
+            <label for="current-password">Contraseña actual</label>
+            <input type="password" id="current-password" autocomplete="current-password" required>
+          </div>
+          <div class="field">
+            <label for="new-username">Usuario nuevo</label>
+            <input type="text" id="new-username" autocomplete="username" placeholder="Déjalo igual si no lo cambias">
+          </div>
+          <div class="field">
+            <label for="new-password">Contraseña nueva</label>
+            <input type="password" id="new-password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+          </div>
+          <button type="submit" class="btn-bubble">Guardar<span></span><span></span><span></span><span></span></button>
+          <p class="auth-msg" id="account-msg" role="status"></p>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="js/data/content.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
