@@ -69,7 +69,8 @@
             '  </div>' +
             '  <div class="footer-bottom">' +
             '    <p>&copy; ' + new Date().getFullYear() + ' Nerea González López — Todos los derechos reservados. ' +
-            '    Diseñado por <a href="https://www.linkedin.com/in/maalfer1" target="_blank" rel="noopener">El Pingüino de Mario</a></p>' +
+            '    Diseñado por <a href="https://www.linkedin.com/in/maalfer1" target="_blank" rel="noopener">Mario Álvarez</a>' +
+            '    &amp; <a href="' + site.linkedin + '" target="_blank" rel="noopener">Nerea González</a></p>' +
             '  </div>' +
             '</footer>';
     }
