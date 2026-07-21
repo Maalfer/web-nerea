@@ -356,7 +356,7 @@ window.CONTENT = {
                 { type: 'sub', title: 'San Juanín' },
                 { type: 'grid', group: 'escultura/encargos', from: 1, to: 3, shape: 'wide' },
                 { type: 'sub', title: 'Figurilla de perro' },
-                { type: 'grid', group: 'escultura/encargos', from: 3, to: 8, shape: 'wide' },
+                { type: 'mosaic', group: 'escultura/encargos', from: 3, to: 8 },
 
                 {
                     type: 'section', id: 'other', eyebrow: 'Otros',

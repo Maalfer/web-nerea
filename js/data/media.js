@@ -1145,11 +1145,11 @@ window.MEDIA = {
    "name": "5esculturillaperro.HEIC"
   },
   {
-   "src": "images/escultura/encargos/06.webp?v=789137b5",
-   "medium": "images/escultura/encargos/06-m.webp?v=3bd0b4ab",
-   "thumb": "images/escultura/encargos/06-t.webp?v=5605bd0d",
-   "w": 1600,
-   "h": 1200,
+   "src": "images/escultura/encargos/06.webp?v=2ac9697d",
+   "medium": "images/escultura/encargos/06-m.webp?v=3bb23c92",
+   "thumb": "images/escultura/encargos/06-t.webp?v=0dcce7c5",
+   "w": 1200,
+   "h": 1600,
    "name": "6esculturillaperro.HEIC"
   },
   {
