@@ -1,6 +1,9 @@
 (function () {
     'use strict';
 
+    var MEDIUM_WIDTH = 1100;
+    var FULL_WIDTH = 1600;
+
     function el(tag, cls, html) {
         var node = document.createElement(tag);
         if (cls) node.className = cls;
@@ -30,9 +33,22 @@
         return all.slice(block.from || 0, block.to == null ? all.length : block.to);
     }
 
-    function imgEl(entry, useThumb, alt) {
+    function imgEl(entry, size, alt, sizes) {
         var im = el('img');
-        im.src = useThumb ? entry.thumb : entry.src;
+        var medium = entry.medium || entry.src;
+
+        if (size === 'thumb') {
+            im.src = entry.thumb;
+        } else if (size === 'full') {
+            im.src = entry.src;
+        } else {
+            im.src = medium;
+            if (medium !== entry.src) {
+                im.srcset = medium + ' ' + MEDIUM_WIDTH + 'w, ' + entry.src + ' ' + FULL_WIDTH + 'w';
+                im.sizes = sizes || '(max-width: 900px) 100vw, 900px';
+            }
+        }
+
         im.alt = alt || '';
         im.loading = 'lazy';
         im.decoding = 'async';
@@ -53,7 +69,7 @@
 
     function tile(entry, alt, shape, label) {
         var fig = el('figure', 'tile' + (shape ? ' tile--' + shape : ''));
-        fig.appendChild(imgEl(entry, true, alt));
+        fig.appendChild(imgEl(entry, 'thumb', alt));
         fig.appendChild(el('span', 'tile-zoom', '<i class="bi bi-arrows-angle-expand"></i>'));
         if (label) fig.appendChild(el('figcaption', 'tile-label', label));
         return zoomable(fig, entry, label || alt);
@@ -65,7 +81,7 @@
             var entry = pickOne(b.group, b.i);
             if (!entry) return null;
             var fig = el('figure', 'feature reveal' + (b.tall ? ' feature--tall' : ''));
-            var im = imgEl(entry, false, b.caption || '');
+            var im = imgEl(entry, 'medium', b.caption || '');
             if (b.eager) im.loading = 'eager';
             fig.appendChild(im);
             if (b.caption) fig.appendChild(el('figcaption', 'feature-caption', b.caption));
@@ -116,7 +132,7 @@
 
             items.forEach(function (entry, n) {
                 var slide = el('div', 'carousel-slide');
-                slide.appendChild(imgEl(entry, false, b.alt + ' ' + (n + 1)));
+                slide.appendChild(imgEl(entry, 'medium', b.alt + ' ' + (n + 1)));
                 zoomable(slide, entry, b.caption);
                 track.appendChild(slide);
             });
@@ -134,7 +150,7 @@
                 var thumb = el('button', 'thumb' + (n === 0 ? ' is-active' : ''));
                 thumb.type = 'button';
                 thumb.setAttribute('aria-label', 'Ir a la imagen ' + (n + 1));
-                thumb.appendChild(imgEl(entry, true, ''));
+                thumb.appendChild(imgEl(entry, 'thumb', ''));
                 thumbs.appendChild(thumb);
             });
 
@@ -279,7 +295,7 @@
         slides = slides.filter(Boolean);
 
         slides.forEach(function (entry, n) {
-            var im = imgEl(entry, false, '');
+            var im = imgEl(entry, 'medium', '', '100vw');
             im.removeAttribute('width');
             im.removeAttribute('height');
             if (n === 0) {
@@ -374,7 +390,7 @@
                 var link = el('a', 'gate-panel reveal');
                 link.href = gate.href;
                 if (entry) {
-                    var im = imgEl(entry, false, gate.title);
+                    var im = imgEl(entry, 'medium', gate.title, '(max-width: 900px) 100vw, 34vw');
                     im.removeAttribute('width');
                     im.removeAttribute('height');
                     im.loading = 'eager';
@@ -408,7 +424,7 @@
             var info = data.about;
             var entry = pickOne(info.group, 0);
             var photo = el('div', 'about-photo reveal-left');
-            if (entry) photo.appendChild(imgEl(entry, false, 'Nerea González López'));
+            if (entry) photo.appendChild(imgEl(entry, 'medium', 'Nerea González López', '(max-width: 980px) 100vw, 460px'));
 
             var text = el('div', 'about-text reveal-right');
             text.appendChild(el('span', 'eyebrow', 'Quién soy'));
@@ -448,7 +464,7 @@
                 card.href = ref.href;
                 card.target = '_blank';
                 card.rel = 'noopener';
-                if (entry) card.appendChild(imgEl(entry, true, ref.name));
+                if (entry) card.appendChild(imgEl(entry, 'thumb', ref.name));
                 card.appendChild(el('h3', null, ref.name));
                 card.appendChild(el('p', null, ref.text));
                 refs.appendChild(card);

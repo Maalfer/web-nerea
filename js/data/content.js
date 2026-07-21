@@ -75,7 +75,7 @@ window.CONTENT = {
             'Erasmus en la Scuola Internazionale di Comics de Roma'
         ],
         facts: [
-            { value: 'HBO', label: 'Cráneo de Valerion' },
+            { value: 'HBO', label: 'Cráneo de Balerion' },
             { value: '3', label: 'Disciplinas' },
             { value: '+10', label: 'Proyectos comerciales' }
         ]
@@ -98,7 +98,7 @@ window.CONTENT = {
             name: 'MYLIDEAS',
             href: 'https://mylideas.com/',
             group: 'referencias', index: 3,
-            text: 'Participación en el tallado y dirección de la policromía de la calavera de Valerion, proyecto encargado por HBO para la promoción de «La casa del dragón», así como en varios proyectos para la franquicia Pitufos y en la fabricación de coches para la Patrulla Canina.'
+            text: 'Participación en el tallado y dirección de la policromía de la calavera de Balerion, proyecto encargado por HBO para la promoción de «La casa del dragón», así como en varios proyectos para la franquicia Pitufos y en la fabricación de coches para la Patrulla Canina.'
         },
         {
             name: 'Mario Álvarez',
@@ -196,7 +196,7 @@ window.CONTENT = {
                     title: 'Platos ilustrados',
                     text: 'Ilustración aplicada sobre plato cerámico.'
                 },
-                { type: 'grid', group: 'ilustracion/platos', shape: 'wide' },
+                { type: 'grid', group: 'ilustracion/platos', shape: 'wide', variant: 'lg' },
 
                 {
                     type: 'section', id: 'merchandising', alt: true, eyebrow: '05 — Producto',
@@ -251,7 +251,7 @@ window.CONTENT = {
             },
             index: [
                 { label: 'Escultura publicitaria', href: '#publicitaria' },
-                { label: 'Dragón Valerion', href: '#valerion' },
+                { label: 'Dragón Balerion', href: '#balerion' },
                 { label: 'Paw Patrol', href: '#paw-patrol' },
                 { label: 'Berty’s Burger', href: '#bertys' },
                 { label: 'Pitufos', href: '#pitufos' },
@@ -266,13 +266,18 @@ window.CONTENT = {
                     text: 'Esculturas realizadas en porexpan recubierto de poliurea, lijadas y pintadas a mano.'
                 },
                 {
-                    type: 'split', id: 'valerion',
-                    title: 'Dragón Valerion',
+                    type: 'split', id: 'balerion',
+                    title: 'Dragón Balerion',
                     sub: 'Proyecto para HBO',
-                    text: 'Cráneo de Valerion, escultura realizada para HBO. Peana hecha con porexpan, velas de epoxi espesada con sílice y cráneo con estructura soldada de metal recubierta de porexpan recubierto de poliurea. Pintado y tallado completamente a mano.',
-                    media: { type: 'feature', group: 'escultura/dragon', i: 0, caption: 'Cráneo de Valerion' }
+                    text: 'Cráneo de Balerion, escultura realizada para HBO. Peana hecha con porexpan, velas de epoxi espesada con sílice y cráneo con estructura soldada de metal recubierta de porexpan recubierto de poliurea. Pintado y tallado completamente a mano.',
+                    media: { type: 'feature', group: 'escultura/dragon', i: 0, caption: 'Cráneo de Balerion' }
                 },
                 { type: 'grid', group: 'escultura/dragon', from: 1, to: 6, shape: 'wide' },
+                { type: 'sub', title: 'La referencia', text: 'El cráneo de Balerion tal y como aparece en la serie.' },
+                {
+                    type: 'feature', group: 'escultura/dragon-referencia', i: 0,
+                    caption: 'Imagen de referencia — La casa del dragón (HBO)'
+                },
 
                 {
                     type: 'section', id: 'paw-patrol', alt: true, eyebrow: 'Escultura publicitaria',
@@ -313,7 +318,7 @@ window.CONTENT = {
                 },
                 { type: 'feature', group: 'escultura/diorama-portada', i: 0, caption: 'Diorama — imagen de portada' },
                 { type: 'sub', title: 'Estudio previo', text: 'Bocetos y estudio previo del proyecto.' },
-                { type: 'strip', group: 'escultura/diorama-estudio', cols: 3 },
+                { type: 'strip', group: 'escultura/diorama-estudio', cols: 2 },
                 { type: 'sub', title: 'Proceso', text: 'Construcción del diorama paso a paso.' },
                 { type: 'mosaic', group: 'escultura/diorama-proceso' },
                 {
