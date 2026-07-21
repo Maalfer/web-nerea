@@ -1,78 +1,85 @@
-/* --- Carousel 1 Logic (Comic Projects) --- */
-let currentSlide5 = 0;
+(function () {
+    'use strict';
 
-function moveSlide5(direction) {
-    const slides5 = document.querySelectorAll('.carousel-item');
-    if (!slides5.length) return;
-    const totalSlides5 = slides5.length;
-    slides5[currentSlide5].style.display = 'none';
-    currentSlide5 = (currentSlide5 + direction + totalSlides5) % totalSlides5;
-    slides5[currentSlide5].style.display = 'block';
-    updateThumbnailSelection5();
-}
+    function init(root, thumbsBox) {
+        var viewport = root.querySelector('.carousel-viewport');
+        var track = root.querySelector('.carousel-track');
+        var slides = track.querySelectorAll('.carousel-slide');
+        var counter = root.querySelector('.carousel-counter');
+        var thumbs = thumbsBox ? thumbsBox.querySelectorAll('.thumb') : [];
+        var i = 0;
 
-function selectSlide5(index) {
-    const slides5 = document.querySelectorAll('.carousel-item');
-    if (!slides5.length) return;
-    slides5[currentSlide5].style.display = 'none';
-    currentSlide5 = index;
-    slides5[currentSlide5].style.display = 'block';
-    updateThumbnailSelection5();
-}
+        if (slides.length <= 1) {
+            Array.prototype.forEach.call(root.querySelectorAll('.carousel-btn'), function (b) {
+                b.style.display = 'none';
+            });
+        }
 
-function updateThumbnailSelection5() {
-    const thumbnails = document.querySelectorAll('.thumbnail');
-    thumbnails.forEach((thumb, index) => {
-        thumb.classList.toggle('selected', index === currentSlide5);
-    });
-}
+        function fit() {
+            var h = slides[i].scrollHeight;
+            if (h > 40) viewport.style.height = h + 'px';
+        }
 
-/* --- Carousel 2 Logic (Sculpture Works) --- */
-let currentSlide3 = 0;
+        function go(n) {
+            i = (n + slides.length) % slides.length;
+            track.style.transform = 'translateX(' + (-100 * i) + '%)';
+            fit();
+            if (counter) counter.textContent = (i + 1) + ' / ' + slides.length;
+            Array.prototype.forEach.call(thumbs, function (t, k) {
+                t.classList.toggle('is-active', k === i);
+            });
+            var next = slides[(i + 1) % slides.length].querySelector('img');
+            if (next) next.loading = 'eager';
+        }
 
-function moveSlide(direction) {
-    const slides = document.querySelectorAll('.carousel-item2');
-    if (!slides.length) return;
-    const totalSlides = slides.length;
-    slides[currentSlide3].style.display = 'none';
-    currentSlide3 = (currentSlide3 + direction + totalSlides) % totalSlides;
-    slides[currentSlide3].style.display = 'block';
-    updateThumbnailSelection();
-}
-
-function selectSlide(index) {
-    const slides = document.querySelectorAll('.carousel-item2');
-    if (!slides.length) return;
-    slides[currentSlide3].style.display = 'none';
-    currentSlide3 = index;
-    slides[currentSlide3].style.display = 'block';
-    updateThumbnailSelection();
-}
-
-function updateThumbnailSelection() {
-    const thumbnails = document.querySelectorAll('.thumbnail2');
-    thumbnails.forEach((thumb, index) => {
-        thumb.classList.toggle('selected', index === currentSlide3);
-    });
-}
-
-/* --- Initialization --- */
-document.addEventListener("DOMContentLoaded", () => {
-    // Init Carousel 1
-    const slides5 = document.querySelectorAll('.carousel-item');
-    if (slides5.length > 0) {
-        slides5.forEach((slide, index) => {
-            slide.style.display = index === 0 ? 'block' : 'none';
+        root.querySelector('.carousel-btn.prev').addEventListener('click', function () {
+            go(i - 1);
         });
-        updateThumbnailSelection5();
+        root.querySelector('.carousel-btn.next').addEventListener('click', function () {
+            go(i + 1);
+        });
+
+        Array.prototype.forEach.call(thumbs, function (t, k) {
+            t.addEventListener('click', function () {
+                go(k);
+            });
+        });
+
+        var startX = null;
+        root.addEventListener('touchstart', function (e) {
+            startX = e.changedTouches[0].clientX;
+        }, { passive: true });
+        root.addEventListener('touchend', function (e) {
+            if (startX === null) return;
+            var dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 45) go(i + (dx < 0 ? 1 : -1));
+            startX = null;
+        }, { passive: true });
+
+        root.setAttribute('tabindex', '0');
+        root.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                go(i + 1);
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                go(i - 1);
+            }
+        });
+
+        Array.prototype.forEach.call(root.querySelectorAll('img'), function (im) {
+            if (!im.complete) im.addEventListener('load', fit);
+        });
+
+        var timer;
+        window.addEventListener('resize', function () {
+            clearTimeout(timer);
+            timer = setTimeout(fit, 180);
+        });
+
+        go(0);
     }
 
-    // Init Carousel 2
-    const slides2 = document.querySelectorAll('.carousel-item2');
-    if (slides2.length > 0) {
-        slides2.forEach((slide, index) => {
-            slide.style.display = index === 0 ? 'block' : 'none';
-        });
-        updateThumbnailSelection();
-    }
-});
+    window.Carousel = { init: init };
+})();

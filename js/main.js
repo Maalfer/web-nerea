@@ -1,58 +1,74 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Efecto de escritura y borrado dinámico
-    const textElement = document.getElementById("dynamic-text");
-    if (textElement) {
-        const texts = [
-            "A versatile artist with abilities in illustration, sculpture and design.",
-            "Certified Sculpture Artist."
-        ];
+(function () {
+    'use strict';
 
-        let currentTextIndex = 0;
-        let index = 0;
-        let isDeleting = false;
+    var observer = null;
 
-        function type() {
-            const currentText = texts[currentTextIndex];
-            const delay = isDeleting ? 50 : 100;
-
-            textElement.innerText = currentText.substring(0, index);
-
-            if (!isDeleting && index < currentText.length) {
-                index++;
-                setTimeout(type, delay);
-            } else if (isDeleting && index > 0) {
-                index--;
-                setTimeout(type, delay);
-            } else {
-                isDeleting = !isDeleting;
-                if (!isDeleting) {
-                    currentTextIndex = (currentTextIndex + 1) % texts.length;
-                }
-                setTimeout(type, isDeleting ? 1000 : 2000);
-            }
+    function observe(root) {
+        var scope = root || document;
+        if (!('IntersectionObserver' in window)) {
+            scope.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(function (n) {
+                n.classList.add('is-visible');
+            });
+            return;
         }
-
-        type();
+        if (!observer) {
+            observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        }
+        scope.querySelectorAll('.reveal:not(.is-visible), .reveal-left:not(.is-visible), .reveal-right:not(.is-visible)')
+            .forEach(function (n) {
+                observer.observe(n);
+            });
     }
 
-    // Efecto de aparición al hacer scroll para que funcione en móvil
-    const observer = new IntersectionObserver(
-        (entries, observer) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                    observer.unobserve(entry.target); 
-                }
-            });
-        },
-        {
-            threshold: 0.1 // Mejoramos la visibilidad en móviles
-        }
-    );
+    function chrome() {
+        var header = document.getElementById('site-header');
 
-    // Observa todos los elementos con animación de scroll
-    const elements = document.querySelectorAll(
-        ".scroll-fade-in, .scroll-from-right, .scroll-from-left, .scroll-from-bottom"
-    );
-    elements.forEach((el) => observer.observe(el));
-});
+        var bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        document.body.appendChild(bar);
+
+        var top = document.createElement('button');
+        top.className = 'to-top';
+        top.type = 'button';
+        top.setAttribute('aria-label', 'Volver arriba');
+        top.innerHTML = '<i class="bi bi-arrow-up"></i>';
+        top.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        document.body.appendChild(top);
+
+        var ticking = false;
+
+        function update() {
+            var y = window.scrollY || document.documentElement.scrollTop;
+            var h = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+            if (header) header.classList.toggle('scrolled', y > 60);
+            top.classList.toggle('is-visible', y > 700);
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', function () {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(update);
+        }, { passive: true });
+
+        update();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        chrome();
+        observe(document);
+    });
+
+    document.addEventListener('content:rendered', function () {
+        observe(document);
+    });
+})();
