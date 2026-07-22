@@ -46,16 +46,71 @@
 
     // ------------------------------------------------------------ the canvas
 
+    /** Draws one tab per page, plus the button that creates a new one. */
+    function paintTabs() {
+        var bar = document.querySelector('.ng-pages');
+        if (!bar) return;
+        bar.innerHTML = '';
+
+        Object.keys(window.NGSchema.pages).forEach(function (slug) {
+            var meta = window.NGSchema.pages[slug];
+            var button = el('button', slug === page ? 'is-on' : '', meta.label);
+            button.type = 'button';
+            button.setAttribute('data-page-btn', slug);
+            button.setAttribute('aria-current', slug === page ? 'page' : 'false');
+            button.addEventListener('click', function () {
+                loadPage(slug);
+            });
+            bar.appendChild(button);
+        });
+
+        var add = el('button', 'ng-page-add', '<i class="bi bi-plus-lg"></i>');
+        add.type = 'button';
+        add.title = 'Crear una página nueva';
+        add.setAttribute('aria-label', 'Crear una página nueva');
+        add.addEventListener('click', newPage);
+        bar.appendChild(add);
+    }
+
+    function newPage() {
+        window.NGSettings.openNewPage(function (form) {
+            return window.Auth.createPage(form.slug, form.title, form.subtitle, form.menu)
+                .then(function (answer) {
+                    store.init({
+                        draft: answer.draft,
+                        published: answer.published,
+                        media: store.media()
+                    });
+                    window.NGSchema.refresh(store.model());
+                    loadPage(answer.slug);
+                    window.NGMedia.toast('Página «' + form.title + '» creada');
+                });
+        });
+    }
+
+    function removePage(slug) {
+        var meta = window.NGSchema.pages[slug];
+        if (!meta || meta.builtin) return;
+        if (!window.confirm('¿Eliminar la página «' + meta.label + '» y todo su contenido?\n' +
+            'Se quitará también del menú. Esta acción se aplica al momento.')) return;
+
+        window.Auth.deletePage(slug).then(function (answer) {
+            store.init({ draft: answer.draft, published: answer.published, media: store.media() });
+            window.NGSchema.refresh(store.model());
+            loadPage('home');
+            window.NGMedia.toast('Página eliminada');
+        }).catch(function (error) {
+            window.NGMedia.toast(error.message || 'No se pudo eliminar', true);
+        });
+    }
+
     function loadPage(next) {
+        if (!window.NGSchema.pages[next]) next = 'home';
         page = next;
         selected = null;
         stash();
         frame.src = window.NGSchema.pages[page].file + '?edit=1';
-        document.querySelectorAll('[data-page-btn]').forEach(function (button) {
-            var on = button.getAttribute('data-page-btn') === page;
-            button.classList.toggle('is-on', on);
-            button.setAttribute('aria-current', on ? 'page' : 'false');
-        });
+        paintTabs();
         paintPanels();
     }
 
@@ -438,9 +493,12 @@
     function boot(state) {
         store = window.NGStore;
         store.init(state);
+        window.NGSchema.refresh(store.model());
 
         store.listen(function (reason, detail) {
             if (reason === 'change') {
+                window.NGSchema.refresh(store.model());
+                paintTabs();
                 status();
                 scheduleSave();
                 if (!detail.quiet) scheduleCanvas();
@@ -529,11 +587,6 @@
             });
         });
 
-        document.querySelectorAll('[data-page-btn]').forEach(function (button) {
-            button.addEventListener('click', function () {
-                loadPage(button.getAttribute('data-page-btn'));
-            });
-        });
         document.querySelectorAll('[data-tab-btn]').forEach(function (button) {
             button.addEventListener('click', function () {
                 showTab(button.getAttribute('data-tab-btn'));
@@ -582,6 +635,7 @@
     });
 
     window.NGEditorApp = {
+        removePage: removePage,
         booted: function () {
             return booted;
         },

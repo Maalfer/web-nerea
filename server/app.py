@@ -265,6 +265,82 @@ def scaled(image, max_width):
 # Draft, publishing and revisions
 # ---------------------------------------------------------------------------
 
+BUILTIN_PAGES = ("ilustracion", "escultura", "teatro")
+PAGE_TEMPLATE = "ilustracion.html"
+RESERVED_SLUGS = set(BUILTIN_PAGES) | {
+    "index", "home", "login", "dashboard", "editor", "api", "server",
+    "js", "css", "images", "video", "assets", "favicon", "robots", "sitemap",
+}
+SLUG_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def check_slug(slug):
+    slug = (slug or "").strip().lower()
+    if not SLUG_PATTERN.match(slug):
+        raise HTTPException(status_code=400,
+                            detail="La dirección solo admite letras, números y guiones")
+    if slug in RESERVED_SLUGS:
+        raise HTTPException(status_code=409, detail="Esa dirección está reservada")
+    if len(slug) > 40:
+        raise HTTPException(status_code=400, detail="La dirección es demasiado larga")
+    return slug
+
+
+def page_html(slug, title, description):
+    """Builds the shell of a new page from an existing one, so it inherits
+    the current scripts and their cache-busting version."""
+    source = WEB_ROOT / PAGE_TEMPLATE
+    if not source.exists():
+        raise HTTPException(status_code=500, detail="Falta la plantilla de página")
+    body = source.read_text()
+
+    body = re.sub(r'data-page="[a-z0-9-]+"', 'data-page="%s"' % slug, body)
+    body = re.sub(r"<title>.*?</title>",
+                  "<title>%s — Nerea González López</title>" % html_safe(title),
+                  body, flags=re.S)
+    body = re.sub(r'(<meta name="description"\s+content=")[^"]*(")',
+                  lambda m: m.group(1) + html_safe(description) + m.group(2), body, count=1)
+    body = re.sub(r'(<meta property="og:title" content=")[^"]*(")',
+                  lambda m: m.group(1) + html_safe(title) + m.group(2), body, count=1)
+    return body
+
+
+def html_safe(text):
+    return (str(text or "").replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def custom_slugs(data):
+    return [slug for slug in (data.get("pages") or {}) if slug not in BUILTIN_PAGES]
+
+
+def rebuild_pages():
+    """Keeps every custom page shell in step with the template."""
+    try:
+        data = load_content()
+    except Exception:
+        return
+    for slug in custom_slugs(data):
+        page = data["pages"][slug]
+        target = WEB_ROOT / (slug + ".html")
+        try:
+            write_text_atomic(target, page_html(slug, page.get("title", slug),
+                                                page.get("subtitle", "")))
+        except HTTPException:
+            return
+
+
+def drop_links(data, slug):
+    """Removes menu and footer links that pointed at a deleted page."""
+    target = slug + ".html"
+    for holder, key in (("header", "links"), ("footer", "portfolio")):
+        block = data.get(holder) or {}
+        rows = block.get(key)
+        if isinstance(rows, list):
+            block[key] = [row for row in rows
+                          if str(row.get("href", "")).split("#")[0] != target]
+
+
 DEFAULT_CHROME = {
     "header": {
         "brand": "Nerea González",
@@ -631,6 +707,7 @@ def on_startup():
     try:
         seed_chrome()
         sync_static()
+        rebuild_pages()
     except Exception:
         pass
 
@@ -794,6 +871,7 @@ async def admin_publish(request: Request):
     require_user(request)
     draft = load_draft()
     save_content(draft)
+    rebuild_pages()
     return {"ok": True, "publishedAt": file_moment(CONTENT_JSON), "revisions": revision_list()}
 
 
@@ -816,6 +894,69 @@ def admin_restore(request: Request, name: str = Form(...)):
     data = json.loads(path.read_text())
     store_draft(data)
     return {"ok": True, "draft": data}
+
+
+@app.post("/admin/pages")
+def admin_create_page(request: Request, slug: str = Form(...), title: str = Form(...),
+                      subtitle: str = Form(""), menu: str = Form("")):
+    require_user(request)
+    slug = check_slug(slug)
+    label = (title or "").strip() or slug
+
+    published = load_content()
+    draft = load_draft()
+    if slug in (published.get("pages") or {}) or slug in (draft.get("pages") or {}):
+        raise HTTPException(status_code=409, detail="Ya existe una página con esa dirección")
+
+    page = {
+        "title": label,
+        "subtitle": (subtitle or "").strip(),
+        "hero": {},
+        "index": [],
+        "blocks": [],
+    }
+
+    for data in (published, draft):
+        data.setdefault("pages", {})[slug] = json.loads(json.dumps(page))
+        if menu == "1":
+            links = data.setdefault("header", {}).setdefault("links", [])
+            links.append({"label": label, "href": slug + ".html"})
+
+    write_text_atomic(WEB_ROOT / (slug + ".html"),
+                      page_html(slug, label, (subtitle or "").strip()))
+    save_content(published)
+    store_draft(draft)
+    return {"ok": True, "slug": slug, "draft": draft, "published": published}
+
+
+@app.post("/admin/pages/delete")
+def admin_delete_page(request: Request, slug: str = Form(...)):
+    require_user(request)
+    slug = (slug or "").strip().lower()
+    if slug in BUILTIN_PAGES:
+        raise HTTPException(status_code=400, detail="Las páginas originales no se pueden eliminar")
+    if not SLUG_PATTERN.match(slug):
+        raise HTTPException(status_code=400, detail="Dirección no válida")
+
+    published = load_content()
+    draft = load_draft()
+    if slug not in (published.get("pages") or {}) and slug not in (draft.get("pages") or {}):
+        raise HTTPException(status_code=404, detail="Esa página no existe")
+
+    for data in (published, draft):
+        (data.get("pages") or {}).pop(slug, None)
+        drop_links(data, slug)
+
+    target = WEB_ROOT / (slug + ".html")
+    if target.exists():
+        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        trashed = TRASH_DIR / stamp / (slug + ".html")
+        trashed.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(target), str(trashed))
+
+    save_content(published)
+    store_draft(draft)
+    return {"ok": True, "draft": draft, "published": published}
 
 
 @app.post("/admin/media/group")

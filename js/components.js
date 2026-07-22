@@ -46,13 +46,16 @@
         return window.NG_EDIT ? ' data-ng-path="' + path + '"' : '';
     }
 
+    function stemOf(file) {
+        var name = String(file || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase();
+        name = name.replace(/\.html$/, '');
+        if (!name || name === 'index') return 'home';
+        if (name === 'dashboard' || name === 'editor') return 'login';
+        return name;
+    }
+
     function currentKey() {
-        var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-        if (file.indexOf('ilustracion') === 0) return 'ilustracion';
-        if (file.indexOf('escultura') === 0) return 'escultura';
-        if (file.indexOf('teatro') === 0) return 'teatro';
-        if (file.indexOf('login') === 0 || file.indexOf('dashboard') === 0) return 'login';
-        return 'home';
+        return stemOf(location.pathname.split('/').pop() || 'index.html');
     }
 
     function header() {
@@ -85,12 +88,8 @@
     }
 
     function keyForHref(href) {
-        var file = String(href || '').split('#')[0].toLowerCase();
-        if (file.indexOf('ilustracion') === 0) return 'ilustracion';
-        if (file.indexOf('escultura') === 0) return 'escultura';
-        if (file.indexOf('teatro') === 0) return 'teatro';
-        if (file.indexOf('index') === 0 && String(href).indexOf('#') === -1) return 'home';
-        return '';
+        if (String(href || '').indexOf('#') !== -1) return '';
+        return stemOf(href);
     }
 
     function footer(site) {

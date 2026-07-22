@@ -1387,3 +1387,26 @@ textarea {
     border-color: var(--ng-gold);
     box-shadow: -4px 0 0 var(--ng-gold);
 }
+
+.ng-page-add {
+    color: var(--ng-gold) !important;
+    padding: 6px 10px !important;
+}
+
+.ng-page-add:hover {
+    background: var(--ng-line);
+}
+
+.ng-btn--danger {
+    border-color: var(--ng-danger);
+    color: var(--ng-danger);
+    background: transparent;
+    width: 100%;
+    justify-content: center;
+}
+
+.ng-btn--danger:hover:not(:disabled) {
+    background: var(--ng-danger);
+    border-color: var(--ng-danger);
+    color: #fff;
+}

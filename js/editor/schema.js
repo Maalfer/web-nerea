@@ -363,7 +363,15 @@
                         return path !== 'pages.teatro';
                     }
                 },
-                { key: 'index', label: 'Índice de la página', type: 'pageIndex' }
+                { key: 'index', label: 'Índice de la página', type: 'pageIndex' },
+                {
+                    key: '', label: 'Eliminar la página', type: 'pageDelete', advanced: true,
+                    when: function (value, path) {
+                        var slug = path.split('.')[1];
+                        var meta = window.NGSchema.pages[slug];
+                        return !!meta && !meta.builtin;
+                    }
+                }
             ],
             inline: { title: 'h1', subtitle: '.page-hero-body p' }
         },
@@ -530,12 +538,33 @@
         }
     };
 
+    var BUILTIN = ['ilustracion', 'escultura', 'teatro'];
+    var LABELS = { ilustracion: 'Ilustración', escultura: 'Escultura', teatro: 'Teatro' };
+
     var pages = {
-        home: { label: 'Inicio', file: 'index.html', list: null },
-        ilustracion: { label: 'Ilustración', file: 'ilustracion.html', list: 'pages.ilustracion.blocks' },
-        escultura: { label: 'Escultura', file: 'escultura.html', list: 'pages.escultura.blocks' },
-        teatro: { label: 'Teatro', file: 'teatro.html', list: 'pages.teatro.projects' }
+        home: { label: 'Inicio', file: 'index.html', list: null, builtin: true },
+        ilustracion: { label: 'Ilustración', file: 'ilustracion.html', list: 'pages.ilustracion.blocks', builtin: true },
+        escultura: { label: 'Escultura', file: 'escultura.html', list: 'pages.escultura.blocks', builtin: true },
+        teatro: { label: 'Teatro', file: 'teatro.html', list: 'pages.teatro.projects', builtin: true }
     };
+
+    /** Rebuilds the page list so pages created from the editor also show up. */
+    function refresh(model) {
+        var next = { home: pages.home };
+        Object.keys((model && model.pages) || {}).forEach(function (slug) {
+            var page = model.pages[slug] || {};
+            var builtin = BUILTIN.indexOf(slug) !== -1;
+            next[slug] = {
+                label: builtin ? LABELS[slug] : (page.title || slug),
+                file: slug + '.html',
+                list: 'pages.' + slug + (slug === 'teatro' ? '.projects' : '.blocks'),
+                builtin: builtin
+            };
+        });
+        pages = next;
+        window.NGSchema.pages = next;
+        return next;
+    }
 
     var palette = {
         home: [
@@ -568,6 +597,8 @@
         blocks: blocks,
         singles: singles,
         pages: pages,
+        refresh: refresh,
+        builtin: BUILTIN,
         palette: palette,
         kindForPath: kindForPath,
 

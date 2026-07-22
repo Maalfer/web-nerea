@@ -109,6 +109,21 @@
             return request('/admin/revisions/restore', { method: 'POST', body: body });
         },
 
+        createPage: function (slug, title, subtitle, menu) {
+            var body = new FormData();
+            body.append('slug', slug);
+            body.append('title', title);
+            body.append('subtitle', subtitle || '');
+            body.append('menu', menu ? '1' : '');
+            return request('/admin/pages', { method: 'POST', body: body });
+        },
+
+        deletePage: function (slug) {
+            var body = new FormData();
+            body.append('slug', slug);
+            return request('/admin/pages/delete', { method: 'POST', body: body });
+        },
+
         createGroup: function (kind, group) {
             var body = new FormData();
             body.append('kind', kind);

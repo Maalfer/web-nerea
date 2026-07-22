@@ -201,6 +201,21 @@
         return wrap;
     }
 
+    function deleteControl(path) {
+        var wrap = el('div', 'ng-picker');
+        var slug = path.split('.')[1];
+        var button = el('button', 'ng-btn ng-btn--danger',
+            '<i class="bi bi-trash"></i> Eliminar esta página');
+        button.type = 'button';
+        button.addEventListener('click', function () {
+            window.NGEditorApp.removePage(slug);
+        });
+        wrap.appendChild(button);
+        wrap.appendChild(el('p', 'ng-field-hint',
+            'Se borra la página, su contenido y sus enlaces del menú. Se aplica al momento.'));
+        return wrap;
+    }
+
     function groupOf(path, spec) {
         return read(path, spec.groupKey || 'group');
     }
@@ -498,6 +513,7 @@
         if (spec.type === 'hero') return heroControl(path, spec);
         if (spec.type === 'pdf') return pdfControl(path, spec);
         if (spec.type === 'colorField') return colorFieldControl(path, spec);
+        if (spec.type === 'pageDelete') return deleteControl(path);
         if (REPEATERS[spec.type]) {
             return repeater(path, spec, REPEATERS[spec.type].columns, REPEATERS[spec.type].blank);
         }

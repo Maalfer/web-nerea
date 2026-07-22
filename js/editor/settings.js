@@ -198,6 +198,93 @@
         box.body.appendChild(form);
     }
 
+    function newPageModal(onSubmit) {
+        var box = shell('Página nueva');
+        box.body.appendChild(el('p', 'ng-hint',
+            'Se creará una página vacía con la misma cabecera y pie que el resto. ' +
+            'Después la compones con los bloques del catálogo.'));
+
+        var form = el('form', 'ng-fields');
+        var campos = [
+            { id: 'np-title', label: 'Nombre de la página', type: 'text', required: true,
+                hint: 'Por ejemplo: Exposiciones' },
+            { id: 'np-slug', label: 'Dirección web', type: 'text', required: true,
+                hint: 'exposiciones → nereagonzalez.art/exposiciones.html' },
+            { id: 'np-subtitle', label: 'Subtítulo', type: 'text' }
+        ];
+        var inputs = {};
+
+        campos.forEach(function (spec) {
+            var wrap = el('div', 'ng-field');
+            var tag = el('label', null, spec.label);
+            tag.setAttribute('for', spec.id);
+            wrap.appendChild(tag);
+            var input = el('input');
+            input.type = spec.type;
+            input.id = spec.id;
+            if (spec.required) input.required = true;
+            wrap.appendChild(input);
+            if (spec.hint) wrap.appendChild(el('p', 'ng-field-hint', spec.hint));
+            form.appendChild(wrap);
+            inputs[spec.id] = input;
+        });
+
+        var tocado = false;
+        inputs['np-slug'].addEventListener('input', function () {
+            tocado = true;
+        });
+        inputs['np-title'].addEventListener('input', function () {
+            if (tocado) return;
+            inputs['np-slug'].value = inputs['np-title'].value
+                .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        });
+
+        var menuWrap = el('div', 'ng-field');
+        var menuLabel = el('label', null, 'Añadirla al menú');
+        menuLabel.setAttribute('for', 'np-menu');
+        menuWrap.appendChild(menuLabel);
+        var toggle = el('label', 'ng-switch');
+        var check = el('input');
+        check.type = 'checkbox';
+        check.id = 'np-menu';
+        check.checked = true;
+        toggle.appendChild(check);
+        toggle.appendChild(el('span', 'ng-switch-track'));
+        menuWrap.appendChild(toggle);
+        form.appendChild(menuWrap);
+
+        var message = el('p', 'ng-hint');
+        message.setAttribute('role', 'status');
+        message.setAttribute('aria-live', 'polite');
+        var send = el('button', 'ng-btn ng-btn--gold', 'Crear página');
+        send.type = 'submit';
+        form.appendChild(send);
+        form.appendChild(message);
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            send.disabled = true;
+            message.textContent = 'Creando…';
+            onSubmit({
+                title: inputs['np-title'].value.trim(),
+                slug: inputs['np-slug'].value.trim(),
+                subtitle: inputs['np-subtitle'].value.trim(),
+                menu: check.checked
+            }).then(function () {
+                box.close();
+            }).catch(function (error) {
+                message.textContent = error.message || 'No se pudo crear la página';
+                send.disabled = false;
+            });
+        });
+
+        box.body.appendChild(form);
+        setTimeout(function () {
+            inputs['np-title'].focus();
+        }, 40);
+    }
+
     function helpModal() {
         var box = shell('Cómo funciona el editor');
         var steps = [
@@ -232,6 +319,7 @@
 
     window.NGSettings = {
         openHelp: helpModal,
+        openNewPage: newPageModal,
         load: function () {
             return window.Auth.documents().then(function (data) {
                 docs = data.documents || [];
