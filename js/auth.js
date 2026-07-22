@@ -51,6 +51,38 @@
             return request('/documents/' + key, { method: 'POST', body: body });
         },
 
+        getContent: function () {
+            return request('/admin/content');
+        },
+
+        putContent: function (data) {
+            return request('/admin/content', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        },
+
+        getMedia: function () {
+            return request('/admin/media');
+        },
+
+        replaceImage: function (group, index, file) {
+            var body = new FormData();
+            body.append('group', group);
+            body.append('index', index);
+            body.append('file', file);
+            return request('/admin/media/image', { method: 'POST', body: body });
+        },
+
+        replaceVideo: function (group, index, file) {
+            var body = new FormData();
+            body.append('group', group);
+            body.append('index', index);
+            body.append('file', file);
+            return request('/admin/media/video', { method: 'POST', body: body });
+        },
+
         account: function (currentPassword, username, password) {
             var body = new FormData();
             body.append('current_password', currentPassword);

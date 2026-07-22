@@ -1938,6 +1938,132 @@ window.MEDIA = {
    "h": 1109,
    "name": "p-76.jpg"
   }
+ ],
+ "teatro/orlando": [
+  {
+   "src": "images/teatro/orlando/01.webp?v=0b383507",
+   "medium": "images/teatro/orlando/01-m.webp?v=d6673b85",
+   "thumb": "images/teatro/orlando/01-t.webp?v=a3485d8f",
+   "w": 1600,
+   "h": 1204,
+   "name": "IMG_20251028_123224147.jpg"
+  },
+  {
+   "src": "images/teatro/orlando/02.webp?v=a4374d09",
+   "medium": "images/teatro/orlando/02-m.webp?v=fee2731d",
+   "thumb": "images/teatro/orlando/02-t.webp?v=5920e07b",
+   "w": 1008,
+   "h": 1370,
+   "name": "Screenshot_20260721-233610.png"
+  },
+  {
+   "src": "images/teatro/orlando/03.webp?v=ef132ea6",
+   "medium": "images/teatro/orlando/03-m.webp?v=1695cdc1",
+   "thumb": "images/teatro/orlando/03-t.webp?v=028df8fe",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251030_203828703.jpg"
+  },
+  {
+   "src": "images/teatro/orlando/04.webp?v=743353af",
+   "medium": "images/teatro/orlando/04-m.webp?v=8b14d33d",
+   "thumb": "images/teatro/orlando/04-t.webp?v=2a932f20",
+   "w": 1200,
+   "h": 1600,
+   "name": "IMG_20251030_191703952.jpg"
+  },
+  {
+   "src": "images/teatro/orlando/05.webp?v=bf757a85",
+   "medium": "images/teatro/orlando/05-m.webp?v=ab6b4eea",
+   "thumb": "images/teatro/orlando/05-t.webp?v=ce646103",
+   "w": 1200,
+   "h": 1600,
+   "name": "IMG_20251030_191710031.jpg"
+  },
+  {
+   "src": "images/teatro/orlando/06.webp?v=d61bd40d",
+   "medium": "images/teatro/orlando/06-m.webp?v=051307c0",
+   "thumb": "images/teatro/orlando/06-t.webp?v=746353a1",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251111_191837420.jpg"
+  },
+  {
+   "src": "images/teatro/orlando/07.webp?v=609fb2f8",
+   "medium": "images/teatro/orlando/07-m.webp?v=7055ba0b",
+   "thumb": "images/teatro/orlando/07-t.webp?v=2c2cb238",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251031_204341447.jpg"
+  }
+ ],
+ "teatro/romeo-julieta": [
+  {
+   "src": "images/teatro/romeo-julieta/01.webp?v=4b38c42b",
+   "medium": "images/teatro/romeo-julieta/01-m.webp?v=b51f0843",
+   "thumb": "images/teatro/romeo-julieta/01-t.webp?v=24ea18bf",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251004_173653509.jpg"
+  },
+  {
+   "src": "images/teatro/romeo-julieta/02.webp?v=4979b5f8",
+   "medium": "images/teatro/romeo-julieta/02-m.webp?v=a9b2d857",
+   "thumb": "images/teatro/romeo-julieta/02-t.webp?v=8cd997cd",
+   "w": 1008,
+   "h": 1400,
+   "name": "Screenshot_20260721-233605.png"
+  },
+  {
+   "src": "images/teatro/romeo-julieta/03.webp?v=6bab3cd9",
+   "medium": "images/teatro/romeo-julieta/03-m.webp?v=cfacc58f",
+   "thumb": "images/teatro/romeo-julieta/03-t.webp?v=0b903e40",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251003_102435882.jpg"
+  },
+  {
+   "src": "images/teatro/romeo-julieta/04.webp?v=eca8599f",
+   "medium": "images/teatro/romeo-julieta/04-m.webp?v=90f82dd6",
+   "thumb": "images/teatro/romeo-julieta/04-t.webp?v=79d91fc8",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20251003_102441479.jpg"
+  }
+ ],
+ "teatro/hansel-gretel": [
+  {
+   "src": "images/teatro/hansel-gretel/01.webp?v=021c0f19",
+   "medium": "images/teatro/hansel-gretel/01-m.webp?v=ddee4ee1",
+   "thumb": "images/teatro/hansel-gretel/01-t.webp?v=edaaf45e",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20250912_190158375.jpg"
+  },
+  {
+   "src": "images/teatro/hansel-gretel/02.webp?v=c21f5d2e",
+   "medium": "images/teatro/hansel-gretel/02-m.webp?v=0f3bd517",
+   "thumb": "images/teatro/hansel-gretel/02-t.webp?v=1fd16fa6",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20250904_174758027.jpg"
+  },
+  {
+   "src": "images/teatro/hansel-gretel/03.webp?v=b1cafe5f",
+   "medium": "images/teatro/hansel-gretel/03-m.webp?v=4b9fd0de",
+   "thumb": "images/teatro/hansel-gretel/03-t.webp?v=e943e749",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20250906_175939710.jpg"
+  },
+  {
+   "src": "images/teatro/hansel-gretel/04.webp?v=a8e0b892",
+   "medium": "images/teatro/hansel-gretel/04-m.webp?v=4c3a5f17",
+   "thumb": "images/teatro/hansel-gretel/04-t.webp?v=05964142",
+   "w": 1600,
+   "h": 1200,
+   "name": "IMG_20250906_171701655.jpg"
+  }
  ]
 };
 
@@ -1971,6 +2097,42 @@ window.MEDIA_VIDEO = {
   {
    "src": "video/rigoletto.mp4?v=9a0220a0",
    "name": "rigoletto"
+  }
+ ],
+ "teatro/orlando": [
+  {
+   "src": "video/orlando-1.mp4?v=7a8b799e",
+   "poster": "video/orlando-1-poster.webp?v=1517c5a7",
+   "name": "orlando-1"
+  },
+  {
+   "src": "video/orlando-2.mp4?v=dc5fe985",
+   "poster": "video/orlando-2-poster.webp?v=57d3d992",
+   "name": "orlando-2"
+  },
+  {
+   "src": "video/orlando-3.mp4?v=f76291c6",
+   "poster": "video/orlando-3-poster.webp?v=9df8c0e4",
+   "name": "orlando-3"
+  }
+ ],
+ "teatro/romeo-julieta": [
+  {
+   "src": "video/romeo-julieta-1.mp4?v=394f74c3",
+   "poster": "video/romeo-julieta-1-poster.webp?v=aa521dcd",
+   "name": "romeo-julieta-1"
+  },
+  {
+   "src": "video/romeo-julieta-2.mp4?v=b513ad0b",
+   "poster": "video/romeo-julieta-2-poster.webp?v=63f98290",
+   "name": "romeo-julieta-2"
+  }
+ ],
+ "teatro/hansel-gretel": [
+  {
+   "src": "video/hansel-gretel-1.mp4?v=d11da836",
+   "poster": "video/hansel-gretel-1-poster.webp?v=084faff8",
+   "name": "hansel-gretel-1"
   }
  ]
 };

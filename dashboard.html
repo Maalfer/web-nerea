@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260722a">
 </head>
 
 <body>
@@ -38,6 +38,29 @@
         <p class="panel-note">Sustituye cualquier PDF: el archivo nuevo queda publicado al instante y se guarda una
           copia del anterior.</p>
         <div class="doc-list" id="documents"></div>
+      </section>
+
+      <section class="panel-section">
+        <h2>Contenido y textos</h2>
+        <p class="panel-note">Edita cualquier título o texto de la web. Los cambios se publican al pulsar «Guardar
+          cambios».</p>
+        <div id="content-editor" class="content-editor">
+          <p class="panel-note">Cargando…</p>
+        </div>
+        <div class="content-save-bar">
+          <button type="button" class="btn-bubble" id="content-save" disabled>Guardar
+            cambios<span></span><span></span><span></span><span></span></button>
+          <span class="auth-msg" id="content-msg" role="status"></span>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <h2>Imágenes y vídeos</h2>
+        <p class="panel-note">Sustituye cualquier imagen o vídeo. Las imágenes se optimizan automáticamente y el
+          cambio queda publicado al instante.</p>
+        <div id="media-editor" class="media-editor">
+          <p class="panel-note">Cargando…</p>
+        </div>
       </section>
 
       <section class="panel-section">
@@ -68,8 +91,10 @@
 
   <script src="js/data/content.js"></script>
   <script src="js/components.js"></script>
+  <script src="js/data/media.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/dashboard.js"></script>
+  <script src="js/dashboard-content.js"></script>
   <script src="js/main.js"></script>
 </body>
 

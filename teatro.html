@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Teatro y ópera: escenografía, utilería y acabados artísticos de Nerea González López para Carmen y Rigoletto.">
+    content="Teatro y ópera: escenografía, utilería y acabados artísticos de Nerea González López para Carmen, Rigoletto, Orlando, Romeo y Julieta y Hansel y Gretel.">
   <meta property="og:title" content="Teatro & Ópera — Nerea González López">
   <meta property="og:image" content="images/teatro/carmen/01.webp">
   <title>Teatro & Ópera — Nerea González López</title>
@@ -17,106 +17,30 @@
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260722a">
 </head>
 
 <body class="teatro-page">
 
   <div id="header-container"></div>
 
-  <header class="opera-hero">
+  <header class="opera-hero" id="teatro-hero">
     <div>
       <h1>Teatro &amp; Ópera</h1>
       <p>ESCENOGRAFÍA Y DISEÑO ARTÍSTICO</p>
     </div>
   </header>
 
-  <main>
-
-    <section class="opera-project-section" id="carmen">
-      <div class="opera-grid">
-        <div class="opera-text reveal-left">
-          <h2 class="section-title">Carmen</h2>
-          <h4 class="section-subtitle">Dirigida por Emilio Sagi</h4>
-          <hr class="divider">
-          <p class="project-desc">
-            Participación en la producción de la ópera <strong>Carmen</strong>, bajo la dirección de Emilio Sagi.
-            El trabajo se centró en la creación de utilería detallada, texturizado meticuloso y acabados
-            escenográficos que evocan la atmósfera vibrante y dramática de la obra. Cada pieza fue tratada con
-            técnicas artesanales para asegurar su realismo bajo la iluminación teatral.
-          </p>
-        </div>
-        <div class="opera-media reveal-right">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline poster="images/teatro/carmen/01.webp">
-              <source src="video/carmen.mp4" type="video/mp4">
-              Tu navegador no puede reproducir este vídeo.
-            </video>
-          </div>
-          <div class="gallery-grid">
-            <img src="images/teatro/carmen/01-t.webp" data-lightbox data-full="images/teatro/carmen/01.webp"
-              data-caption="Carmen — escenografía" alt="Carmen escenografía 1">
-            <img src="images/teatro/carmen/02-t.webp" data-lightbox data-full="images/teatro/carmen/02.webp"
-              data-caption="Carmen — escenografía" alt="Carmen escenografía 2">
-            <img src="images/teatro/carmen/03-t.webp" data-lightbox data-full="images/teatro/carmen/03.webp"
-              data-caption="Carmen — escenografía" alt="Carmen escenografía 3">
-            <img src="images/teatro/carmen/04-t.webp" data-lightbox data-full="images/teatro/carmen/04.webp"
-              data-caption="Carmen — escenografía" alt="Carmen escenografía 4">
-          </div>
-        </div>
-      </div>
-
-      <div class="wrap opera-extra">
-        <div class="gallery-grid gallery-grid--sm">
-          <img src="images/teatro/carmen/05-t.webp" data-lightbox data-full="images/teatro/carmen/05.webp"
-            data-caption="Carmen — detalle" alt="Carmen detalle 5">
-          <img src="images/teatro/carmen/06-t.webp" data-lightbox data-full="images/teatro/carmen/06.webp"
-            data-caption="Carmen — detalle" alt="Carmen detalle 6">
-          <img src="images/teatro/carmen/07-t.webp" data-lightbox data-full="images/teatro/carmen/07.webp"
-            data-caption="Carmen — detalle" alt="Carmen detalle 7">
-        </div>
-      </div>
-    </section>
-
-    <section class="opera-project-section" id="rigoletto">
-      <div class="opera-grid opera-grid--flip">
-        <div class="opera-text reveal-right">
-          <h2 class="section-title">Rigoletto</h2>
-          <h4 class="section-subtitle">Colaboración artística</h4>
-          <hr class="divider">
-          <p class="project-desc">
-            Colaboración en la escenografía de la ópera <strong>Rigoletto</strong>.
-            El proyecto requirió la construcción de elementos decorativos de gran escala,
-            combinando técnicas de carpintería y pintura artística para crear ambientes
-            inmersivos que complementan la narrativa oscura y trágica de la obra.
-          </p>
-        </div>
-        <div class="opera-media reveal-left">
-          <div class="video-frame">
-            <video controls preload="metadata" playsinline poster="images/teatro/rigoletto/01.webp">
-              <source src="video/rigoletto.mp4" type="video/mp4">
-              Tu navegador no puede reproducir este vídeo.
-            </video>
-          </div>
-          <div class="gallery-grid">
-            <img src="images/teatro/rigoletto/01-t.webp" data-lightbox data-full="images/teatro/rigoletto/01.webp"
-              data-caption="Rigoletto — escenografía" alt="Rigoletto escenografía">
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+  <main id="teatro-app"></main>
 
   <div id="footer-container"></div>
 
-  <script src="js/data/media.js"></script>
   <script src="js/data/content.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/data/media.js"></script>
   <script src="js/components.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/lightbox.js"></script>
-  <script src="js/carousel.js"></script>
-  <script src="js/render.js"></script>
+  <script src="js/teatro.js"></script>
   <script src="js/main.js"></script>
 </body>
 

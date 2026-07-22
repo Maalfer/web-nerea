@@ -955,6 +955,16 @@ body::-webkit-scrollbar-thumb:hover {
     background: #000;
 }
 
+.video-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.video-row .video-frame video {
+    max-height: 48vh;
+}
+
 .downloads {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2043,6 +2053,36 @@ body::-webkit-scrollbar-thumb:hover {
     border-bottom: none;
 }
 
+.opera-section-header {
+    max-width: 1280px;
+    margin: 34px auto 10px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Crop the Instagram embed so it shows only the video, hiding the account
+   header on top and the likes/comments footer below. */
+.reel-embed {
+    position: relative;
+    width: 360px;
+    max-width: 100%;
+    height: 202px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #000;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.reel-embed iframe {
+    position: absolute;
+    top: -55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 780px;
+    border: 0;
+}
+
 .opera-grid {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
@@ -2323,4 +2363,182 @@ body::-webkit-scrollbar-thumb:hover {
     .section {
         padding: 56px 18px;
     }
+}
+
+/* ---- Panel: editor de contenido y media ---- */
+.content-editor {
+    margin-bottom: 18px;
+}
+
+.edit-group {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.edit-group > summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-family: var(--mono);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: var(--gold);
+    list-style: none;
+}
+
+.edit-group > summary::-webkit-details-marker {
+    display: none;
+}
+
+.edit-group > summary::before {
+    content: '▸ ';
+}
+
+.edit-group[open] > summary::before {
+    content: '▾ ';
+}
+
+.edit-body {
+    padding: 4px 18px 16px;
+}
+
+.edit-sub {
+    border-left: 2px solid rgba(240, 183, 0, 0.35);
+    padding-left: 14px;
+    margin: 14px 0;
+}
+
+.edit-sub-title {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: #cfcfcf;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.field-edit {
+    margin-bottom: 12px;
+}
+
+.field-edit label {
+    display: block;
+    font-size: 0.8rem;
+    color: #9aa0a6;
+    margin-bottom: 4px;
+}
+
+.field-edit input,
+.field-edit textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    color: #f2f2f2;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.field-edit input:focus,
+.field-edit textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.content-save-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    bottom: 0;
+    padding: 12px 0;
+    background: linear-gradient(to top, rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0));
+}
+
+.auth-msg.is-ok,
+.doc-status.is-ok {
+    color: #7ddc8f;
+}
+
+.media-section-title {
+    color: var(--gold);
+    font-family: var(--serif);
+    margin: 22px 0 12px;
+}
+
+.media-group {
+    margin-bottom: 22px;
+}
+
+.media-group-title {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: #cfcfcf;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 10px;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+.media-item {
+    margin: 0;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.media-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #000;
+}
+
+.media-item--video {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 120px;
+}
+
+.media-video-icon {
+    font-size: 1.6rem;
+    color: var(--gold);
+}
+
+.media-name {
+    font-size: 0.8rem;
+    color: #cfcfcf;
+    word-break: break-word;
+}
+
+.media-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+}
+
+.media-replace {
+    font-size: 0.78rem;
+    padding: 7px 12px;
+}
+
+.media-replace input[type="file"] {
+    display: none;
 }
