@@ -1082,6 +1082,9 @@ body::-webkit-scrollbar-thumb:hover {
 
 .btn-ghost {
     display: inline-block;
+    background: transparent;
+    font-family: var(--mono);
+    cursor: pointer;
     border: 1px solid var(--gold);
     color: var(--gold);
     border-radius: 0.5em;
@@ -1143,6 +1146,7 @@ body::-webkit-scrollbar-thumb:hover {
     margin-bottom: 16px;
 }
 
+.about-text h3,
 .about-text h4 {
     color: var(--gold);
     font-size: 0.82rem;
@@ -1337,6 +1341,7 @@ body::-webkit-scrollbar-thumb:hover {
     margin: 0 auto;
 }
 
+.footer-col h2,
 .footer-col h3 {
     font-size: 1.05rem;
     border-bottom: 2px solid var(--gold-soft);
@@ -2713,4 +2718,50 @@ h4.ng-heading {
 .ng-html video,
 .ng-html img {
     max-width: 100%;
+}
+
+.ng-row {
+    display: grid;
+    gap: 30px;
+    align-items: start;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.ng-row.is-middle {
+    align-items: center;
+}
+
+.ng-row--2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.ng-row--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ng-row--2.is-3367 {
+    grid-template-columns: 1fr 2fr;
+}
+
+.ng-row--2.is-6733 {
+    grid-template-columns: 2fr 1fr;
+}
+
+.ng-col {
+    min-width: 0;
+}
+
+.ng-col-empty {
+    min-height: 40px;
+}
+
+@media (max-width: 860px) {
+
+    .ng-row--2,
+    .ng-row--3,
+    .ng-row--2.is-3367,
+    .ng-row--2.is-6733 {
+        grid-template-columns: 1fr;
+    }
 }

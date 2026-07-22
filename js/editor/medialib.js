@@ -10,6 +10,25 @@
 
     var overlay = null;
     var session = null;
+    var restoreTo = null;
+
+    function trap(box) {
+        box.addEventListener('keydown', function (event) {
+            if (event.key !== 'Tab') return;
+            var focusable = box.querySelectorAll(
+                'a[href], button:not(:disabled), input:not(:disabled), select, textarea, [tabindex="0"]');
+            if (!focusable.length) return;
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        });
+    }
 
     function media() {
         return window.NGStore.media();
@@ -38,6 +57,8 @@
         overlay = null;
         session = null;
         document.removeEventListener('keydown', onKey);
+        if (restoreTo && restoreTo.focus) restoreTo.focus();
+        restoreTo = null;
     }
 
     function onKey(event) {
@@ -46,6 +67,8 @@
 
     function toast(message, bad) {
         var note = el('div', 'ng-toast' + (bad ? ' is-bad' : ''), message);
+        note.setAttribute('role', bad ? 'alert' : 'status');
+        note.setAttribute('aria-live', bad ? 'assertive' : 'polite');
         document.body.appendChild(note);
         setTimeout(function () {
             note.classList.add('is-out');
@@ -68,17 +91,25 @@
     // ------------------------------------------------------------ the modal
 
     function build() {
+        restoreTo = document.activeElement;
         overlay = el('div', 'ng-modal');
         var panel = el('div', 'ng-modal-panel');
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-labelledby', 'ng-media-title');
 
         var head = el('header', 'ng-modal-head');
-        head.appendChild(el('h2', null, session.title || 'Biblioteca de medios'));
+        var title = el('h2', null, session.title || 'Biblioteca de medios');
+        title.id = 'ng-media-title';
+        head.appendChild(title);
         var shut = el('button', 'ng-icon-btn', '<i class="bi bi-x-lg"></i>');
         shut.type = 'button';
         shut.title = 'Cerrar';
+        shut.setAttribute('aria-label', 'Cerrar');
         shut.addEventListener('click', close);
         head.appendChild(shut);
         panel.appendChild(head);
+        trap(panel);
 
         var body = el('div', 'ng-modal-body');
         var aside = el('aside', 'ng-modal-groups');
@@ -96,6 +127,7 @@
 
         renderGroups(aside, main);
         renderItems(main);
+        shut.focus();
     }
 
     function renderGroups(aside, main) {
@@ -246,6 +278,7 @@
         var left = el('button', 'ng-icon-btn', '<i class="bi bi-chevron-left"></i>');
         left.type = 'button';
         left.title = 'Mover antes';
+        left.setAttribute('aria-label', 'Mover antes: ' + (entry.name || 'archivo ' + (index + 1)));
         left.addEventListener('click', function (event) {
             event.stopPropagation();
             shift(index, -1, main);
@@ -253,6 +286,7 @@
         var right = el('button', 'ng-icon-btn', '<i class="bi bi-chevron-right"></i>');
         right.type = 'button';
         right.title = 'Mover después';
+        right.setAttribute('aria-label', 'Mover después: ' + (entry.name || 'archivo ' + (index + 1)));
         right.addEventListener('click', function (event) {
             event.stopPropagation();
             shift(index, 1, main);
@@ -260,6 +294,7 @@
         var drop = el('button', 'ng-icon-btn ng-danger', '<i class="bi bi-trash"></i>');
         drop.type = 'button';
         drop.title = 'Eliminar';
+        drop.setAttribute('aria-label', 'Eliminar ' + (entry.name || 'archivo ' + (index + 1)));
         drop.addEventListener('click', function (event) {
             event.stopPropagation();
             if (!window.confirm('¿Eliminar este archivo? Se moverá a la papelera del servidor.')) return;
@@ -281,6 +316,15 @@
 
         card.appendChild(el('figcaption', null, entry.name || ('Archivo ' + (index + 1))));
 
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-pressed', picked ? 'true' : 'false');
+        card.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.click();
+            }
+        });
         card.addEventListener('click', function () {
             if (session.mode === 'index') {
                 session.value = index;

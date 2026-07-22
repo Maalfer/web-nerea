@@ -414,6 +414,13 @@ def walk_blocks(node):
             yield from walk_blocks(value)
 
 
+GROUP_KEYS = ("group", "gallery", "videoGroup")
+
+
+def uses_group(block, group):
+    return any(block.get(key) == group for key in GROUP_KEYS)
+
+
 def freeze_ranges(content, group, length):
     """Turn from/to slices over a group into explicit index lists."""
     for block in walk_blocks(content):
@@ -431,18 +438,20 @@ def freeze_ranges(content, group, length):
 def remap_indices(content, group, mapping, length):
     """Keep media references pointing at the right entry after a delete or reorder."""
     freeze_ranges(content, group, length)
+    remaining = len([v for v in mapping.values() if v is not None])
+
     for block in walk_blocks(content):
-        if block.get("group") != group:
+        if not uses_group(block, group):
             continue
-        if isinstance(block.get("items"), list):
-            block["items"] = [mapping[i] for i in block["items"]
-                              if i in mapping and mapping[i] is not None]
-        for key in ("i", "index"):
-            if key in block and isinstance(block[key], int):
-                moved = mapping.get(block[key])
-                block[key] = 0 if moved is None else moved
-        if isinstance(block.get("mainCount"), int):
-            remaining = len([v for v in mapping.values() if v is not None])
+        if block.get("group") == group:
+            if isinstance(block.get("items"), list):
+                block["items"] = [mapping[i] for i in block["items"]
+                                  if i in mapping and mapping[i] is not None]
+            for key in ("i", "index"):
+                if key in block and isinstance(block[key], int):
+                    moved = mapping.get(block[key])
+                    block[key] = 0 if moved is None else moved
+        if block.get("gallery") == group and isinstance(block.get("mainCount"), int):
             block["mainCount"] = max(0, min(block["mainCount"], remaining))
 
 

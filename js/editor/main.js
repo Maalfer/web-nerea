@@ -52,7 +52,9 @@
         stash();
         frame.src = window.NGSchema.pages[page].file + '?edit=1';
         document.querySelectorAll('[data-page-btn]').forEach(function (button) {
-            button.classList.toggle('is-on', button.getAttribute('data-page-btn') === page);
+            var on = button.getAttribute('data-page-btn') === page;
+            button.classList.toggle('is-on', on);
+            button.setAttribute('aria-current', on ? 'page' : 'false');
         });
         paintPanels();
     }
@@ -76,8 +78,12 @@
 
     function paintPanels() {
         document.querySelectorAll('[data-tab-btn]').forEach(function (button) {
-            button.classList.toggle('is-on', button.getAttribute('data-tab-btn') === tab);
+            var on = button.getAttribute('data-tab-btn') === tab;
+            button.classList.toggle('is-on', on);
+            button.setAttribute('aria-selected', on ? 'true' : 'false');
+            button.tabIndex = on ? 0 : -1;
         });
+        pick('panel-body').setAttribute('aria-labelledby', 'tab-' + tab);
         var host = pick('panel-body');
 
         if (tab === 'add') return window.NGPanels.palette(host, page, selected);
@@ -155,31 +161,44 @@
         refreshCanvas();
     }
 
-    function add(payload) {
-        var list = payload.list;
+    /** Puts a fresh block into any list, including the inside of a column. */
+    function insert(payload, list, index) {
         var spec = window.NGSchema.blocks[payload.kind] || window.NGSchema.singles[payload.kind];
-        if (!spec || !spec.create) return;
+        if (!spec || !spec.create || !list) return;
+        if (payload.kind === 'row' && /\.columns\./.test(list)) {
+            return window.NGMedia.toast('No se pueden anidar filas dentro de otra fila', true);
+        }
 
         var groups = Object.keys(media().images || {});
         var fresh = spec.create(groups[0] || '', media());
-
-        var at = null;
-        if (selected && selected.indexOf(list + '.') === 0) {
-            var info = listInfo(selected);
-            if (info) at = info.index + 1;
-        }
+        var at = index;
 
         store.mutate(function (model) {
             var rows = store.path.get(model, list) || [];
             store.path.set(model, list, rows);
-            if (at == null) at = rows.length;
+            if (at == null || at > rows.length) at = rows.length;
             rows.splice(at, 0, fresh);
         });
         setSelected(list + '.' + at, true);
         tab = 'settings';
+        settingsMode = 'content';
         refreshCanvas();
         paintPanels();
         window.NGMedia.toast('«' + spec.label + '» añadido');
+    }
+
+    function add(payload) {
+        var list = payload.list;
+        var at = null;
+
+        if (selected) {
+            var info = listInfo(selected);
+            if (info && (info.list === list || /\.columns\.\d+$/.test(info.list))) {
+                list = info.list;
+                at = info.index + 1;
+            }
+        }
+        insert(payload, list, at);
     }
 
     // ------------------------------------------------------- saving & status
@@ -310,28 +329,8 @@
             store.setField(path + '.' + field, text, { quiet: true });
             if (tab === 'settings') paintPanels();
         },
-        dropWidget: function (payload, index) {
-            var meta = window.NGSchema.pages[page];
-            if (!meta.list || !payload) return;
-            var spec = window.NGSchema.blocks[payload.kind] || window.NGSchema.singles[payload.kind];
-            if (!spec || !spec.create) return;
-
-            var groups = Object.keys(media().images || {});
-            var fresh = spec.create(groups[0] || '', media());
-            var at = index;
-
-            store.mutate(function (model) {
-                var rows = store.path.get(model, meta.list) || [];
-                store.path.set(model, meta.list, rows);
-                if (at == null || at > rows.length) at = rows.length;
-                rows.splice(at, 0, fresh);
-            });
-            setSelected(meta.list + '.' + at, true);
-            tab = 'settings';
-            settingsMode = 'content';
-            refreshCanvas();
-            paintPanels();
-            window.NGMedia.toast('«' + spec.label + '» añadido');
+        dropWidget: function (payload, list, index) {
+            insert(payload, list, index);
         },
 
         addBelow: function (path) {
@@ -352,7 +351,9 @@
 
     function showDevice(width) {
         document.querySelectorAll('[data-device]').forEach(function (other) {
-            other.classList.toggle('is-on', other.getAttribute('data-device') === width);
+            var on = other.getAttribute('data-device') === width;
+            other.classList.toggle('is-on', on);
+            other.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
         pick('stage').style.maxWidth = width === 'full' ? '' : width + 'px';
     }
@@ -502,6 +503,18 @@
 
         devices();
         shortcuts();
+
+        var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tab-btn]'));
+        tabs.forEach(function (button, index) {
+            button.addEventListener('keydown', function (event) {
+                var step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+                if (!step) return;
+                event.preventDefault();
+                var next = tabs[(index + step + tabs.length) % tabs.length];
+                next.focus();
+                showTab(next.getAttribute('data-tab-btn'));
+            });
+        });
 
         window.addEventListener('beforeunload', function (event) {
             if (store.unsaved()) {

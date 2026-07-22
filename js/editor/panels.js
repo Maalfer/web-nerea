@@ -43,11 +43,12 @@
 
     // ------------------------------------------------------------ structure
 
-    function rowFor(listPath, value, index, selected) {
+    function rowFor(listPath, value, index, selected, depth) {
         var path = listPath + '.' + index;
         var spec = window.NGSchema.describe(path, value);
         var row = el('div', 'ng-layer' + (path === selected ? ' is-on' : '') +
-            (value && value.type === 'section' ? ' is-head' : ''));
+            (value && value.type === 'section' ? ' is-head' : '') +
+            (depth ? ' is-nested' : ''));
         row.draggable = true;
         row.setAttribute('data-index', index);
         row.innerHTML = '<i class="bi ' + (spec ? spec.icon : 'bi-square') + '"></i>' +
@@ -60,8 +61,16 @@
             row.querySelector('em').textContent = 'sin contenido';
         }
 
+        row.setAttribute('role', 'button');
+        row.setAttribute('tabindex', '0');
         row.addEventListener('click', function () {
             handlers.onSelect(path);
+        });
+        row.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handlers.onSelect(path);
+            }
         });
         row.addEventListener('mouseenter', function () {
             handlers.onHover(path);
@@ -72,10 +81,32 @@
         return row;
     }
 
+    function columnTree(rowPath, value, selected) {
+        var wrap = el('div', 'ng-subtree');
+        var count = value.cols === 3 ? 3 : 2;
+
+        for (var column = 0; column < count; column++) {
+            var listPath = rowPath + '.columns.' + column;
+            var children = (value.columns && value.columns[column]) || [];
+            var head = el('div', 'ng-subtree-head', 'Columna ' + (column + 1) +
+                (children.length ? '' : ' · vacía'));
+            wrap.appendChild(head);
+
+            if (!children.length) continue;
+            var box = el('div', 'ng-layers');
+            children.forEach(function (child, index) {
+                box.appendChild(rowFor(listPath, child, index, selected, 1));
+            });
+            wrap.appendChild(box);
+            sortable(children, listPath, box);
+        }
+        return wrap;
+    }
+
     function sortable(list, listPath, host) {
         var dragging = null;
 
-        host.querySelectorAll('.ng-layer').forEach(function (row) {
+        host.querySelectorAll(':scope > .ng-layer').forEach(function (row) {
             var index = parseInt(row.getAttribute('data-index'), 10);
 
             row.addEventListener('dragstart', function (event) {
@@ -86,7 +117,7 @@
             });
             row.addEventListener('dragend', function () {
                 dragging = null;
-                host.querySelectorAll('.ng-layer').forEach(function (node) {
+                host.querySelectorAll(':scope > .ng-layer').forEach(function (node) {
                     node.classList.remove('is-dragging', 'is-over', 'is-under');
                 });
             });
@@ -122,7 +153,10 @@
             }
             var box = el('div', 'ng-layers');
             rows.forEach(function (value, index) {
-                box.appendChild(rowFor(entry.path, value, index, selected));
+                box.appendChild(rowFor(entry.path, value, index, selected, 0));
+                if (value && value.type === 'row') {
+                    box.appendChild(columnTree(entry.path + '.' + index, value, selected));
+                }
             });
             host.appendChild(box);
             sortable(rows, entry.path, box);
@@ -138,8 +172,9 @@
         else extras.unshift({ path: 'pages.' + page, label: 'Ajustes de la página', icon: 'bi-sliders' });
 
         extras.forEach(function (entry) {
-            var row = el('div', 'ng-layer' + (entry.path === selected ? ' is-on' : ''),
+            var row = el('button', 'ng-layer' + (entry.path === selected ? ' is-on' : ''),
                 '<i class="bi ' + entry.icon + '"></i><span>' + entry.label + '</span>');
+            row.type = 'button';
             row.addEventListener('click', function () {
                 handlers.onSelect(entry.path);
             });

@@ -6,6 +6,7 @@
     function el(tag, cls) {
         var node = document.createElement(tag);
         if (cls) node.className = cls;
+        if (tag === 'img') node.alt = '';
         return node;
     }
 
@@ -23,6 +24,7 @@
 
         function setImg(img, entry) {
             if (!img || !entry) return;
+            img.alt = 'Página ' + (pages.indexOf(entry) + 1) + ' de ' + pages.length;
             if (img.getAttribute('data-src') === entry.src) return;
             img.setAttribute('data-src', entry.src);
             img.src = entry.src;

@@ -23,27 +23,62 @@
             ' · ' + d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     }
 
+    var seq = 0;
+
     function shell(title) {
+        var restoreTo = document.activeElement;
         var overlay = el('div', 'ng-modal');
         var panel = el('div', 'ng-modal-panel ng-modal-panel--slim');
-        var head = el('header', 'ng-modal-head');
-        head.appendChild(el('h2', null, title));
-        var shut = el('button', 'ng-icon-btn', '<i class="bi bi-x-lg"></i>');
-        shut.type = 'button';
-        shut.addEventListener('click', function () {
+        seq += 1;
+        var titleId = 'ng-dialog-' + seq;
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-labelledby', titleId);
+
+        function shut() {
             overlay.remove();
-        });
-        head.appendChild(shut);
+            document.removeEventListener('keydown', onKey);
+            if (restoreTo && restoreTo.focus) restoreTo.focus();
+        }
+
+        function onKey(event) {
+            if (event.key === 'Escape') return shut();
+            if (event.key !== 'Tab') return;
+            var focusable = panel.querySelectorAll(
+                'a[href], button:not(:disabled), input:not(:disabled), select, textarea');
+            if (!focusable.length) return;
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+
+        var head = el('header', 'ng-modal-head');
+        var heading = el('h2', null, title);
+        heading.id = titleId;
+        head.appendChild(heading);
+        var close = el('button', 'ng-icon-btn', '<i class="bi bi-x-lg"></i>');
+        close.type = 'button';
+        close.setAttribute('aria-label', 'Cerrar');
+        close.addEventListener('click', shut);
+        head.appendChild(close);
         panel.appendChild(head);
 
         var body = el('div', 'ng-modal-body ng-modal-body--plain');
         panel.appendChild(body);
         overlay.appendChild(panel);
         overlay.addEventListener('mousedown', function (event) {
-            if (event.target === overlay) overlay.remove();
+            if (event.target === overlay) shut();
         });
+        document.addEventListener('keydown', onKey);
         document.body.appendChild(overlay);
-        return { overlay: overlay, body: body };
+        close.focus();
+        return { overlay: overlay, body: body, close: shut };
     }
 
     function documentsModal() {
@@ -117,9 +152,15 @@
 
         fields.forEach(function (spec) {
             var wrap = el('div', 'ng-field');
-            wrap.appendChild(el('label', null, spec.label));
+            var tag = el('label', null, spec.label);
+            tag.setAttribute('for', spec.id);
+            wrap.appendChild(tag);
             var input = el('input');
             input.type = spec.type;
+            input.id = spec.id;
+            input.autocomplete = spec.type === 'password'
+                ? (spec.id === 'ng-current' ? 'current-password' : 'new-password')
+                : 'username';
             if (spec.required) input.required = true;
             if (spec.hint) input.placeholder = spec.hint;
             wrap.appendChild(input);
@@ -128,6 +169,8 @@
         });
 
         var message = el('p', 'ng-hint');
+        message.setAttribute('role', 'status');
+        message.setAttribute('aria-live', 'polite');
         var send = el('button', 'ng-btn ng-btn--gold', 'Guardar');
         send.type = 'submit';
         form.appendChild(send);

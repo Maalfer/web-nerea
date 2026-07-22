@@ -112,8 +112,10 @@
         return store().get(path + '.style.base.' + key);
     }
 
+    var seq = 0;
+
     function label(spec, path) {
-        var box = el('div', 'ng-style-label');
+        var box = el('label', 'ng-style-label');
         box.appendChild(el('span', null, spec.label));
 
         var current = read(path, spec.key);
@@ -121,6 +123,7 @@
             var clear = el('button', 'ng-icon-btn ng-tiny', '<i class="bi bi-arrow-counterclockwise"></i>');
             clear.type = 'button';
             clear.title = 'Quitar este ajuste';
+            clear.setAttribute('aria-label', 'Quitar el ajuste de ' + spec.label.toLowerCase());
             clear.addEventListener('click', function () {
                 write(path, spec.key, undefined);
             });
@@ -205,6 +208,8 @@
                 '<i class="bi ' + option.icon + '"></i>');
             button.type = 'button';
             button.title = option.title;
+            button.setAttribute('aria-label', spec.label + ': ' + option.title);
+            button.setAttribute('aria-pressed', current === option.value ? 'true' : 'false');
             button.addEventListener('click', function () {
                 write(path, spec.key, current === option.value ? undefined : option.value);
             });
@@ -307,8 +312,17 @@
                 var body = el('div', 'ng-fields');
                 group.fields.forEach(function (spec) {
                     var field = el('div', 'ng-field ng-field--style');
-                    field.appendChild(label(spec, path));
-                    field.appendChild(control(path, spec));
+                    var tag = label(spec, path);
+                    var node = control(path, spec);
+                    field.appendChild(tag);
+                    field.appendChild(node);
+
+                    var first = node.querySelector('input, select') || node;
+                    if (first.tagName === 'INPUT' || first.tagName === 'SELECT') {
+                        seq += 1;
+                        first.id = 'ng-st-' + seq;
+                        tag.setAttribute('for', first.id);
+                    }
                     body.appendChild(field);
                 });
                 block.appendChild(body);

@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Editor visual del portfolio de Nerea González López.">
   <title>Editor visual — Nerea González López</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,20 +15,21 @@
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/editor.css?v=20260722e">
+  <link rel="stylesheet" href="css/editor.css?v=20260722k">
 </head>
 
 <body class="ng-body">
 
+  <a class="ng-skip" href="#panel-body">Ir al panel de edición</a>
   <div class="ng-shell" id="editor">
 
-    <header class="ng-top">
+    <header class="ng-top" role="banner">
       <div class="ng-top-left">
         <a class="ng-brand" href="dashboard.html" title="Volver al panel">
           <i class="bi bi-chevron-left"></i>
           <strong>Editor</strong>
         </a>
-        <nav class="ng-pages">
+        <nav class="ng-pages" aria-label="Páginas de la web">
           <button type="button" data-page-btn="home">Inicio</button>
           <button type="button" data-page-btn="ilustracion">Ilustración</button>
           <button type="button" data-page-btn="escultura">Escultura</button>
@@ -35,30 +37,30 @@
         </nav>
       </div>
 
-      <div class="ng-devices">
-        <button type="button" data-device="full" class="is-on" title="Escritorio"><i
+      <div class="ng-devices" role="group" aria-label="Vista previa por dispositivo">
+        <button type="button" data-device="full" class="is-on" title="Escritorio" aria-label="Escritorio"><i
             class="bi bi-display"></i></button>
-        <button type="button" data-device="900" title="Tableta"><i class="bi bi-tablet-landscape"></i></button>
-        <button type="button" data-device="420" title="Móvil"><i class="bi bi-phone"></i></button>
+        <button type="button" data-device="900" title="Tableta" aria-label="Tableta"><i class="bi bi-tablet-landscape"></i></button>
+        <button type="button" data-device="420" title="Móvil" aria-label="Móvil"><i class="bi bi-phone"></i></button>
       </div>
 
       <div class="ng-top-right">
-        <span class="ng-save-state" id="save-state">…</span>
-        <button type="button" class="ng-icon-btn" id="undo" title="Deshacer (Ctrl+Z)"><i
+        <span class="ng-save-state" id="save-state" role="status" aria-live="polite">…</span>
+        <button type="button" class="ng-icon-btn" id="undo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer (Ctrl+Z)"><i
             class="bi bi-arrow-counterclockwise"></i></button>
-        <button type="button" class="ng-icon-btn" id="redo" title="Rehacer (Ctrl+Mayús+Z)"><i
+        <button type="button" class="ng-icon-btn" id="redo" title="Rehacer (Ctrl+Mayús+Z)" aria-label="Rehacer (Ctrl+Mayús+Z)"><i
             class="bi bi-arrow-clockwise"></i></button>
-        <button type="button" class="ng-icon-btn" id="library" title="Biblioteca de medios"><i
+        <button type="button" class="ng-icon-btn" id="library" title="Biblioteca de medios" aria-label="Biblioteca de medios"><i
             class="bi bi-images"></i></button>
-        <button type="button" class="ng-icon-btn" id="docs" title="Documentos en PDF"><i
+        <button type="button" class="ng-icon-btn" id="docs" title="Documentos en PDF" aria-label="Documentos en PDF"><i
             class="bi bi-file-earmark-pdf"></i></button>
-        <button type="button" class="ng-icon-btn" id="preview" title="Ver el borrador en otra pestaña"><i
+        <button type="button" class="ng-icon-btn" id="preview" title="Ver el borrador en otra pestaña" aria-label="Ver el borrador en otra pestaña"><i
             class="bi bi-box-arrow-up-right"></i></button>
-        <button type="button" class="ng-icon-btn" id="history" title="Versiones anteriores"><i
+        <button type="button" class="ng-icon-btn" id="history" title="Versiones anteriores" aria-label="Versiones anteriores"><i
             class="bi bi-clock-history"></i></button>
-        <button type="button" class="ng-icon-btn" id="account" title="Cuenta"><i
+        <button type="button" class="ng-icon-btn" id="account" title="Cuenta" aria-label="Cuenta"><i
             class="bi bi-person-gear"></i></button>
-        <button type="button" class="ng-icon-btn" id="help" title="Cómo funciona"><i
+        <button type="button" class="ng-icon-btn" id="help" title="Cómo funciona" aria-label="Cómo funciona"><i
             class="bi bi-question-circle"></i></button>
         <button type="button" class="ng-btn ng-btn--ghost" id="discard">Descartar</button>
         <button type="button" class="ng-btn ng-btn--gold" id="publish">Publicar</button>
@@ -67,13 +69,13 @@
     </header>
 
     <div class="ng-work">
-      <aside class="ng-side">
-        <nav class="ng-tabs">
-          <button type="button" data-tab-btn="add"><i class="bi bi-plus-square"></i> Añadir</button>
-          <button type="button" data-tab-btn="layers"><i class="bi bi-list-nested"></i> Estructura</button>
-          <button type="button" data-tab-btn="settings"><i class="bi bi-sliders"></i> Ajustes</button>
-        </nav>
-        <div class="ng-panel" id="panel-body">
+      <aside class="ng-side" aria-label="Panel de edición">
+        <div class="ng-tabs" role="tablist" aria-label="Herramientas del editor">
+          <button type="button" role="tab" id="tab-add" aria-controls="panel-body" data-tab-btn="add"><i class="bi bi-plus-square"></i> Añadir</button>
+          <button type="button" role="tab" id="tab-layers" aria-controls="panel-body" data-tab-btn="layers"><i class="bi bi-list-nested"></i> Estructura</button>
+          <button type="button" role="tab" id="tab-settings" aria-controls="panel-body" data-tab-btn="settings"><i class="bi bi-sliders"></i> Ajustes</button>
+        </div>
+        <div class="ng-panel" id="panel-body" role="tabpanel" tabindex="0">
           <p class="ng-empty">Cargando el editor…</p>
         </div>
       </aside>
@@ -87,15 +89,15 @@
 
   </div>
 
-  <script src="js/auth.js?v=20260722e"></script>
-  <script src="js/editor/schema.js?v=20260722e"></script>
-  <script src="js/editor/store.js?v=20260722e"></script>
-  <script src="js/editor/medialib.js?v=20260722e"></script>
-  <script src="js/editor/inspector.js?v=20260722e"></script>
-  <script src="js/editor/style.js?v=20260722e"></script>
-  <script src="js/editor/panels.js?v=20260722e"></script>
-  <script src="js/editor/settings.js?v=20260722e"></script>
-  <script src="js/editor/main.js?v=20260722e"></script>
+  <script src="js/auth.js?v=20260722k"></script>
+  <script src="js/editor/schema.js?v=20260722k"></script>
+  <script src="js/editor/store.js?v=20260722k"></script>
+  <script src="js/editor/medialib.js?v=20260722k"></script>
+  <script src="js/editor/inspector.js?v=20260722k"></script>
+  <script src="js/editor/style.js?v=20260722k"></script>
+  <script src="js/editor/panels.js?v=20260722k"></script>
+  <script src="js/editor/settings.js?v=20260722k"></script>
+  <script src="js/editor/main.js?v=20260722k"></script>
 </body>
 
 </html>

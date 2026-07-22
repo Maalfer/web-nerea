@@ -30,11 +30,30 @@
         handlers.onEdit(path, { live: !!live });
     }
 
+    var seq = 0;
+
+    /** Ties the visible label to whatever control the field renders. */
+    function link(box, tag) {
+        var control = box.querySelector('input, select, textarea, button');
+        if (!control || !tag) return;
+        if (control.tagName === 'BUTTON') {
+            seq += 1;
+            tag.id = tag.id || 'ng-lb-' + seq;
+            control.setAttribute('aria-labelledby', tag.id + ' ' + (control.id || ''));
+            return;
+        }
+        seq += 1;
+        control.id = control.id || 'ng-in-' + seq;
+        tag.setAttribute('for', control.id);
+    }
+
     function field(label, control, hint) {
         var box = el('div', 'ng-field');
-        if (label) box.appendChild(el('label', null, label));
+        var tag = label ? el('label', null, label) : null;
+        if (tag) box.appendChild(tag);
         box.appendChild(control);
         if (hint) box.appendChild(el('p', 'ng-field-hint', hint));
+        link(box, tag);
         return box;
     }
 

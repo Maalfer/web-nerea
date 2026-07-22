@@ -84,6 +84,21 @@
         return zoomable(fig, entry, label || alt);
     }
 
+    function childNode(child, meta, column, position) {
+        var build = blocks[child.type];
+        if (!build) return null;
+        var data = child.alt ? child : Object.assign({}, child, {
+            alt: child.caption || (meta && meta.context) || ''
+        });
+        var path = meta && meta.path
+            ? meta.path + '.columns.' + column + '.' + position
+            : null;
+        var node = build(data, { path: path, context: meta && meta.context });
+        if (!node) return null;
+        if (path) stamp(node, path);
+        return styled(node, child);
+    }
+
     var blocks = {
 
         feature: function (b) {
@@ -238,6 +253,26 @@
                 box.appendChild(inner);
             }
             wrap.appendChild(box);
+            return wrap;
+        },
+
+        row: function (b, meta) {
+            var count = b.cols === 3 ? 3 : 2;
+            var wrap = el('div', 'ng-row ng-row--' + count +
+                (b.ratio ? ' is-' + b.ratio : '') +
+                (b.middle ? ' is-middle' : ''));
+            if (b.gap != null) wrap.style.gap = b.gap + 'px';
+
+            for (var index = 0; index < count; index++) {
+                var cell = el('div', 'ng-col');
+                var children = (b.columns && b.columns[index]) || [];
+                children.forEach(function (child, position) {
+                    var node = childNode(child, meta, index, position);
+                    if (node) cell.appendChild(node);
+                });
+                if (!children.length) cell.appendChild(el('div', 'ng-col-empty'));
+                wrap.appendChild(cell);
+            }
             return wrap;
         },
 
@@ -445,7 +480,7 @@
             if (!build) return;
 
             var data = b.alt ? b : Object.assign({}, b, { alt: b.caption || context });
-            var node = build(data);
+            var node = build(data, { path: path, context: context });
             if (node) ensureSection().appendChild(styled(stamp(node, path), b));
         });
     }
@@ -508,7 +543,7 @@
             });
 
             if (info.education && info.education.length) {
-                text.appendChild(el('h4', null, 'Formación'));
+                text.appendChild(el('h3', null, 'Formación'));
                 var list = el('ul', 'contact-list');
                 info.education.forEach(function (line) {
                     list.appendChild(el('li', null,

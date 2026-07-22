@@ -1294,3 +1294,75 @@ textarea {
         font-size: 11px;
     }
 }
+
+.ng-subtree {
+    margin: 2px 0 6px 16px;
+    padding-left: 12px;
+    border-left: 1px solid var(--ng-line);
+}
+
+.ng-subtree-head {
+    color: var(--ng-dim);
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 8px 0 5px;
+}
+
+.ng-layer.is-nested {
+    background: var(--ng-bg);
+}
+
+/* ------------------------------------------------------- accesibilidad */
+
+.ng-skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 2000;
+    background: var(--ng-gold);
+    color: #17171a;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 0 0 8px 0;
+    text-decoration: none;
+}
+
+.ng-skip:focus {
+    left: 0;
+}
+
+.ng-body :focus-visible {
+    outline: 2px solid var(--ng-gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.ng-pages button:focus-visible,
+.ng-devices button:focus-visible,
+.ng-tabs button:focus-visible,
+.ng-subtabs button:focus-visible,
+.ng-style-devices button:focus-visible {
+    outline-offset: -2px;
+}
+
+.ng-panel:focus-visible {
+    outline-offset: -3px;
+}
+
+.ng-layer:focus-visible,
+.ng-widget:focus-visible,
+.ng-media-card:focus-visible {
+    outline: 2px solid var(--ng-gold);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ng-stage,
+    .ng-toast,
+    .ng-switch-track,
+    .ng-switch-track::after {
+        transition: none !important;
+    }
+}

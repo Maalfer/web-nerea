@@ -182,6 +182,32 @@
             }
         },
 
+        row: {
+            label: 'Fila de columnas',
+            icon: 'bi-layout-three-columns',
+            hint: 'Divide el ancho en dos o tres columnas y coloca dentro los bloques que quieras.',
+            fields: [
+                {
+                    key: 'cols', label: 'Número de columnas', type: 'select', options: [
+                        { value: 2, label: '2 columnas' },
+                        { value: 3, label: '3 columnas' }
+                    ]
+                },
+                {
+                    key: 'ratio', label: 'Proporción', type: 'select', options: [
+                        { value: '', label: 'Iguales' },
+                        { value: '3367', label: 'Estrecha + ancha' },
+                        { value: '6733', label: 'Ancha + estrecha' }
+                    ]
+                },
+                { key: 'gap', label: 'Separación entre columnas', type: 'number', min: 0, max: 100 },
+                { key: 'middle', label: 'Centrar verticalmente', type: 'toggle' }
+            ],
+            create: function () {
+                return { type: 'row', cols: 2, gap: 30, columns: [[], []] };
+            }
+        },
+
         heading: {
             label: 'Título suelto',
             icon: 'bi-type-h2',
@@ -196,7 +222,7 @@
                     ]
                 }
             ],
-            inline: { text: '' },
+            inline: { text: ':self' },
             create: function () {
                 return { type: 'heading', text: 'Nuevo título', level: 'h2' };
             }
@@ -209,7 +235,7 @@
             fields: [
                 { key: 'text', label: 'Texto', type: 'textarea' }
             ],
-            inline: { text: 'p' },
+            inline: { text: ':self' },
             create: function () {
                 return { type: 'text', text: 'Escribe aquí tu texto.' };
             }
@@ -465,9 +491,9 @@
             { kind: 'download', list: 'downloads' },
             { kind: 'reference', list: 'references' }
         ],
-        blocks: ['section', 'sub', 'heading', 'text', 'split', 'feature', 'strip', 'grid',
-            'mosaic', 'carousel', 'video', 'button', 'links', 'divider', 'spacer',
-            'flipbook', 'html'],
+        blocks: ['section', 'sub', 'heading', 'text', 'row', 'split', 'feature', 'strip',
+            'grid', 'mosaic', 'carousel', 'video', 'button', 'links', 'divider',
+            'spacer', 'flipbook', 'html'],
         projects: ['project']
     };
 

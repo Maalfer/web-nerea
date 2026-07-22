@@ -69,7 +69,9 @@
         '[contenteditable="true"]:focus,[contenteditable="true"]:focus-visible{outline:2px solid #e0a83a !important;',
         'outline-offset:2px !important;background:rgba(224,168,58,.08)}',
         '.ng-dragging{opacity:.4}',
-        'body.ng-drag-active{cursor:grabbing !important;user-select:none}'
+        'body.ng-drag-active{cursor:grabbing !important;user-select:none}',
+        '.ng-bar button:focus-visible{outline:2px solid #141414;outline-offset:-3px}',
+        '@media (prefers-reduced-motion: reduce){[data-ng-path]{transition:none}}'
     ].join('');
 
     var style = document.createElement('style');
@@ -306,7 +308,13 @@
         if (!spec || !spec.inline) return;
 
         Object.keys(spec.inline).forEach(function (field) {
-            var target = node.querySelector(spec.inline[field]);
+            var selector = spec.inline[field];
+            var target;
+            try {
+                target = selector === ':self' ? node : node.querySelector(selector);
+            } catch (error) {
+                return;
+            }
             if (!target || target.querySelector('[data-ng-path]')) return;
             target.setAttribute('contenteditable', 'plaintext-only');
             target.setAttribute('data-ng-field', field);
@@ -371,38 +379,80 @@
 
     // -------------------------------------------------- soltar widgets nuevos
 
-    function siblingNodes() {
-        var all = nodes().filter(function (node) {
-            return /\.\d+$/.test(node.getAttribute('data-ng-path'));
-        });
-        return all.sort(function (a, b) {
+    function inOrder(list) {
+        return list.sort(function (a, b) {
             return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
         });
     }
 
-    function dropSlot(pointerY, siblings) {
-        for (var n = 0; n < siblings.length; n++) {
-            var box = siblings[n].getBoundingClientRect();
-            if (pointerY < box.top + box.height / 2) return n;
-        }
-        return siblings.length;
+    function rootList() {
+        var first = nodes().filter(function (node) {
+            return /^pages\..+\.(blocks|projects)\.\d+$/.test(node.getAttribute('data-ng-path'));
+        })[0];
+        if (!first) return null;
+        var path = first.getAttribute('data-ng-path');
+        return path.slice(0, path.lastIndexOf('.') + 1);
     }
 
-    function showDropLine(slot, siblings) {
+    function childrenOf(prefix) {
+        return inOrder(nodes().filter(function (node) {
+            var path = node.getAttribute('data-ng-path');
+            return path.indexOf(prefix) === 0 && path.slice(prefix.length).indexOf('.') === -1;
+        }));
+    }
+
+    function siblingNodes() {
+        var prefix = rootList();
+        return prefix ? childrenOf(prefix) : [];
+    }
+
+    /** Works out which list a dragged widget would land in, and where. */
+    function dropContext(pointerX, pointerY) {
+        var over = document.elementFromPoint(pointerX, pointerY);
+        var column = closestOf(over, '.ng-col');
+        var prefix = null;
+
+        if (column && column.parentElement) {
+            var row = closestOf(column.parentElement, '[data-ng-path]');
+            if (row) {
+                var cells = Array.prototype.slice.call(column.parentElement.children);
+                prefix = row.getAttribute('data-ng-path') + '.columns.' + cells.indexOf(column) + '.';
+            }
+        }
+        if (!prefix) prefix = rootList();
+        if (!prefix) return null;
+
+        var siblings = childrenOf(prefix);
+        var slot = siblings.length;
+        for (var n = 0; n < siblings.length; n++) {
+            var box = siblings[n].getBoundingClientRect();
+            if (pointerY < box.top + box.height / 2) {
+                slot = n;
+                break;
+            }
+        }
+        return { list: prefix.slice(0, -1), index: slot, siblings: siblings, box: column };
+    }
+
+    function showDropLine(context) {
         if (!indicator) {
             indicator = document.createElement('div');
             indicator.className = 'ng-drop';
             layer.appendChild(indicator);
         }
-        if (!siblings.length) {
+        var siblings = context.siblings;
+        var reference = siblings.length
+            ? siblings[Math.min(context.index, siblings.length - 1)]
+            : context.box;
+        if (!reference) {
             indicator.style.display = 'none';
             return;
         }
-        var reference = siblings[Math.min(slot, siblings.length - 1)];
         var box = reference.getBoundingClientRect();
-        var below = slot >= siblings.length;
+        var below = siblings.length && context.index >= siblings.length;
         indicator.style.display = 'block';
-        indicator.style.top = (below ? box.bottom : box.top) + window.scrollY - 2 + 'px';
+        indicator.style.top = (below || !siblings.length ? box.bottom : box.top) +
+            window.scrollY - 2 + 'px';
         indicator.style.left = box.left + window.scrollX + 'px';
         indicator.style.width = box.width + 'px';
     }
@@ -419,9 +469,8 @@
     document.addEventListener('dragover', function (event) {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'copy';
-        var siblings = siblingNodes();
-        dropTarget = dropSlot(event.clientY, siblings);
-        showDropLine(dropTarget, siblings);
+        dropTarget = dropContext(event.clientX, event.clientY);
+        if (dropTarget) showDropLine(dropTarget);
 
         var edge = 90;
         if (event.clientY < edge) window.scrollBy(0, -16);
@@ -437,9 +486,9 @@
         event.preventDefault();
         clearDropLine();
         var raw = event.dataTransfer.getData('text/plain') || '';
-        if (raw.indexOf('ng-widget:') !== 0 || !host) return;
+        if (raw.indexOf('ng-widget:') !== 0 || !host || !dropTarget) return;
         try {
-            host.dropWidget(JSON.parse(raw.slice(10)), dropTarget);
+            host.dropWidget(JSON.parse(raw.slice(10)), dropTarget.list, dropTarget.index);
         } catch (error) {
             return;
         }
@@ -465,7 +514,13 @@
 
     function decorate() {
         if (!layer.parentNode) document.body.appendChild(layer);
-        nodes().forEach(wireInline);
+        nodes().forEach(function (node) {
+            try {
+                wireInline(node);
+            } catch (error) {
+                return;
+            }
+        });
         emptyState();
         markSelected();
     }

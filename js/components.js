@@ -45,11 +45,11 @@
             '  <div class="footer-overlay"></div>' +
             '  <div class="footer-grid">' +
             '    <div class="footer-col">' +
-            '      <h3>SOBRE MÍ</h3>' +
+            '      <h2>SOBRE MÍ</h2>' +
             '      <p>Soy Nerea González López, artista y diseñadora especializada en ilustración y escultura. Este portfolio reúne mi trabajo en las tres disciplinas que me definen.</p>' +
             '    </div>' +
             '    <div class="footer-col">' +
-            '      <h3>PORTFOLIO</h3>' +
+            '      <h2>PORTFOLIO</h2>' +
             '      <ul>' +
             '        <li><a href="ilustracion.html">Ilustración</a></li>' +
             '        <li><a href="escultura.html">Escultura</a></li>' +
@@ -58,7 +58,7 @@
             '      </ul>' +
             '    </div>' +
             '    <div class="footer-col">' +
-            '      <h3>CONTACTO</h3>' +
+            '      <h2>CONTACTO</h2>' +
             '      <ul>' +
             '        <li><a href="mailto:' + site.email + '">' + site.email + '</a></li>' +
             '        <li><a href="tel:+34689040797">+34 689 040 797</a></li>' +

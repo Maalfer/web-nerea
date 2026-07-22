@@ -74,7 +74,7 @@
 
         var text = el('div', 'opera-text ' + (flip ? 'reveal-right' : 'reveal-left'));
         text.appendChild(el('h2', 'section-title', data.title || ''));
-        if (data.subtitle) text.appendChild(el('h4', 'section-subtitle', data.subtitle));
+        if (data.subtitle) text.appendChild(el('h3', 'section-subtitle', data.subtitle));
         text.appendChild(el('hr', 'divider'));
         text.appendChild(el('p', 'project-desc', (data.text || '').replace(/\n/g, '<br>')));
         grid.appendChild(text);
