@@ -1931,41 +1931,41 @@ body::-webkit-scrollbar-thumb:hover {
     max-width: 460px;
 }
 
-.reveal {
+.ng-anim .reveal {
     opacity: 0;
     transform: translateY(38px);
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
     will-change: opacity, transform;
 }
 
-.reveal.is-visible {
+.ng-anim .reveal.is-visible {
     opacity: 1;
     transform: none;
 }
 
-.reveal-left {
+.ng-anim .reveal-left {
     opacity: 0;
     transform: translateX(-42px);
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 
-.reveal-right {
+.ng-anim .reveal-right {
     opacity: 0;
     transform: translateX(42px);
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
 
-.reveal-left.is-visible,
-.reveal-right.is-visible {
+.ng-anim .reveal-left.is-visible,
+.ng-anim .reveal-right.is-visible {
     opacity: 1;
     transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-    .reveal,
-    .reveal-left,
-    .reveal-right {
+    .ng-anim .reveal,
+    .ng-anim .reveal-left,
+    .ng-anim .reveal-right {
         opacity: 1 !important;
         transform: none !important;
     }

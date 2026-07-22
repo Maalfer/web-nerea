@@ -40,6 +40,7 @@
     }
 
     window.NG_EDIT = true;
+    document.documentElement.classList.remove('ng-anim');
 
     var host = null;
     try {
@@ -575,6 +576,7 @@
         },
 
         rerender: function () {
+            document.documentElement.classList.remove('ng-anim');
             if (window.Components) window.Components.mount();
             if (window.Teatro) window.Teatro.render();
             else if (window.Render) window.Render.render();
