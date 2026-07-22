@@ -2542,3 +2542,113 @@ body::-webkit-scrollbar-thumb:hover {
 .media-replace input[type="file"] {
     display: none;
 }
+
+.editor-entry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.editor-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .25s var(--ease), transform .25s var(--ease), background .25s var(--ease);
+}
+
+.editor-card:hover {
+    border-color: var(--gold);
+    background: rgba(224, 168, 58, 0.06);
+    transform: translateY(-3px);
+}
+
+.editor-card i {
+    font-size: 22px;
+    color: var(--gold);
+}
+
+.editor-card strong {
+    font-size: 1.05rem;
+}
+
+.editor-card span {
+    color: var(--text-dim);
+    font-size: .85rem;
+    line-height: 1.5;
+}
+
+.editor-entry-cta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.editor-entry-cta .panel-note {
+    margin: 0;
+}
+
+.panel-draft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    margin-bottom: 26px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: .88rem;
+    line-height: 1.6;
+}
+
+.panel-draft:empty {
+    display: none;
+}
+
+.panel-draft i {
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
+.panel-draft.is-pending {
+    border-color: rgba(240, 183, 0, 0.45);
+    background: rgba(240, 183, 0, 0.06);
+    color: var(--text);
+}
+
+.panel-draft.is-error {
+    border-color: rgba(210, 85, 74, 0.5);
+    color: #e88b81;
+}
+
+.editor-card-go {
+    margin-top: auto;
+    padding-top: 10px;
+    color: var(--gold);
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editor-card-go i {
+    font-size: .9rem;
+    transition: transform .35s var(--ease);
+}
+
+.editor-card:hover .editor-card-go i {
+    transform: translateX(6px);
+}
+
+.panel-foot-note {
+    margin-top: 8px;
+}

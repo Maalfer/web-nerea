@@ -61,9 +61,10 @@
         return header;
     }
 
-    function project(data) {
+    function project(data, position) {
         var section = el('section', 'opera-project-section');
         section.id = data.id;
+        if (window.NG_EDIT) section.setAttribute('data-ng-path', 'pages.teatro.projects.' + position);
 
         if (data.reel && data.reelPosition !== 'bottom') section.appendChild(reelBlock(data.reel));
 
@@ -122,7 +123,7 @@
         return section;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function build() {
         var mount = document.getElementById('teatro-app');
         if (!mount) return;
 
@@ -132,6 +133,7 @@
         var hero = document.getElementById('teatro-hero');
         if (hero) {
             hero.innerHTML = '';
+            if (window.NG_EDIT) hero.setAttribute('data-ng-path', 'pages.teatro');
             var box = el('div');
             box.appendChild(el('h1', null, data.title || 'Teatro'));
             if (data.subtitle) box.appendChild(el('p', null, data.subtitle));
@@ -140,10 +142,13 @@
         if (data.title) document.title = data.title + ' — ' + ((window.CONTENT.site || {}).name || '');
 
         mount.innerHTML = '';
-        (data.projects || []).forEach(function (p) {
-            mount.appendChild(project(p));
+        (data.projects || []).forEach(function (p, position) {
+            mount.appendChild(project(p, position));
         });
 
         document.dispatchEvent(new CustomEvent('content:rendered'));
-    });
+    }
+
+    document.addEventListener('DOMContentLoaded', build);
+    window.Teatro = { render: build };
 })();

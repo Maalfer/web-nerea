@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/styles.css?v=20260722a">
+  <link rel="stylesheet" href="css/styles.css?v=20260722c">
 </head>
 
 <body>
@@ -28,61 +28,45 @@
         <div>
           <span class="eyebrow">Panel</span>
           <h1>Hola, <span id="panel-user">…</span></h1>
-          <p>Desde aquí actualizas los documentos que se descargan en la web y cambias tus datos de acceso.</p>
+          <p>Elige la página que quieras retocar y se abrirá en el editor visual, donde puedes escribir
+            encima de los textos, mover los bloques y cambiar las fotos.</p>
         </div>
         <button type="button" class="btn-ghost" id="logout">Cerrar sesión</button>
       </div>
 
-      <section class="panel-section">
-        <h2>Documentos</h2>
-        <p class="panel-note">Sustituye cualquier PDF: el archivo nuevo queda publicado al instante y se guarda una
-          copia del anterior.</p>
-        <div class="doc-list" id="documents"></div>
-      </section>
+      <p class="panel-draft" id="draft-note"></p>
 
-      <section class="panel-section">
-        <h2>Contenido y textos</h2>
-        <p class="panel-note">Edita cualquier título o texto de la web. Los cambios se publican al pulsar «Guardar
-          cambios».</p>
-        <div id="content-editor" class="content-editor">
-          <p class="panel-note">Cargando…</p>
-        </div>
-        <div class="content-save-bar">
-          <button type="button" class="btn-bubble" id="content-save" disabled>Guardar
-            cambios<span></span><span></span><span></span><span></span></button>
-          <span class="auth-msg" id="content-msg" role="status"></span>
-        </div>
-      </section>
+      <div class="editor-entry">
+        <a class="editor-card" href="editor.html?p=home">
+          <i class="bi bi-house"></i>
+          <strong>Inicio</strong>
+          <span>Accesos de portada, descargas, sobre mí y referencias</span>
+          <span class="editor-card-go">Editar <i class="bi bi-arrow-right"></i></span>
+        </a>
+        <a class="editor-card" href="editor.html?p=ilustracion">
+          <i class="bi bi-brush"></i>
+          <strong>Ilustración</strong>
+          <span>Cómics, Cenicienta, mural, platos, diseño y arte digital</span>
+          <span class="editor-card-go">Editar <i class="bi bi-arrow-right"></i></span>
+        </a>
+        <a class="editor-card" href="editor.html?p=escultura">
+          <i class="bi bi-hammer"></i>
+          <strong>Escultura</strong>
+          <span>Porexpan, dioramas, moldes, cursos y encargos</span>
+          <span class="editor-card-go">Editar <i class="bi bi-arrow-right"></i></span>
+        </a>
+        <a class="editor-card" href="editor.html?p=teatro">
+          <i class="bi bi-mask"></i>
+          <strong>Teatro</strong>
+          <span>Óperas y obras: descripciones, fotos, vídeos y reels</span>
+          <span class="editor-card-go">Editar <i class="bi bi-arrow-right"></i></span>
+        </a>
+      </div>
 
-      <section class="panel-section">
-        <h2>Imágenes y vídeos</h2>
-        <p class="panel-note">Sustituye cualquier imagen o vídeo. Las imágenes se optimizan automáticamente y el
-          cambio queda publicado al instante.</p>
-        <div id="media-editor" class="media-editor">
-          <p class="panel-note">Cargando…</p>
-        </div>
-      </section>
-
-      <section class="panel-section">
-        <h2>Cuenta</h2>
-        <p class="panel-note">Cambia tu usuario, tu contraseña o ambos. Necesitas escribir la contraseña actual.</p>
-        <form class="account-form" id="account-form">
-          <div class="field">
-            <label for="current-password">Contraseña actual</label>
-            <input type="password" id="current-password" autocomplete="current-password" required>
-          </div>
-          <div class="field">
-            <label for="new-username">Usuario nuevo</label>
-            <input type="text" id="new-username" autocomplete="username" placeholder="Déjalo igual si no lo cambias">
-          </div>
-          <div class="field">
-            <label for="new-password">Contraseña nueva</label>
-            <input type="password" id="new-password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
-          </div>
-          <button type="submit" class="btn-bubble">Guardar<span></span><span></span><span></span><span></span></button>
-          <p class="auth-msg" id="account-msg" role="status"></p>
-        </form>
-      </section>
+      <p class="panel-note panel-foot-note">
+        Dentro del editor también están los PDF que se descargan, la biblioteca de fotos y vídeos,
+        el historial de versiones y tus datos de acceso.
+      </p>
 
     </div>
   </main>
@@ -90,12 +74,11 @@
   <div id="footer-container"></div>
 
   <script src="js/data/content.js"></script>
-  <script src="js/components.js"></script>
+  <script src="js/components.js?v=20260722c"></script>
   <script src="js/data/media.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/dashboard.js"></script>
-  <script src="js/dashboard-content.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/auth.js?v=20260722c"></script>
+  <script src="js/dashboard.js?v=20260722c"></script>
+  <script src="js/main.js?v=20260722c"></script>
 </body>
 
 </html>

@@ -83,6 +83,69 @@
             return request('/admin/media/video', { method: 'POST', body: body });
         },
 
+        getState: function () {
+            return request('/admin/state');
+        },
+
+        putDraft: function (data) {
+            return request('/admin/draft', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        },
+
+        publish: function () {
+            return request('/admin/publish', { method: 'POST' });
+        },
+
+        discardDraft: function () {
+            return request('/admin/discard', { method: 'POST' });
+        },
+
+        restoreRevision: function (name) {
+            var body = new FormData();
+            body.append('name', name);
+            return request('/admin/revisions/restore', { method: 'POST', body: body });
+        },
+
+        createGroup: function (kind, group) {
+            var body = new FormData();
+            body.append('kind', kind);
+            body.append('group', group);
+            return request('/admin/media/group', { method: 'POST', body: body });
+        },
+
+        addImage: function (group, file) {
+            var body = new FormData();
+            body.append('group', group);
+            body.append('file', file);
+            return request('/admin/media/image/new', { method: 'POST', body: body });
+        },
+
+        addVideo: function (group, file) {
+            var body = new FormData();
+            body.append('group', group);
+            body.append('file', file);
+            return request('/admin/media/video/new', { method: 'POST', body: body });
+        },
+
+        deleteMedia: function (kind, group, index) {
+            var body = new FormData();
+            body.append('kind', kind);
+            body.append('group', group);
+            body.append('index', index);
+            return request('/admin/media/delete', { method: 'POST', body: body });
+        },
+
+        reorderMedia: function (kind, group, order) {
+            var body = new FormData();
+            body.append('kind', kind);
+            body.append('group', group);
+            body.append('order', JSON.stringify(order));
+            return request('/admin/media/reorder', { method: 'POST', body: body });
+        },
+
         account: function (currentPassword, username, password) {
             var body = new FormData();
             body.append('current_password', currentPassword);

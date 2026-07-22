@@ -11,6 +11,11 @@
         return node;
     }
 
+    function stamp(node, path) {
+        if (node && window.NG_EDIT) node.setAttribute('data-ng-path', path);
+        return node;
+    }
+
     function media(group) {
         return (window.MEDIA || {})[group] || [];
     }
@@ -280,8 +285,9 @@
         }
     };
 
-    function renderHero(page, mount) {
+    function renderHero(page, mount, base) {
         var hero = el('header', 'page-hero');
+        stamp(hero, base);
         var box = el('div', 'page-hero-media');
         var slides = [];
 
@@ -336,8 +342,9 @@
         mount.appendChild(nav);
     }
 
-    function renderPage(page, mount) {
-        renderHero(page, mount);
+    function renderPage(page, mount, base) {
+        base = base || 'pages.' + (mount.getAttribute('data-page') || '');
+        renderHero(page, mount, base);
         renderIndex(page, mount);
 
         var current = null;
@@ -353,7 +360,9 @@
             return wrap;
         }
 
-        (page.blocks || []).forEach(function (b) {
+        (page.blocks || []).forEach(function (b, position) {
+            var path = base + '.blocks.' + position;
+
             if (b.type === 'section') {
                 var section = el('section', 'project' + (b.alt ? ' project--alt' : ''));
                 if (b.id) section.id = b.id;
@@ -366,6 +375,7 @@
                 wrap.appendChild(head);
                 section.appendChild(wrap);
                 mount.appendChild(section);
+                stamp(head, path);
                 current = wrap;
                 context = b.title;
                 return;
@@ -375,19 +385,20 @@
 
             var build = blocks[b.type];
             if (!build) return;
-            b.alt = b.alt || b.caption || context;
 
-            var node = build(b);
-            if (node) ensureSection().appendChild(node);
+            var data = b.alt ? b : Object.assign({}, b, { alt: b.caption || context });
+            var node = build(data);
+            if (node) ensureSection().appendChild(stamp(node, path));
         });
     }
 
     function renderHome(data, root) {
         var panels = root.querySelector('#gate-panels');
         if (panels) {
-            (data.gates || []).forEach(function (gate) {
+            (data.gates || []).forEach(function (gate, position) {
                 var entry = pickOne(gate.group, gate.index);
                 var link = el('a', 'gate-panel reveal');
+                stamp(link, 'gates.' + position);
                 link.href = gate.href;
                 if (entry) {
                     var im = imgEl(entry, 'medium', gate.title, '(max-width: 900px) 100vw, 34vw');
@@ -409,8 +420,9 @@
 
         var downloads = root.querySelector('#downloads');
         if (downloads) {
-            (data.downloads || []).forEach(function (item) {
+            (data.downloads || []).forEach(function (item, position) {
                 var card = el('article', 'dl-card reveal');
+                stamp(card, 'downloads.' + position);
                 card.appendChild(el('div', 'icon', '<i class="bi ' + item.icon + '"></i>'));
                 card.appendChild(el('h3', null, item.title));
                 card.appendChild(el('p', null, item.text));
@@ -427,6 +439,7 @@
             if (entry) photo.appendChild(imgEl(entry, 'medium', 'Nerea González López', '(max-width: 980px) 100vw, 460px'));
 
             var text = el('div', 'about-text reveal-right');
+            stamp(text, 'about');
             text.appendChild(el('span', 'eyebrow', 'Quién soy'));
             text.appendChild(el('h2', null, info.title));
             (info.paragraphs || []).forEach(function (p) {
@@ -458,9 +471,10 @@
 
         var refs = root.querySelector('#refs');
         if (refs) {
-            (data.references || []).forEach(function (ref) {
+            (data.references || []).forEach(function (ref, position) {
                 var entry = pickOne(ref.group, ref.index);
                 var card = el('a', 'ref reveal');
+                stamp(card, 'references.' + position);
                 card.href = ref.href;
                 card.target = '_blank';
                 card.rel = 'noopener';
@@ -472,12 +486,18 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    var HOME_MOUNTS = ['#gate-panels', '#downloads', '#about-body', '#refs'];
+
+    function build() {
         var mount = document.getElementById('app');
         var slug = mount && mount.getAttribute('data-page');
         if (!slug) return;
 
         if (slug === 'home') {
+            HOME_MOUNTS.forEach(function (selector) {
+                var box = document.querySelector(selector);
+                if (box) box.innerHTML = '';
+            });
             window.Api.getHome().then(function (data) {
                 renderHome(data, document);
                 document.dispatchEvent(new CustomEvent('content:rendered'));
@@ -488,10 +508,20 @@
         window.Api.getPage(slug).then(function (page) {
             if (!page) return;
             document.title = page.title + ' — ' + window.CONTENT.site.name;
+            mount.innerHTML = '';
             renderPage(page, mount);
             document.dispatchEvent(new CustomEvent('content:rendered'));
         });
-    });
+    }
 
-    window.Render = { blocks: blocks, renderPage: renderPage };
+    document.addEventListener('DOMContentLoaded', build);
+
+    window.Render = {
+        blocks: blocks,
+        renderPage: renderPage,
+        renderHome: renderHome,
+        renderHero: renderHero,
+        renderIndex: renderIndex,
+        render: build
+    };
 })();

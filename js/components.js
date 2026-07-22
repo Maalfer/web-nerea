@@ -111,4 +111,5 @@
     }
 
     document.addEventListener('DOMContentLoaded', mount);
+    window.Components = { mount: mount };
 })();

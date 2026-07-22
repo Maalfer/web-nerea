@@ -2066,7 +2066,6 @@ window.MEDIA = {
   }
  ]
 };
-
 window.MEDIA_VIDEO = {
  "ilustracion/mural": [
   {
