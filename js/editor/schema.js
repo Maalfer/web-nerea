@@ -182,6 +182,97 @@
             }
         },
 
+        heading: {
+            label: 'Título suelto',
+            icon: 'bi-type-h2',
+            hint: 'Un título por su cuenta, sin la línea ni el antetítulo de una sección.',
+            fields: [
+                { key: 'text', label: 'Texto', type: 'text' },
+                {
+                    key: 'level', label: 'Tamaño', type: 'select', options: [
+                        { value: 'h2', label: 'Grande' },
+                        { value: 'h3', label: 'Mediano' },
+                        { value: 'h4', label: 'Pequeño' }
+                    ]
+                }
+            ],
+            inline: { text: '' },
+            create: function () {
+                return { type: 'heading', text: 'Nuevo título', level: 'h2' };
+            }
+        },
+
+        text: {
+            label: 'Texto',
+            icon: 'bi-text-paragraph',
+            hint: 'Uno o varios párrafos. Deja una línea en blanco para separar párrafos.',
+            fields: [
+                { key: 'text', label: 'Texto', type: 'textarea' }
+            ],
+            inline: { text: 'p' },
+            create: function () {
+                return { type: 'text', text: 'Escribe aquí tu texto.' };
+            }
+        },
+
+        button: {
+            label: 'Botón',
+            icon: 'bi-hand-index',
+            hint: 'Un botón que lleva a otra página, a un PDF o a un enlace externo.',
+            fields: [
+                { key: 'label', label: 'Texto del botón', type: 'text' },
+                { key: 'href', label: 'Enlace', type: 'pdf' },
+                {
+                    key: 'variant', label: 'Estilo', type: 'select', options: [
+                        { value: '', label: 'Destacado' },
+                        { value: 'ghost', label: 'Contorno' }
+                    ]
+                },
+                { key: 'blank', label: 'Abrir en otra pestaña', type: 'toggle' },
+                { key: 'download', label: 'Nombre al descargar', type: 'text', advanced: true }
+            ],
+            inline: { label: 'a' },
+            create: function () {
+                return { type: 'button', label: 'Ver más', href: '#' };
+            }
+        },
+
+        spacer: {
+            label: 'Espacio',
+            icon: 'bi-distribute-vertical',
+            hint: 'Hueco vacío para separar dos bloques.',
+            fields: [
+                { key: 'height', label: 'Altura en píxeles', type: 'number', min: 0, max: 400 }
+            ],
+            create: function () {
+                return { type: 'spacer', height: 40 };
+            }
+        },
+
+        divider: {
+            label: 'Separador',
+            icon: 'bi-hr',
+            hint: 'Una línea fina que separa contenidos.',
+            fields: [
+                { key: 'width', label: 'Ancho (%)', type: 'number', min: 5, max: 100 }
+            ],
+            create: function () {
+                return { type: 'divider', width: 100 };
+            }
+        },
+
+        html: {
+            label: 'Código',
+            icon: 'bi-code-slash',
+            hint: 'Para pegar un incrustado de fuera: un vídeo de YouTube, un mapa, un reel…',
+            fields: [
+                { key: 'code', label: 'Código HTML', type: 'textarea' }
+            ],
+            create: function () {
+                return { type: 'html', code: '' };
+            }
+        },
+
         flipbook: {
             label: 'Libro hojeable',
             icon: 'bi-book',
@@ -324,6 +415,27 @@
             }
         },
 
+        theme: {
+            label: 'Diseño global',
+            icon: 'bi-palette2',
+            hint: 'Colores y tamaño de letra de toda la web. Afecta a las cuatro páginas a la vez.',
+            fields: [
+                { key: 'gold', label: 'Color de acento', type: 'colorField', hint: 'Títulos destacados, enlaces y botones.' },
+                { key: 'bg', label: 'Fondo principal', type: 'colorField' },
+                { key: 'bgAlt', label: 'Fondo alterno', type: 'colorField', hint: 'El de las secciones con fondo distinto.' },
+                { key: 'text', label: 'Texto principal', type: 'colorField' },
+                { key: 'textDim', label: 'Texto secundario', type: 'colorField' },
+                {
+                    key: 'scale', label: 'Tamaño general de la letra', type: 'select', options: [
+                        { value: '', label: 'Normal' },
+                        { value: '0.92', label: 'Más pequeña' },
+                        { value: '1.08', label: 'Más grande' },
+                        { value: '1.16', label: 'Mucho más grande' }
+                    ]
+                }
+            ]
+        },
+
         site: {
             label: 'Datos de contacto',
             icon: 'bi-envelope',
@@ -353,12 +465,14 @@
             { kind: 'download', list: 'downloads' },
             { kind: 'reference', list: 'references' }
         ],
-        blocks: ['section', 'sub', 'split', 'feature', 'strip', 'grid', 'mosaic',
-            'carousel', 'video', 'links', 'flipbook'],
+        blocks: ['section', 'sub', 'heading', 'text', 'split', 'feature', 'strip', 'grid',
+            'mosaic', 'carousel', 'video', 'button', 'links', 'divider', 'spacer',
+            'flipbook', 'html'],
         projects: ['project']
     };
 
     function kindForPath(path) {
+        if (path === 'site.theme') return 'theme';
         if (path === 'site') return 'site';
         if (path === 'about') return 'about';
         if (/^gates\.\d+$/.test(path)) return 'gate';
@@ -377,7 +491,8 @@
 
         /** True for elements that live alone: they cannot be moved, copied or deleted. */
         singleton: function (path) {
-            return path === 'site' || path === 'about' || /^pages\.[a-z-]+$/.test(path);
+            return path === 'site' || path === 'site.theme' || path === 'about' ||
+                /^pages\.[a-z-]+$/.test(path);
         },
 
         describe: function (path, value) {

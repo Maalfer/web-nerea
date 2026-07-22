@@ -145,6 +145,43 @@
         return wrap;
     }
 
+    function colorFieldControl(path, spec) {
+        var wrap = el('div', 'ng-color');
+        var current = read(path, spec.key);
+
+        var swatch = el('input');
+        swatch.type = 'color';
+        swatch.value = /^#[0-9a-f]{6}$/i.test(current || '') ? current : '#f0b700';
+
+        var text = el('input');
+        text.type = 'text';
+        text.value = current || '';
+        text.placeholder = 'por defecto';
+
+        swatch.addEventListener('input', function () {
+            text.value = swatch.value;
+            write(path, spec.key, swatch.value, true);
+        });
+        swatch.addEventListener('change', function () {
+            write(path, spec.key, swatch.value, false);
+        });
+        text.addEventListener('change', function () {
+            write(path, spec.key, text.value || undefined);
+        });
+
+        var clear = el('button', 'ng-icon-btn ng-tiny', '<i class="bi bi-arrow-counterclockwise"></i>');
+        clear.type = 'button';
+        clear.title = 'Volver al color original';
+        clear.addEventListener('click', function () {
+            write(path, spec.key, undefined);
+        });
+
+        wrap.appendChild(swatch);
+        wrap.appendChild(text);
+        wrap.appendChild(clear);
+        return wrap;
+    }
+
     function groupOf(path, spec) {
         return read(path, spec.groupKey || 'group');
     }
@@ -434,6 +471,7 @@
         if (spec.type === 'imageItems') return itemsControl(path, spec);
         if (spec.type === 'hero') return heroControl(path, spec);
         if (spec.type === 'pdf') return pdfControl(path, spec);
+        if (spec.type === 'colorField') return colorFieldControl(path, spec);
         if (REPEATERS[spec.type]) {
             return repeater(path, spec, REPEATERS[spec.type].columns, REPEATERS[spec.type].blank);
         }

@@ -992,3 +992,305 @@ textarea {
 .ng-layer.is-hidden em {
     color: var(--ng-danger);
 }
+
+/* ------------------------------------------------- contenido / estilo */
+
+.ng-subtabs {
+    display: flex;
+    gap: 4px;
+    background: var(--ng-panel-2);
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.ng-subtabs button {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: var(--ng-dim);
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.ng-subtabs button:hover {
+    color: var(--ng-text);
+}
+
+.ng-subtabs button.is-on {
+    background: var(--ng-gold);
+    color: #17171a;
+    font-weight: 700;
+}
+
+.ng-style-devices {
+    display: flex;
+    gap: 2px;
+    background: var(--ng-panel-2);
+    padding: 3px;
+    border-radius: 7px;
+    margin-bottom: 12px;
+}
+
+.ng-style-devices button {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: var(--ng-dim);
+    padding: 7px 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11.5px;
+}
+
+.ng-style-devices button.is-on {
+    background: var(--ng-line);
+    color: var(--ng-gold);
+    font-weight: 700;
+}
+
+.ng-style-group {
+    border: 1px solid var(--ng-line);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: var(--ng-panel-2);
+}
+
+.ng-style-group summary {
+    cursor: pointer;
+    padding: 11px 12px;
+    font-size: 12px;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+}
+
+.ng-style-group summary::-webkit-details-marker {
+    display: none;
+}
+
+.ng-style-group summary i {
+    color: var(--ng-gold);
+}
+
+.ng-style-group summary::after {
+    content: "\f282";
+    font-family: "bootstrap-icons";
+    margin-left: auto;
+    color: var(--ng-dim);
+    font-size: 11px;
+}
+
+.ng-style-group[open] summary::after {
+    content: "\f286";
+}
+
+.ng-style-group .ng-fields {
+    padding: 4px 12px 14px;
+}
+
+.ng-field--style label,
+.ng-style-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--ng-dim);
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.ng-icon-btn.ng-tiny {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+.ng-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ng-range input[type="range"] {
+    flex: 1 1 auto;
+    accent-color: var(--ng-gold);
+    background: transparent;
+    min-width: 0;
+}
+
+.ng-range input[type="number"] {
+    width: 68px;
+    flex: 0 0 68px;
+    background: var(--ng-bg);
+    border: 1px solid var(--ng-line);
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+
+.ng-color {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ng-color input[type="color"] {
+    width: 38px;
+    height: 32px;
+    flex: 0 0 38px;
+    padding: 2px;
+    border: 1px solid var(--ng-line);
+    border-radius: 6px;
+    background: var(--ng-bg);
+    cursor: pointer;
+}
+
+.ng-color input[type="text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    background: var(--ng-bg);
+    border: 1px solid var(--ng-line);
+    border-radius: 6px;
+    padding: 7px 9px;
+}
+
+.ng-choice {
+    display: flex;
+    gap: 4px;
+}
+
+.ng-choice button {
+    flex: 1;
+    border: 1px solid var(--ng-line);
+    background: var(--ng-bg);
+    color: var(--ng-dim);
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.ng-choice button:hover {
+    color: var(--ng-text);
+}
+
+.ng-choice button.is-on {
+    background: var(--ng-gold);
+    border-color: var(--ng-gold);
+    color: #17171a;
+}
+
+.ng-style-reset {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.ng-widget.is-dragging {
+    opacity: .4;
+    border-color: var(--ng-gold);
+}
+
+.ng-widget[draggable="true"] {
+    cursor: grab;
+}
+
+.ng-help {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.ng-help-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--ng-line);
+}
+
+.ng-help-row:last-child {
+    border-bottom: 0;
+}
+
+.ng-help-row i {
+    color: var(--ng-gold);
+    font-size: 17px;
+    margin-top: 2px;
+    flex: 0 0 22px;
+}
+
+.ng-help-row div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ng-help-row span {
+    color: var(--ng-dim);
+    line-height: 1.6;
+    font-size: 12px;
+}
+
+/* --------------------------------------------- ajuste fino de la barra */
+
+.ng-top {
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.ng-top-left {
+    min-width: 0;
+    flex: 0 1 auto;
+    overflow: hidden;
+}
+
+.ng-devices {
+    flex: 0 0 auto;
+}
+
+.ng-top-right {
+    flex: 0 0 auto;
+}
+
+.ng-save-state {
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-width: 1500px) {
+    .ng-devices {
+        display: none;
+    }
+
+    .ng-save-state {
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 1240px) {
+    .ng-save-state {
+        display: none;
+    }
+
+    .ng-brand strong {
+        display: none;
+    }
+
+    .ng-pages button {
+        padding: 6px 9px;
+        font-size: 11px;
+    }
+}

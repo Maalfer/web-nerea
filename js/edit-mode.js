@@ -369,9 +369,104 @@
         else hideChrome();
     }
 
+    // -------------------------------------------------- soltar widgets nuevos
+
+    function siblingNodes() {
+        var all = nodes().filter(function (node) {
+            return /\.\d+$/.test(node.getAttribute('data-ng-path'));
+        });
+        return all.sort(function (a, b) {
+            return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+        });
+    }
+
+    function dropSlot(pointerY, siblings) {
+        for (var n = 0; n < siblings.length; n++) {
+            var box = siblings[n].getBoundingClientRect();
+            if (pointerY < box.top + box.height / 2) return n;
+        }
+        return siblings.length;
+    }
+
+    function showDropLine(slot, siblings) {
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'ng-drop';
+            layer.appendChild(indicator);
+        }
+        if (!siblings.length) {
+            indicator.style.display = 'none';
+            return;
+        }
+        var reference = siblings[Math.min(slot, siblings.length - 1)];
+        var box = reference.getBoundingClientRect();
+        var below = slot >= siblings.length;
+        indicator.style.display = 'block';
+        indicator.style.top = (below ? box.bottom : box.top) + window.scrollY - 2 + 'px';
+        indicator.style.left = box.left + window.scrollX + 'px';
+        indicator.style.width = box.width + 'px';
+    }
+
+    function clearDropLine() {
+        if (indicator) {
+            indicator.remove();
+            indicator = null;
+        }
+    }
+
+    var dropTarget = null;
+
+    document.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        var siblings = siblingNodes();
+        dropTarget = dropSlot(event.clientY, siblings);
+        showDropLine(dropTarget, siblings);
+
+        var edge = 90;
+        if (event.clientY < edge) window.scrollBy(0, -16);
+        else if (event.clientY > window.innerHeight - edge) window.scrollBy(0, 16);
+    });
+
+    document.addEventListener('dragleave', function (event) {
+        if (event.relatedTarget) return;
+        clearDropLine();
+    });
+
+    document.addEventListener('drop', function (event) {
+        event.preventDefault();
+        clearDropLine();
+        var raw = event.dataTransfer.getData('text/plain') || '';
+        if (raw.indexOf('ng-widget:') !== 0 || !host) return;
+        try {
+            host.dropWidget(JSON.parse(raw.slice(10)), dropTarget);
+        } catch (error) {
+            return;
+        }
+    });
+
+    function emptyState() {
+        var mount = document.getElementById('app') || document.getElementById('teatro-app');
+        if (!mount) return;
+        var existing = document.getElementById('ng-empty-drop');
+        if (siblingNodes().length) {
+            if (existing) existing.remove();
+            return;
+        }
+        if (existing) return;
+        var box = document.createElement('div');
+        box.id = 'ng-empty-drop';
+        box.textContent = 'Esta página está vacía. Arrastra aquí un bloque del catálogo.';
+        box.style.cssText = 'margin:120px auto;max-width:640px;padding:60px 30px;text-align:center;' +
+            'border:2px dashed rgba(224,168,58,.5);border-radius:14px;color:#e0a83a;' +
+            'font:600 14px/1.6 "Fira Code",monospace';
+        mount.appendChild(box);
+    }
+
     function decorate() {
         if (!layer.parentNode) document.body.appendChild(layer);
         nodes().forEach(wireInline);
+        emptyState();
         markSelected();
     }
 

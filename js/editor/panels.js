@@ -130,7 +130,10 @@
 
         host.appendChild(el('h4', 'ng-panel-title', 'Elementos generales'));
         var quick = el('div', 'ng-quick');
-        var extras = [{ path: 'site', label: 'Datos de contacto', icon: 'bi-envelope' }];
+        var extras = [
+            { path: 'site.theme', label: 'Diseño global', icon: 'bi-palette2' },
+            { path: 'site', label: 'Datos de contacto', icon: 'bi-envelope' }
+        ];
         if (page === 'home') extras.push({ path: 'about', label: 'Sobre mí', icon: 'bi-person' });
         else extras.unshift({ path: 'pages.' + page, label: 'Ajustes de la página', icon: 'bi-sliders' });
 
@@ -183,10 +186,19 @@
         items.forEach(function (item) {
             var card = el('button', 'ng-widget');
             card.type = 'button';
+            card.draggable = true;
             card.innerHTML = '<i class="bi ' + item.spec.icon + '"></i><strong>' + item.spec.label +
                 '</strong><span>' + (item.spec.hint || '') + '</span>';
             card.addEventListener('click', function () {
                 handlers.onAdd(item.payload);
+            });
+            card.addEventListener('dragstart', function (event) {
+                event.dataTransfer.effectAllowed = 'copy';
+                event.dataTransfer.setData('text/plain', 'ng-widget:' + JSON.stringify(item.payload));
+                card.classList.add('is-dragging');
+            });
+            card.addEventListener('dragend', function () {
+                card.classList.remove('is-dragging');
             });
             grid.appendChild(card);
         });

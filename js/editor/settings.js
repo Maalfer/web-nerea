@@ -155,7 +155,39 @@
         box.body.appendChild(form);
     }
 
+    function helpModal() {
+        var box = shell('Cómo funciona el editor');
+        var steps = [
+            ['bi-hand-index', 'Pulsa cualquier cosa de la página',
+                'Al pulsar un bloque se marca en dorado y a la izquierda salen sus ajustes.'],
+            ['bi-cursor-text', 'Escribe encima del texto',
+                'Los títulos y párrafos se editan directamente sobre la página, como en un documento.'],
+            ['bi-grip-vertical', 'Muévelo de sitio',
+                'Arrastra por el asa de la barra dorada, o usa las flechas. También puedes ordenar desde «Estructura».'],
+            ['bi-plus-square', 'Añade bloques nuevos',
+                'En «Añadir» tienes el catálogo. Púlsalos o arrástralos al punto exacto de la página.'],
+            ['bi-brush', 'Dale estilo',
+                'En «Ajustes → Estilo» cambias márgenes, colores, tamaños y sombras, con valores distintos para móvil.'],
+            ['bi-images', 'Cambia las fotos',
+                'Desde la biblioteca subes, ordenas y borras imágenes y vídeos de cada álbum.'],
+            ['bi-eye', 'Compruébalo antes de publicar',
+                'Nada se ve en la web hasta que pulsas «Publicar». Antes puedes verlo con la vista previa.'],
+            ['bi-clock-history', 'Y si algo sale mal',
+                'Ctrl+Z deshace, «Descartar» vuelve a lo publicado y en el reloj tienes versiones anteriores.']
+        ];
+
+        var list = el('div', 'ng-help');
+        steps.forEach(function (step) {
+            var row = el('div', 'ng-help-row');
+            row.innerHTML = '<i class="bi ' + step[0] + '"></i><div><strong>' + step[1] +
+                '</strong><span>' + step[2] + '</span></div>';
+            list.appendChild(row);
+        });
+        box.body.appendChild(list);
+    }
+
     window.NGSettings = {
+        openHelp: helpModal,
         load: function () {
             return window.Auth.documents().then(function (data) {
                 docs = data.documents || [];

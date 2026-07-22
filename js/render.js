@@ -16,6 +16,10 @@
         return node;
     }
 
+    function styled(node, block) {
+        return window.Styler ? window.Styler.apply(node, block) : node;
+    }
+
     function media(group) {
         return (window.MEDIA || {})[group] || [];
     }
@@ -237,6 +241,57 @@
             return wrap;
         },
 
+        heading: function (b) {
+            var level = b.level || 'h2';
+            var node = el(level, 'ng-heading', b.text || '');
+            return node;
+        },
+
+        text: function (b) {
+            var box = el('div', 'ng-text');
+            String(b.text || '').split(/\n{2,}/).forEach(function (chunk) {
+                box.appendChild(el('p', null, chunk.replace(/\n/g, '<br>')));
+            });
+            return box;
+        },
+
+        button: function (b) {
+            var box = el('div', 'ng-button-row');
+            var a = el('a', b.variant === 'ghost' ? 'btn-ghost' : 'btn-bubble', b.label || 'Botón');
+            a.href = b.href || '#';
+            if (b.download) a.setAttribute('download', b.download);
+            else if (b.blank) {
+                a.target = '_blank';
+                a.rel = 'noopener';
+            }
+            if (b.variant !== 'ghost') {
+                a.innerHTML = (b.label || 'Botón') + '<span></span><span></span><span></span><span></span>';
+            }
+            box.appendChild(a);
+            return box;
+        },
+
+        spacer: function (b) {
+            var box = el('div', 'ng-spacer');
+            box.style.height = (b.height || 40) + 'px';
+            return box;
+        },
+
+        divider: function (b) {
+            var box = el('div', 'ng-divider-wrap');
+            var line = el('hr', 'ng-divider');
+            if (b.width) line.style.width = b.width + '%';
+            box.appendChild(line);
+            return box;
+        },
+
+        html: function (b) {
+            if (!b.code) return null;
+            var box = el('div', 'ng-html');
+            box.innerHTML = b.code;
+            return box;
+        },
+
         flipbook: function (b) {
             var wrap = el('div', 'reveal');
             if (b.id) wrap.id = b.id;
@@ -344,7 +399,9 @@
 
     function renderPage(page, mount, base) {
         base = base || 'pages.' + (mount.getAttribute('data-page') || '');
+        if (window.Styler) window.Styler.globals((window.CONTENT || {}).site);
         renderHero(page, mount, base);
+        styled(mount.querySelector('.page-hero'), page);
         renderIndex(page, mount);
 
         var current = null;
@@ -376,6 +433,7 @@
                 section.appendChild(wrap);
                 mount.appendChild(section);
                 stamp(head, path);
+                styled(section, b);
                 current = wrap;
                 context = b.title;
                 return;
@@ -388,7 +446,7 @@
 
             var data = b.alt ? b : Object.assign({}, b, { alt: b.caption || context });
             var node = build(data);
-            if (node) ensureSection().appendChild(stamp(node, path));
+            if (node) ensureSection().appendChild(styled(stamp(node, path), b));
         });
     }
 
@@ -399,6 +457,7 @@
                 var entry = pickOne(gate.group, gate.index);
                 var link = el('a', 'gate-panel reveal');
                 stamp(link, 'gates.' + position);
+                styled(link, gate);
                 link.href = gate.href;
                 if (entry) {
                     var im = imgEl(entry, 'medium', gate.title, '(max-width: 900px) 100vw, 34vw');
@@ -423,6 +482,7 @@
             (data.downloads || []).forEach(function (item, position) {
                 var card = el('article', 'dl-card reveal');
                 stamp(card, 'downloads.' + position);
+                styled(card, item);
                 card.appendChild(el('div', 'icon', '<i class="bi ' + item.icon + '"></i>'));
                 card.appendChild(el('h3', null, item.title));
                 card.appendChild(el('p', null, item.text));
@@ -440,6 +500,7 @@
 
             var text = el('div', 'about-text reveal-right');
             stamp(text, 'about');
+            styled(text, info);
             text.appendChild(el('span', 'eyebrow', 'Quién soy'));
             text.appendChild(el('h2', null, info.title));
             (info.paragraphs || []).forEach(function (p) {
@@ -475,6 +536,7 @@
                 var entry = pickOne(ref.group, ref.index);
                 var card = el('a', 'ref reveal');
                 stamp(card, 'references.' + position);
+                styled(card, ref);
                 card.href = ref.href;
                 card.target = '_blank';
                 card.rel = 'noopener';
@@ -492,6 +554,7 @@
         var mount = document.getElementById('app');
         var slug = mount && mount.getAttribute('data-page');
         if (!slug) return;
+        if (window.Styler) window.Styler.reset();
 
         if (slug === 'home') {
             HOME_MOUNTS.forEach(function (selector) {
@@ -499,7 +562,9 @@
                 if (box) box.innerHTML = '';
             });
             window.Api.getHome().then(function (data) {
+                if (window.Styler) window.Styler.globals(data.site);
                 renderHome(data, document);
+                if (window.Styler) window.Styler.flush();
                 document.dispatchEvent(new CustomEvent('content:rendered'));
             });
             return;
@@ -510,6 +575,7 @@
             document.title = page.title + ' — ' + window.CONTENT.site.name;
             mount.innerHTML = '';
             renderPage(page, mount);
+            if (window.Styler) window.Styler.flush();
             document.dispatchEvent(new CustomEvent('content:rendered'));
         });
     }

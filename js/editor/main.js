@@ -18,6 +18,7 @@
     var page = 'ilustracion';
     var selected = null;
     var tab = 'add';
+    var settingsMode = 'content';
     var saveTimer = null;
     var refreshTimer = null;
     var booted = false;
@@ -78,9 +79,28 @@
             button.classList.toggle('is-on', button.getAttribute('data-tab-btn') === tab);
         });
         var host = pick('panel-body');
-        if (tab === 'add') window.NGPanels.palette(host, page, selected);
-        else if (tab === 'layers') window.NGPanels.structure(host, page, selected);
-        else window.NGInspector.render(host, selected);
+
+        if (tab === 'add') return window.NGPanels.palette(host, page, selected);
+        if (tab === 'layers') return window.NGPanels.structure(host, page, selected);
+
+        host.innerHTML = '';
+        var bar = el('div', 'ng-subtabs');
+        [['content', 'Contenido', 'bi-pencil'], ['style', 'Estilo', 'bi-brush']].forEach(function (entry) {
+            var button = el('button', settingsMode === entry[0] ? 'is-on' : '',
+                '<i class="bi ' + entry[2] + '"></i> ' + entry[1]);
+            button.type = 'button';
+            button.addEventListener('click', function () {
+                settingsMode = entry[0];
+                paintPanels();
+            });
+            bar.appendChild(button);
+        });
+        host.appendChild(bar);
+
+        var body = el('div', 'ng-subpanel');
+        host.appendChild(body);
+        if (settingsMode === 'style') window.NGStyle.render(body, selected);
+        else window.NGInspector.render(body, selected);
     }
 
     function showTab(name) {
@@ -290,6 +310,30 @@
             store.setField(path + '.' + field, text, { quiet: true });
             if (tab === 'settings') paintPanels();
         },
+        dropWidget: function (payload, index) {
+            var meta = window.NGSchema.pages[page];
+            if (!meta.list || !payload) return;
+            var spec = window.NGSchema.blocks[payload.kind] || window.NGSchema.singles[payload.kind];
+            if (!spec || !spec.create) return;
+
+            var groups = Object.keys(media().images || {});
+            var fresh = spec.create(groups[0] || '', media());
+            var at = index;
+
+            store.mutate(function (model) {
+                var rows = store.path.get(model, meta.list) || [];
+                store.path.set(model, meta.list, rows);
+                if (at == null || at > rows.length) at = rows.length;
+                rows.splice(at, 0, fresh);
+            });
+            setSelected(meta.list + '.' + at, true);
+            tab = 'settings';
+            settingsMode = 'content';
+            refreshCanvas();
+            paintPanels();
+            window.NGMedia.toast('«' + spec.label + '» añadido');
+        },
+
         addBelow: function (path) {
             setSelected(path, true);
             tab = 'add';
@@ -304,15 +348,27 @@
         remove: remove
     };
 
+    var DEVICE_WIDTH = { base: 'full', tablet: '900', mobile: '420' };
+
+    function showDevice(width) {
+        document.querySelectorAll('[data-device]').forEach(function (other) {
+            other.classList.toggle('is-on', other.getAttribute('data-device') === width);
+        });
+        pick('stage').style.maxWidth = width === 'full' ? '' : width + 'px';
+    }
+
     function devices() {
         document.querySelectorAll('[data-device]').forEach(function (button) {
             button.addEventListener('click', function () {
                 var width = button.getAttribute('data-device');
-                document.querySelectorAll('[data-device]').forEach(function (other) {
-                    other.classList.toggle('is-on', other === button);
-                });
-                var stage = pick('stage');
-                stage.style.maxWidth = width === 'full' ? '' : width + 'px';
+                showDevice(width);
+                var key = Object.keys(DEVICE_WIDTH).filter(function (name) {
+                    return DEVICE_WIDTH[name] === width;
+                })[0];
+                if (key) {
+                    window.NGStyle.setDevice(key);
+                    if (tab === 'settings' && settingsMode === 'style') paintPanels();
+                }
             });
         });
     }
@@ -373,6 +429,16 @@
             move(list + '.' + from, to);
         });
         window.NGPanels.on('onAdd', add);
+        window.NGStyle.on('onEdit', function (path, options) {
+            if (options && options.live) scheduleCanvas();
+            else {
+                refreshCanvas();
+                if (frameWin && frameWin.NGEdit) frameWin.NGEdit.select(selected);
+            }
+        });
+        window.NGStyle.on('onDevice', function (key) {
+            showDevice(DEVICE_WIDTH[key] || 'full');
+        });
         window.NGPanels.on('isVisible', function (path) {
             if (!frameWin || !frameWin.document) return true;
             return !!frameWin.document.querySelector('[data-ng-path="' + path + '"]');
@@ -400,6 +466,7 @@
         pick('history').addEventListener('click', history);
         pick('docs').addEventListener('click', window.NGSettings.openDocuments);
         pick('account').addEventListener('click', window.NGSettings.openAccount);
+        pick('help').addEventListener('click', window.NGSettings.openHelp);
         pick('preview').addEventListener('click', function () {
             stash();
             try {

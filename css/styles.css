@@ -2652,3 +2652,65 @@ body::-webkit-scrollbar-thumb:hover {
 .panel-foot-note {
     margin-top: 8px;
 }
+
+.ng-heading {
+    font-family: var(--serif);
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 18px;
+}
+
+h2.ng-heading {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+}
+
+h3.ng-heading {
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+}
+
+h4.ng-heading {
+    font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+}
+
+.ng-text p {
+    color: var(--text-dim);
+    line-height: 1.85;
+    margin-bottom: 16px;
+}
+
+.ng-text p:last-child {
+    margin-bottom: 0;
+}
+
+.ng-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 8px 0 6px;
+}
+
+.ng-spacer {
+    width: 100%;
+}
+
+.ng-divider-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+}
+
+.ng-divider {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid var(--line);
+}
+
+.ng-html {
+    width: 100%;
+}
+
+.ng-html iframe,
+.ng-html video,
+.ng-html img {
+    max-width: 100%;
+}

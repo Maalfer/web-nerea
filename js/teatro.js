@@ -65,6 +65,7 @@
         var section = el('section', 'opera-project-section');
         section.id = data.id;
         if (window.NG_EDIT) section.setAttribute('data-ng-path', 'pages.teatro.projects.' + position);
+        if (window.Styler) window.Styler.apply(section, data);
 
         if (data.reel && data.reelPosition !== 'bottom') section.appendChild(reelBlock(data.reel));
 
@@ -129,6 +130,10 @@
 
         var data = ((window.CONTENT || {}).pages || {}).teatro;
         if (!data) return;
+        if (window.Styler) {
+            window.Styler.reset();
+            window.Styler.globals((window.CONTENT || {}).site);
+        }
 
         var hero = document.getElementById('teatro-hero');
         if (hero) {
@@ -146,6 +151,10 @@
             mount.appendChild(project(p, position));
         });
 
+        if (window.Styler) {
+            window.Styler.apply(hero, data);
+            window.Styler.flush();
+        }
         document.dispatchEvent(new CustomEvent('content:rendered'));
     }
 
