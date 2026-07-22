@@ -759,7 +759,7 @@ window.CONTENT = {
           "videoGroup": "teatro/carmen",
           "gallery": "teatro/carmen",
           "mainCount": 4,
-          "text": "Participación en la producción de la ópera Carmen, bajo la dirección de Emilio Sagi, como parte del equipo de utilería. Me encargué del mantenimiento de los elementos utilizados en el escenario y de su colocación durante la obra, garantizando que cada pieza estuviera en su sitio y en perfecto estado en cada función."
+          "text": "Participación en la producción de la ópera Carmen, bajo la dirección de Emilio Sagi, como parte del equipo de utilería. Me encargué del mantenimiento y la creación de parte de los elementos utilizados en el escenario y de su colocación durante la obra, garantizando que cada pieza estuviera en su sitio y en perfecto estado en cada función."
         },
         {
           "id": "rigoletto",
@@ -805,7 +805,7 @@ window.CONTENT = {
           "videoGroup": "teatro/hansel-gretel",
           "gallery": "teatro/hansel-gretel",
           "mainCount": 3,
-          "text": "Producción propia en la que participé en la creación de los elementos escenográficos. Me ocupé del envejecido de los muebles, las cajas y el resto de piezas que pueblan la escena, así como de la construcción de otros elementos nuevos, hasta componer el ambiente degradado que pedía el montaje.",
+          "text": "Producción propia en la que participé en la creación de los elementos escenográficos. Me ocupé del envejecido de los muebles, las cajas y el resto de piezas que pueblan la escena, así como de la creación de otros elementos como una jarra que se pudiera romper (y arreglar) durante la opera, hasta componer el ambiente degradado que pedía el montaje.",
           "reelPosition": "bottom"
         }
       ]

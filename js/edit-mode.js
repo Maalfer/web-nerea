@@ -218,19 +218,12 @@
         event.stopPropagation();
 
         var origin = listOf(selected);
-        if (!origin) return;
-
-        var siblings = nodes().filter(function (node) {
-            var path = node.getAttribute('data-ng-path');
-            return path.indexOf(origin.prefix) === 0 &&
-                path.slice(origin.prefix.length).indexOf('.') === -1;
-        }).sort(function (a, b) {
-            return parseInt(a.getAttribute('data-ng-path').slice(origin.prefix.length), 10) -
-                parseInt(b.getAttribute('data-ng-path').slice(origin.prefix.length), 10);
-        });
-        if (siblings.length < 2) return;
-
         var moving = nodeFor(selected);
+        if (!origin || !moving) return;
+
+        var value = valueAt(selected);
+        var isRow = value && value.type === 'row';
+
         moving.classList.add('ng-dragging');
         document.body.classList.add('ng-drag-active');
         if (bar) bar.style.display = 'none';
@@ -238,43 +231,27 @@
 
         ghost = document.createElement('div');
         ghost.className = 'ng-ghost';
-        var spec = schema() && schema().describe(selected, valueAt(selected));
+        var spec = schema() && schema().describe(selected, value);
         ghost.textContent = spec ? spec.label : 'Bloque';
         document.body.appendChild(ghost);
 
-        indicator = document.createElement('div');
-        indicator.className = 'ng-drop';
-        layer.appendChild(indicator);
+        var target = null;
 
-        var target = origin.index;
-
-        function measure(pointerY) {
-            var best = siblings.length;
-            for (var n = 0; n < siblings.length; n++) {
-                var box = siblings[n].getBoundingClientRect();
-                if (pointerY < box.top + box.height / 2) {
-                    best = n;
-                    break;
-                }
-            }
-            return best;
-        }
-
-        function draw(slot) {
-            var reference = siblings[Math.min(slot, siblings.length - 1)];
-            var box = reference.getBoundingClientRect();
-            var below = slot >= siblings.length;
-            indicator.style.top = (below ? box.bottom : box.top) + window.scrollY - 2 + 'px';
-            indicator.style.left = box.left + window.scrollX + 'px';
-            indicator.style.width = box.width + 'px';
+        function allowed(context) {
+            if (!context) return false;
+            if (isRow && context.list.indexOf('.columns.') !== -1) return false;
+            return context.list.indexOf(selected + '.') !== 0;
         }
 
         function onMove(move) {
             ghost.style.left = (move.clientX + 14) + 'px';
             ghost.style.top = (move.clientY + 14) + 'px';
-            var slot = measure(move.clientY);
-            target = slot > origin.index ? slot - 1 : slot;
-            draw(slot);
+
+            var context = dropContext(move.clientX, move.clientY);
+            if (allowed(context)) {
+                target = context;
+                showDropLine(context);
+            }
 
             var edge = 90;
             if (move.clientY < edge) window.scrollBy(0, -18);
@@ -287,13 +264,12 @@
             moving.classList.remove('ng-dragging');
             document.body.classList.remove('ng-drag-active');
             if (ghost) ghost.remove();
-            if (indicator) indicator.remove();
-            ghost = indicator = null;
-            if (host && target !== origin.index) host.move(selected, target);
+            ghost = null;
+            clearDropLine();
+            if (host && target) host.relocate(selected, target.list, target.index);
             else markSelected();
         }
 
-        draw(origin.index);
         ghost.style.left = (event.clientX + 14) + 'px';
         ghost.style.top = (event.clientY + 14) + 'px';
         document.addEventListener('mousemove', onMove, true);
@@ -377,7 +353,6 @@
         if (node) showChrome(node);
         else hideChrome();
     }
-
     // -------------------------------------------------- soltar widgets nuevos
 
     function inOrder(list) {

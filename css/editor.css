@@ -1366,3 +1366,11 @@ textarea {
         transition: none !important;
     }
 }
+
+.ng-subtree-head.is-target {
+    color: var(--ng-gold);
+    background: rgba(224, 168, 58, .1);
+    border-radius: 5px;
+    outline: 1px dashed var(--ng-gold);
+    outline-offset: -1px;
+}

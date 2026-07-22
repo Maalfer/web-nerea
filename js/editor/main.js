@@ -136,6 +136,43 @@
         if (frameWin && frameWin.NGEdit) frameWin.NGEdit.select(info.list + '.' + to);
     }
 
+    /** Moves a block to any list: another column, or back out to the page. */
+    function relocate(fromPath, toList, toIndex) {
+        var info = listInfo(fromPath);
+        if (!info || !toList) return;
+
+        var at = toIndex;
+        if (info.list === toList) {
+            if (at != null && at > info.index) at -= 1;
+            if (at === info.index) return;
+        }
+
+        var landed = at;
+        var done = store.mutate(function (model) {
+            var from = store.path.get(model, info.list);
+            if (!from || !from.length) return false;
+
+            var to = store.path.get(model, toList);
+            if (!to) {
+                store.path.set(model, toList, []);
+                to = store.path.get(model, toList);
+            }
+            if (!Array.isArray(to)) return false;
+
+            var moved = from.splice(info.index, 1)[0];
+            if (moved === undefined) return false;
+            if (landed == null || landed > to.length) landed = to.length;
+            to.splice(landed, 0, moved);
+        });
+        if (!done) return;
+
+        var landedPath = toList + '.' + landed;
+        setSelected(landedPath, true);
+        refreshCanvas();
+        if (frameWin && frameWin.NGEdit) frameWin.NGEdit.select(landedPath);
+        paintPanels();
+    }
+
     function duplicate(path) {
         var info = listInfo(path);
         if (!info) return;
@@ -339,6 +376,7 @@
             paintPanels();
         },
         move: move,
+        relocate: relocate,
         nudge: function (path, delta) {
             var info = listInfo(path);
             if (info) move(path, info.index + delta);
@@ -429,6 +467,7 @@
         window.NGPanels.on('onReorder', function (list, from, to) {
             move(list + '.' + from, to);
         });
+        window.NGPanels.on('onRelocate', relocate);
         window.NGPanels.on('onAdd', add);
         window.NGStyle.on('onEdit', function (path, options) {
             if (options && options.live) scheduleCanvas();

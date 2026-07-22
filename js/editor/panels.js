@@ -16,11 +16,27 @@
         onSelect: function () { },
         onHover: function () { },
         onReorder: function () { },
+        onRelocate: function () { },
         onAdd: function () { },
         isVisible: function () {
             return true;
         }
     };
+
+    /** Shared across every list so a block can be dragged from one column to another. */
+    var dragState = null;
+
+    function clearMarks() {
+        document.querySelectorAll('.ng-layer, .ng-subtree-head').forEach(function (node) {
+            node.classList.remove('is-dragging', 'is-over', 'is-under', 'is-target');
+        });
+    }
+
+    function canDrop(listPath) {
+        if (!dragState) return false;
+        if (dragState.type === 'row' && listPath.indexOf('.columns.') !== -1) return false;
+        return listPath.indexOf(dragState.path + '.') !== 0;
+    }
 
     var HOME_LISTS = [
         { path: 'gates', label: 'Accesos de portada' },
@@ -90,6 +106,25 @@
             var children = (value.columns && value.columns[column]) || [];
             var head = el('div', 'ng-subtree-head', 'Columna ' + (column + 1) +
                 (children.length ? '' : ' · vacía'));
+
+            (function (target, total) {
+                head.addEventListener('dragover', function (event) {
+                    if (!canDrop(target)) return;
+                    event.preventDefault();
+                    head.classList.add('is-target');
+                });
+                head.addEventListener('dragleave', function () {
+                    head.classList.remove('is-target');
+                });
+                head.addEventListener('drop', function (event) {
+                    event.preventDefault();
+                    head.classList.remove('is-target');
+                    if (!canDrop(target)) return;
+                    handlers.onRelocate(dragState.path, target, total);
+                    dragState = null;
+                });
+            })(listPath, children.length);
+
             wrap.appendChild(head);
 
             if (!children.length) continue;
@@ -104,28 +139,27 @@
     }
 
     function sortable(list, listPath, host) {
-        var dragging = null;
-
         host.querySelectorAll(':scope > .ng-layer').forEach(function (row) {
             var index = parseInt(row.getAttribute('data-index'), 10);
 
             row.addEventListener('dragstart', function (event) {
-                dragging = index;
+                var value = list[index] || {};
+                dragState = { list: listPath, index: index, type: value.type, path: listPath + '.' + index };
                 row.classList.add('is-dragging');
                 event.dataTransfer.effectAllowed = 'move';
-                event.dataTransfer.setData('text/plain', String(index));
+                event.dataTransfer.setData('text/plain', dragState.path);
             });
             row.addEventListener('dragend', function () {
-                dragging = null;
-                host.querySelectorAll(':scope > .ng-layer').forEach(function (node) {
-                    node.classList.remove('is-dragging', 'is-over', 'is-under');
-                });
+                dragState = null;
+                clearMarks();
             });
             row.addEventListener('dragover', function (event) {
+                if (!canDrop(listPath)) return;
                 event.preventDefault();
-                if (dragging === null || dragging === index) return;
-                row.classList.toggle('is-over', index < dragging);
-                row.classList.toggle('is-under', index > dragging);
+                if (dragState.list === listPath && dragState.index === index) return;
+                var arriba = dragState.list !== listPath || index < dragState.index;
+                row.classList.toggle('is-over', arriba);
+                row.classList.toggle('is-under', !arriba);
             });
             row.addEventListener('dragleave', function () {
                 row.classList.remove('is-over', 'is-under');
@@ -133,8 +167,14 @@
             row.addEventListener('drop', function (event) {
                 event.preventDefault();
                 row.classList.remove('is-over', 'is-under');
-                if (dragging === null || dragging === index) return;
-                handlers.onReorder(listPath, dragging, index);
+                if (!canDrop(listPath)) return;
+                if (dragState.list === listPath) {
+                    if (dragState.index === index) return;
+                    handlers.onReorder(listPath, dragState.index, index);
+                } else {
+                    handlers.onRelocate(dragState.path, listPath, index);
+                }
+                dragState = null;
             });
         });
     }

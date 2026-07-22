@@ -206,7 +206,8 @@
             ['bi-cursor-text', 'Escribe encima del texto',
                 'Los títulos y párrafos se editan directamente sobre la página, como en un documento.'],
             ['bi-grip-vertical', 'Muévelo de sitio',
-                'Arrastra por el asa de la barra dorada, o usa las flechas. También puedes ordenar desde «Estructura».'],
+                'Arrastra por el asa de la barra dorada, o usa las flechas. Puedes sacar un bloque de una columna, ' +
+                'meterlo en otra o devolverlo a la página; también se ordena desde «Estructura».'],
             ['bi-plus-square', 'Añade bloques nuevos',
                 'En «Añadir» tienes el catálogo. Púlsalos o arrástralos al punto exacto de la página.'],
             ['bi-brush', 'Dale estilo',
