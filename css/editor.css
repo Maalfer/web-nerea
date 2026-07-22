@@ -1410,3 +1410,48 @@ textarea {
     border-color: var(--ng-danger);
     color: #fff;
 }
+
+.ng-conflict {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 12px;
+}
+
+.ng-conflict .ng-btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.ng-publish-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 14px 0 18px;
+}
+
+.ng-publish-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.ng-publish-row:hover {
+    background: var(--ng-panel-2);
+}
+
+.ng-publish-row input {
+    accent-color: var(--ng-gold);
+    width: 16px;
+    height: 16px;
+}
+
+.ng-revision {
+    align-items: flex-start;
+}
+
+.ng-revision .ng-doc-info strong {
+    color: var(--ng-gold);
+}

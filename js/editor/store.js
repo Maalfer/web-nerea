@@ -83,6 +83,11 @@
             return state.published;
         },
 
+        setPublished: function (data) {
+            state.published = clone(data);
+            announce('published');
+        },
+
         markPublished: function () {
             state.published = clone(state.model);
             state.saved = clone(state.model);

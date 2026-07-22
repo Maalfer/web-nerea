@@ -87,16 +87,39 @@
             return request('/admin/state');
         },
 
-        putDraft: function (data) {
-            return request('/admin/draft', {
+        putDraft: function (data, base) {
+            return request('/admin/draft' + (base ? '?base=' + encodeURIComponent(base) : ''), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
         },
 
-        publish: function () {
-            return request('/admin/publish', { method: 'POST' });
+        draftVersion: function () {
+            return request('/admin/draft/version');
+        },
+
+        publish: function (areas) {
+            var body = new FormData();
+            if (areas && areas.length) body.append('areas', JSON.stringify(areas));
+            return request('/admin/publish', { method: 'POST', body: body });
+        },
+
+        trash: function () {
+            return request('/admin/trash');
+        },
+
+        restoreTrash: function (item) {
+            var body = new FormData();
+            body.append('item', item);
+            return request('/admin/trash/restore', { method: 'POST', body: body });
+        },
+
+        labelRevision: function (name, label) {
+            var body = new FormData();
+            body.append('name', name);
+            body.append('label', label || '');
+            return request('/admin/revisions/label', { method: 'POST', body: body });
         },
 
         discardDraft: function () {

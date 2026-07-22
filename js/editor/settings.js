@@ -285,6 +285,148 @@
         }, 40);
     }
 
+    function conflictModal(actions) {
+        var box = shell('Cambios en otra sesión');
+        box.body.appendChild(el('p', 'ng-hint',
+            'Alguien ha guardado el borrador desde otra pestaña o dispositivo mientras editabas. ' +
+            'Para no pisar el trabajo de nadie, elige qué versión se queda.'));
+
+        var row = el('div', 'ng-conflict');
+        var reload = el('button', 'ng-btn', 'Cargar lo de la otra sesión');
+        reload.type = 'button';
+        reload.addEventListener('click', function () {
+            reload.disabled = true;
+            actions.onReload().then(function () {
+                box.close();
+            });
+        });
+        var over = el('button', 'ng-btn ng-btn--gold', 'Conservar lo mío');
+        over.type = 'button';
+        over.addEventListener('click', function () {
+            over.disabled = true;
+            actions.onOverwrite().then(function () {
+                box.close();
+            });
+        });
+        row.appendChild(reload);
+        row.appendChild(over);
+        box.body.appendChild(row);
+        box.body.appendChild(el('p', 'ng-field-hint',
+            '«Cargar lo de la otra sesión» descarta los cambios que hayas hecho aquí. ' +
+            '«Conservar lo mío» descarta los de la otra.'));
+    }
+
+    function publishModal(areas, onPublish) {
+        var box = shell('Publicar cambios');
+        box.body.appendChild(el('p', 'ng-hint',
+            'Esto es lo que ha cambiado desde la última publicación. ' +
+            'Desmarca lo que todavía no quieras que se vea.'));
+
+        var list = el('div', 'ng-publish-list');
+        var checks = [];
+        areas.forEach(function (item) {
+            var row = el('label', 'ng-publish-row');
+            var check = el('input');
+            check.type = 'checkbox';
+            check.checked = true;
+            check.value = item.area;
+            row.appendChild(check);
+            row.appendChild(el('span', null, item.label));
+            list.appendChild(row);
+            checks.push(check);
+        });
+        box.body.appendChild(list);
+
+        var nameWrap = el('div', 'ng-field');
+        var nameLabel = el('label', null, 'Nombre para esta versión (opcional)');
+        nameLabel.setAttribute('for', 'pub-label');
+        var name = el('input');
+        name.type = 'text';
+        name.id = 'pub-label';
+        name.placeholder = 'Por ejemplo: fotos nuevas de Orlando';
+        nameWrap.appendChild(nameLabel);
+        nameWrap.appendChild(name);
+        box.body.appendChild(nameWrap);
+
+        var foot = el('div', 'ng-modal-foot');
+        var message = el('p', 'ng-hint');
+        message.setAttribute('role', 'status');
+        var send = el('button', 'ng-btn ng-btn--gold', 'Publicar');
+        send.type = 'button';
+        send.addEventListener('click', function () {
+            var chosen = checks.filter(function (c) {
+                return c.checked;
+            }).map(function (c) {
+                return c.value;
+            });
+            if (!chosen.length) {
+                message.textContent = 'Marca al menos una cosa.';
+                return;
+            }
+            send.disabled = true;
+            message.textContent = 'Publicando…';
+            onPublish(chosen, name.value.trim()).then(function () {
+                box.close();
+            }).catch(function () {
+                send.disabled = false;
+                message.textContent = '';
+            });
+        });
+        foot.appendChild(message);
+        foot.appendChild(send);
+        box.body.appendChild(foot);
+    }
+
+    function trashModal(onRestore) {
+        var box = shell('Papelera');
+        box.body.appendChild(el('p', 'ng-hint',
+            'Aquí queda lo que has borrado: fotos, vídeos y páginas. ' +
+            'Al recuperarlo vuelve a su sitio, en la misma posición.'));
+
+        var list = el('div', 'ng-doc-list');
+        box.body.appendChild(list);
+
+        function paint() {
+            list.innerHTML = '';
+            window.Auth.trash().then(function (data) {
+                var items = data.items || [];
+                if (!items.length) {
+                    list.appendChild(el('p', 'ng-empty', 'La papelera está vacía.'));
+                    return;
+                }
+                items.forEach(function (item) {
+                    var row = el('div', 'ng-doc');
+                    var info = el('div', 'ng-doc-info');
+                    info.appendChild(el('strong', null, item.label));
+                    var when = item.saved ? new Date(item.saved) : null;
+                    info.appendChild(el('span', null, (item.kind === 'page' ? 'Página' : 'Archivo') +
+                        (when ? ' · ' + when.toLocaleDateString('es-ES', { day: '2-digit', month: 'long' }) +
+                            ' ' + when.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '')));
+                    row.appendChild(info);
+
+                    var use = el('button', 'ng-btn ng-btn--gold', 'Recuperar');
+                    use.type = 'button';
+                    use.addEventListener('click', function () {
+                        use.disabled = true;
+                        window.Auth.restoreTrash(item.id).then(function () {
+                            return onRestore();
+                        }).then(function () {
+                            paint();
+                            window.NGMedia.toast('Recuperado');
+                        }).catch(function (error) {
+                            use.disabled = false;
+                            window.NGMedia.toast(error.message || 'No se pudo recuperar', true);
+                        });
+                    });
+                    row.appendChild(use);
+                    list.appendChild(row);
+                });
+            });
+        }
+
+        paint();
+    }
+
     function helpModal() {
         var box = shell('Cómo funciona el editor');
         var steps = [
@@ -319,6 +461,9 @@
 
     window.NGSettings = {
         openHelp: helpModal,
+        openConflict: conflictModal,
+        openPublish: publishModal,
+        openTrash: trashModal,
         openNewPage: newPageModal,
         load: function () {
             return window.Auth.documents().then(function (data) {

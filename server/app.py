@@ -333,12 +333,20 @@ def rebuild_pages():
 def drop_links(data, slug):
     """Removes menu and footer links that pointed at a deleted page."""
     target = slug + ".html"
+    taken = []
     for holder, key in (("header", "links"), ("footer", "portfolio")):
         block = data.get(holder) or {}
         rows = block.get(key)
-        if isinstance(rows, list):
-            block[key] = [row for row in rows
-                          if str(row.get("href", "")).split("#")[0] != target]
+        if not isinstance(rows, list):
+            continue
+        kept = []
+        for row in rows:
+            if str(row.get("href", "")).split("#")[0] == target:
+                taken.append({"holder": holder, "key": key, "row": row})
+            else:
+                kept.append(row)
+        block[key] = kept
+    return taken
 
 
 DEFAULT_CHROME = {
@@ -425,13 +433,24 @@ def file_moment(path):
     return datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(timespec="seconds")
 
 
+def revision_labels():
+    path = REVISION_DIR / "labels.json"
+    if path.is_file():
+        try:
+            return json.loads(path.read_text())
+        except ValueError:
+            return {}
+    return {}
+
+
 def revision_list():
     if not REVISION_DIR.exists():
         return []
+    labels = revision_labels()
     items = []
     for path in sorted(REVISION_DIR.glob("content-*.json"), reverse=True):
         items.append({"name": path.name, "size": path.stat().st_size,
-                      "saved": file_moment(path)})
+                      "saved": file_moment(path), "label": labels.get(path.name, "")})
     return items
 
 
@@ -530,9 +549,20 @@ def transcode_video(payload, rel_base):
     return entry
 
 
-def trash_files(entry):
-    """Move every file behind a manifest entry into the trash folder."""
+def trash_slot(label):
+    """Creates a fresh folder in the trash and returns it."""
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    slot = TRASH_DIR / ("%s-%s" % (stamp, label))
+    number = 1
+    while slot.exists():
+        number += 1
+        slot = TRASH_DIR / ("%s-%s-%d" % (stamp, label, number))
+    slot.mkdir(parents=True, exist_ok=True)
+    return slot
+
+
+def trash_files(entry, slot):
+    """Moves every file behind a manifest entry into the given trash folder."""
     for key in ("src", "medium", "thumb", "poster"):
         rel = strip_query(entry.get(key) or "")
         if not rel:
@@ -540,9 +570,46 @@ def trash_files(entry):
         source = WEB_ROOT / rel
         if not source.exists():
             continue
-        target = TRASH_DIR / stamp / rel
+        target = slot / rel
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(str(source), str(target))
+
+
+def trash_note(slot, payload):
+    payload["saved"] = now()
+    (slot / "deleted.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2))
+
+
+def trash_list():
+    if not TRASH_DIR.exists():
+        return []
+    items = []
+    for slot in sorted(TRASH_DIR.iterdir(), reverse=True):
+        note = slot / "deleted.json"
+        if not note.is_file():
+            continue
+        try:
+            payload = json.loads(note.read_text())
+        except ValueError:
+            continue
+        items.append({
+            "id": slot.name,
+            "kind": payload.get("kind"),
+            "label": payload.get("label", slot.name),
+            "saved": payload.get("saved"),
+        })
+    return items
+
+
+def restore_files(slot):
+    """Puts every file of a trash folder back where it came from."""
+    for path in slot.rglob("*"):
+        if not path.is_file() or path.name == "deleted.json":
+            continue
+        rel = path.relative_to(slot)
+        target = WEB_ROOT / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(path), str(target))
 
 
 def walk_blocks(node):
@@ -841,7 +908,9 @@ def admin_state(request: Request):
         "dirty": draft != published,
         "publishedAt": file_moment(CONTENT_JSON),
         "draftAt": file_moment(DRAFT_JSON),
+        "version": draft_version(),
         "revisions": revision_list(),
+        "trash": trash_list(),
     }
 
 
@@ -858,21 +927,74 @@ async def read_content_body(request):
     return data
 
 
+def draft_version():
+    """Plain number that changes on every write, safe to travel in a query string."""
+    if not DRAFT_JSON.exists():
+        return "0"
+    return str(DRAFT_JSON.stat().st_mtime_ns)
+
+
+@app.get("/admin/draft/version")
+def admin_draft_version(request: Request):
+    require_user(request)
+    return {"version": draft_version(), "draftAt": file_moment(DRAFT_JSON)}
+
+
 @app.put("/admin/draft")
 async def admin_put_draft(request: Request):
     require_user(request)
+    base = request.query_params.get("base")
+    current = draft_version()
+
+    if base and current != "0" and base != current:
+        raise HTTPException(status_code=409, detail="El borrador ha cambiado en otra sesión")
+
     data = await read_content_body(request)
     store_draft(data)
-    return {"ok": True, "draftAt": file_moment(DRAFT_JSON), "dirty": data != load_content()}
+    return {"ok": True, "version": draft_version(), "draftAt": file_moment(DRAFT_JSON),
+            "dirty": data != load_content()}
+
+
+def apply_area(published, draft, area):
+    """Copies one top level area (or one page) from the draft into the published copy."""
+    if area.startswith("pages."):
+        slug = area.split(".", 1)[1]
+        pages = published.setdefault("pages", {})
+        source = (draft.get("pages") or {}).get(slug)
+        if source is None:
+            pages.pop(slug, None)
+        else:
+            pages[slug] = json.loads(json.dumps(source))
+        return
+    if area in draft:
+        published[area] = json.loads(json.dumps(draft[area]))
+    else:
+        published.pop(area, None)
 
 
 @app.post("/admin/publish")
-async def admin_publish(request: Request):
+async def admin_publish(request: Request, areas: str = Form("")):
     require_user(request)
     draft = load_draft()
-    save_content(draft)
+
+    if areas:
+        try:
+            wanted = json.loads(areas)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Selección no válida")
+        if not isinstance(wanted, list) or not wanted:
+            raise HTTPException(status_code=400, detail="No hay nada seleccionado")
+        published = load_content()
+        for area in wanted:
+            apply_area(published, draft, str(area))
+        save_content(published)
+    else:
+        save_content(draft)
+
     rebuild_pages()
-    return {"ok": True, "publishedAt": file_moment(CONTENT_JSON), "revisions": revision_list()}
+    return {"ok": True, "publishedAt": file_moment(CONTENT_JSON),
+            "published": load_content(), "revisions": revision_list(),
+            "version": draft_version()}
 
 
 @app.post("/admin/discard")
@@ -880,7 +1002,23 @@ def admin_discard(request: Request):
     require_user(request)
     published = load_content()
     store_draft(published)
-    return {"ok": True, "draft": published}
+    return {"ok": True, "draft": published, "version": draft_version()}
+
+
+@app.post("/admin/revisions/label")
+def admin_label_revision(request: Request, name: str = Form(...), label: str = Form("")):
+    require_user(request)
+    if "/" in name or not name.startswith("content-"):
+        raise HTTPException(status_code=400, detail="Revisión no válida")
+    labels = revision_labels()
+    clean = (label or "").strip()[:80]
+    if clean:
+        labels[name] = clean
+    else:
+        labels.pop(name, None)
+    REVISION_DIR.mkdir(parents=True, exist_ok=True)
+    write_json_atomic(REVISION_DIR / "labels.json", labels)
+    return {"ok": True, "revisions": revision_list()}
 
 
 @app.post("/admin/revisions/restore")
@@ -893,7 +1031,62 @@ def admin_restore(request: Request, name: str = Form(...)):
         raise HTTPException(status_code=404, detail="Revisión no encontrada")
     data = json.loads(path.read_text())
     store_draft(data)
-    return {"ok": True, "draft": data}
+    return {"ok": True, "draft": data, "version": draft_version()}
+
+
+@app.get("/admin/trash")
+def admin_trash(request: Request):
+    require_user(request)
+    return {"items": trash_list()}
+
+
+@app.post("/admin/trash/restore")
+def admin_trash_restore(request: Request, item: str = Form(...)):
+    require_user(request)
+    if "/" in item or ".." in item:
+        raise HTTPException(status_code=400, detail="Elemento no válido")
+    slot = TRASH_DIR / item
+    note = slot / "deleted.json"
+    if not note.is_file():
+        raise HTTPException(status_code=404, detail="Ese elemento ya no está en la papelera")
+
+    payload = json.loads(note.read_text())
+    kind = payload.get("kind")
+
+    if kind == "media":
+        data = load_media()
+        bucket = media_bucket(data, payload.get("mediaKind", "images"))
+        group = payload["group"]
+        items = bucket.setdefault(group, [])
+        at = min(max(0, int(payload.get("index", len(items)))), len(items))
+        items.insert(at, payload["entry"])
+        save_media(data)
+        restore_files(slot)
+
+        mapping = {}
+        for old_index in range(len(items) - 1):
+            mapping[old_index] = old_index if old_index < at else old_index + 1
+        apply_media_shift(group, mapping, len(items) - 1)
+
+    elif kind == "page":
+        slug = payload["slug"]
+        published = load_content()
+        draft = load_draft()
+        for data in (published, draft):
+            data.setdefault("pages", {})[slug] = json.loads(json.dumps(payload["page"]))
+            for link in payload.get("links") or []:
+                rows = data.setdefault(link["holder"], {}).setdefault(link["key"], [])
+                if not any(r.get("href") == link["row"].get("href") for r in rows):
+                    rows.append(link["row"])
+        restore_files(slot)
+        save_content(published)
+        store_draft(draft)
+        rebuild_pages()
+    else:
+        raise HTTPException(status_code=400, detail="No se sabe cómo recuperar esto")
+
+    shutil.rmtree(slot, ignore_errors=True)
+    return {"ok": True, "kind": kind}
 
 
 @app.post("/admin/pages")
@@ -926,7 +1119,7 @@ def admin_create_page(request: Request, slug: str = Form(...), title: str = Form
                       page_html(slug, label, (subtitle or "").strip()))
     save_content(published)
     store_draft(draft)
-    return {"ok": True, "slug": slug, "draft": draft, "published": published}
+    return {"ok": True, "slug": slug, "draft": draft, "published": published, "version": draft_version()}
 
 
 @app.post("/admin/pages/delete")
@@ -943,20 +1136,23 @@ def admin_delete_page(request: Request, slug: str = Form(...)):
     if slug not in (published.get("pages") or {}) and slug not in (draft.get("pages") or {}):
         raise HTTPException(status_code=404, detail="Esa página no existe")
 
+    page = (published.get("pages") or {}).get(slug) or (draft.get("pages") or {}).get(slug)
+    removed = []
     for data in (published, draft):
         (data.get("pages") or {}).pop(slug, None)
-        drop_links(data, slug)
+        removed = drop_links(data, slug) or removed
 
+    slot = trash_slot("page-" + slug)
     target = WEB_ROOT / (slug + ".html")
     if target.exists():
-        stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-        trashed = TRASH_DIR / stamp / (slug + ".html")
-        trashed.parent.mkdir(parents=True, exist_ok=True)
+        trashed = slot / (slug + ".html")
         shutil.move(str(target), str(trashed))
+    trash_note(slot, {"kind": "page", "slug": slug, "page": page, "links": removed,
+                      "label": "Página: " + (page or {}).get("title", slug)})
 
     save_content(published)
     store_draft(draft)
-    return {"ok": True, "draft": draft, "published": published}
+    return {"ok": True, "draft": draft, "published": published, "version": draft_version()}
 
 
 @app.post("/admin/media/group")
@@ -1028,7 +1224,12 @@ def admin_delete_media(request: Request, kind: str = Form("images"),
     items, i = resolve_entry(data, kind, group, index)
     entry = items.pop(i)
     save_media(data)
-    trash_files(entry)
+
+    slot = trash_slot("media")
+    trash_files(entry, slot)
+    trash_note(slot, {"kind": "media", "mediaKind": kind, "group": group,
+                      "index": i, "entry": entry,
+                      "label": (entry.get("name") or group) + " · " + group})
 
     mapping = {}
     for old in range(len(items) + 1):

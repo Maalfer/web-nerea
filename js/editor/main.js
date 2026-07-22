@@ -22,6 +22,9 @@
     var saveTimer = null;
     var refreshTimer = null;
     var booted = false;
+    var version = null;
+    var watchTimer = null;
+    var conflicted = false;
 
     function media() {
         return store.media();
@@ -76,6 +79,7 @@
         window.NGSettings.openNewPage(function (form) {
             return window.Auth.createPage(form.slug, form.title, form.subtitle, form.menu)
                 .then(function (answer) {
+                    version = answer.version || version;
                     store.init({
                         draft: answer.draft,
                         published: answer.published,
@@ -95,6 +99,7 @@
             'Se quitará también del menú. Esta acción se aplica al momento.')) return;
 
         window.Auth.deletePage(slug).then(function (answer) {
+            version = answer.version || version;
             store.init({ draft: answer.draft, published: answer.published, media: store.media() });
             window.NGSchema.refresh(store.model());
             loadPage('home');
@@ -309,38 +314,151 @@
     }
 
     function scheduleSave() {
+        if (conflicted) return;
         clearTimeout(saveTimer);
         saveTimer = setTimeout(function () {
-            window.Auth.putDraft(store.model()).then(function () {
+            window.Auth.putDraft(store.model(), version).then(function (answer) {
+                version = answer.version || version;
                 store.markSaved();
                 status();
             }).catch(function (error) {
+                if (error.status === 409) return conflict();
                 window.NGMedia.toast(error.message || 'No se pudo guardar el borrador', true);
             });
         }, 900);
     }
 
+    /** Another tab or device saved the draft while this one was editing. */
+    function conflict() {
+        if (conflicted) return;
+        conflicted = true;
+        clearTimeout(watchTimer);
+        pick('save-state').textContent = 'Conflicto con otra sesión';
+
+        window.NGSettings.openConflict({
+            onReload: function () {
+                return window.Auth.getState().then(function (state) {
+                    store.init(state);
+                    version = state.version;
+                    conflicted = false;
+                    window.NGSchema.refresh(store.model());
+                    selected = null;
+                    loadPage(page);
+                    status();
+                    watch();
+                    window.NGMedia.toast('Cargados los cambios de la otra sesión');
+                });
+            },
+            onOverwrite: function () {
+                return window.Auth.putDraft(store.model()).then(function (answer) {
+                    version = answer.version || version;
+                    conflicted = false;
+                    store.markSaved();
+                    status();
+                    watch();
+                    window.NGMedia.toast('Tus cambios se han guardado encima');
+                });
+            }
+        });
+    }
+
+    /** Notices changes made elsewhere even while this tab sits idle. */
+    function watch() {
+        clearTimeout(watchTimer);
+        watchTimer = setTimeout(function () {
+            if (conflicted) return;
+            window.Auth.draftVersion().then(function (answer) {
+                if (version && answer.version && answer.version !== version) {
+                    if (store.unsaved()) return conflict();
+                    return window.Auth.getState().then(function (state) {
+                        store.init(state);
+                        version = state.version;
+                        window.NGSchema.refresh(store.model());
+                        loadPage(page);
+                        status();
+                        window.NGMedia.toast('Se han cargado cambios hechos en otra sesión');
+                    });
+                }
+            }).catch(function () { }).then(watch);
+        }, 25000);
+    }
+
+    var AREA_LABELS = {
+        site: 'Datos de contacto',
+        header: 'Cabecera y menú',
+        footer: 'Pie de página',
+        home: 'Textos de portada',
+        about: 'Sobre mí',
+        gates: 'Accesos de portada',
+        downloads: 'Tarjetas de descarga',
+        references: 'Referencias'
+    };
+
+    /** Works out which parts of the site the draft changes. */
+    function changedAreas() {
+        var draft = store.model();
+        var live = store.published() || {};
+        var areas = [];
+
+        function differs(a, b) {
+            return JSON.stringify(a) !== JSON.stringify(b);
+        }
+
+        Object.keys(AREA_LABELS).forEach(function (key) {
+            if (differs(draft[key], live[key])) {
+                areas.push({ area: key, label: AREA_LABELS[key] });
+            }
+        });
+
+        var slugs = {};
+        Object.keys(draft.pages || {}).forEach(function (slug) {
+            slugs[slug] = true;
+        });
+        Object.keys(live.pages || {}).forEach(function (slug) {
+            slugs[slug] = true;
+        });
+        Object.keys(slugs).forEach(function (slug) {
+            if (!differs((draft.pages || {})[slug], (live.pages || {})[slug])) return;
+            var meta = window.NGSchema.pages[slug];
+            areas.push({ area: 'pages.' + slug, label: 'Página: ' + (meta ? meta.label : slug) });
+        });
+        return areas;
+    }
+
     function publish() {
-        if (!window.confirm('¿Publicar los cambios? La web pública se actualizará ahora mismo.')) return;
-        pick('publish').disabled = true;
-        window.Auth.putDraft(store.model())
-            .then(function () {
-                return window.Auth.publish();
-            })
-            .then(function () {
-                store.markPublished();
-                status();
-                window.NGMedia.toast('Cambios publicados');
-            })
-            .catch(function (error) {
-                window.NGMedia.toast(error.message || 'No se pudo publicar', true);
-                status();
-            });
+        var areas = changedAreas();
+        if (!areas.length) return window.NGMedia.toast('No hay nada nuevo que publicar');
+
+        window.NGSettings.openPublish(areas, function (chosen, label) {
+            pick('publish').disabled = true;
+            return window.Auth.putDraft(store.model(), version)
+                .then(function (answer) {
+                    version = answer.version || version;
+                    store.markSaved();
+                    return window.Auth.publish(chosen.length === areas.length ? null : chosen);
+                })
+                .then(function (answer) {
+                    if (answer.published) store.setPublished(answer.published);
+                    else store.markPublished();
+                    version = answer.version || version;
+                    status();
+                    window.NGMedia.toast('Cambios publicados');
+                    var last = (answer.revisions || [])[0];
+                    if (label && last) window.Auth.labelRevision(last.name, label);
+                })
+                .catch(function (error) {
+                    if (error.status === 409) conflict();
+                    else window.NGMedia.toast(error.message || 'No se pudo publicar', true);
+                    status();
+                    throw error;
+                });
+        });
     }
 
     function discard() {
         if (!window.confirm('¿Descartar todos los cambios del borrador y volver a lo publicado?')) return;
         window.Auth.discardDraft().then(function (data) {
+            version = data.version || version;
             store.replace(data.draft);
             store.markPublished();
             selected = null;
@@ -374,9 +492,12 @@
             data.revisions.forEach(function (item) {
                 var row = el('div', 'ng-revision');
                 var when = new Date(item.saved);
-                row.appendChild(el('span', null, when.toLocaleDateString('es-ES', {
+                var info = el('div', 'ng-doc-info');
+                if (item.label) info.appendChild(el('strong', null, item.label));
+                info.appendChild(el('span', null, when.toLocaleDateString('es-ES', {
                     day: '2-digit', month: 'long', year: 'numeric'
                 }) + ' · ' + when.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })));
+                row.appendChild(info);
                 var use = el('button', 'ng-btn ng-btn--ghost', 'Recuperar');
                 use.type = 'button';
                 use.addEventListener('click', function () {
@@ -565,6 +686,17 @@
         pick('docs').addEventListener('click', window.NGSettings.openDocuments);
         pick('account').addEventListener('click', window.NGSettings.openAccount);
         pick('help').addEventListener('click', window.NGSettings.openHelp);
+        pick('trash').addEventListener('click', function () {
+            window.NGSettings.openTrash(function () {
+                return window.Auth.getState().then(function (state) {
+                    store.init(state);
+                    version = state.version;
+                    window.NGSchema.refresh(store.model());
+                    loadPage(page);
+                    status();
+                });
+            });
+        });
         pick('preview').addEventListener('click', function () {
             stash();
             try {
@@ -616,7 +748,9 @@
         });
 
         booted = true;
-        var wanted = (window.location.search.match(/[?&]p=([a-z]+)/) || [])[1];
+        version = state.version || null;
+        watch();
+        var wanted = (window.location.search.match(/[?&]p=([a-z0-9-]+)/) || [])[1];
         loadPage(window.NGSchema.pages[wanted] ? wanted : 'ilustracion');
         status();
     }
