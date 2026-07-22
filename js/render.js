@@ -485,7 +485,79 @@
         });
     }
 
+    /** Turns an Instagram profile URL into its @handle. */
+    function handleOf(url) {
+        var name = String(url || '').replace(/\/+$/, '').split('/').pop();
+        return name ? '@' + name : '';
+    }
+
+    function fillHead(box, config, path) {
+        if (!box || !config) return;
+        var eyebrow = box.querySelector('.eyebrow');
+        var title = box.querySelector('h1, h2');
+        var text = box.querySelector('p');
+        if (eyebrow && config.eyebrow != null) eyebrow.textContent = config.eyebrow;
+        if (title && config.title != null) title.textContent = config.title;
+        if (text && config.text != null) text.textContent = config.text;
+        stamp(box, path);
+    }
+
+    function renderHomeChrome(data, root) {
+        var home = data.home || {};
+        var site = data.site || {};
+
+        var hero = root.querySelector('#home-hero');
+        if (hero) {
+            var heading = hero.querySelector('h1');
+            if (heading) {
+                heading.innerHTML = '';
+                heading.appendChild(document.createTextNode(
+                    (home.title != null ? home.title : site.name || '') + ' '));
+                if (home.accent) heading.appendChild(el('em', null, home.accent));
+            }
+            var tagline = hero.querySelector('p');
+            if (tagline) tagline.textContent = home.tagline != null ? home.tagline : (site.tagline || '');
+            stamp(hero, 'home');
+        }
+
+        fillHead(root.querySelector('#home-downloads-head'), home.downloads, 'home.downloads');
+        fillHead(root.querySelector('#home-references-head'), home.references, 'home.references');
+
+        var contact = root.querySelector('#home-contact');
+        if (contact) {
+            fillHead(contact, home.contact, 'home.contact');
+            var list = contact.querySelector('.contact-list');
+            if (list) {
+                list.innerHTML = '';
+                var rows = [
+                    ['bi-envelope-fill', site.email, 'mailto:' + site.email],
+                    ['bi-telephone-fill', site.phone, 'tel:' + String(site.phone || '').replace(/\s+/g, '')],
+                    ['bi-geo-alt-fill', site.location, null],
+                    ['bi-instagram', handleOf(site.instagram), site.instagram]
+                ];
+                rows.forEach(function (row) {
+                    if (!row[1]) return;
+                    var item = el('li');
+                    item.appendChild(el('i', 'bi ' + row[0]));
+                    if (row[2]) {
+                        var link = el('a', null, row[1]);
+                        link.href = row[2];
+                        if (row[2].indexOf('http') === 0) {
+                            link.target = '_blank';
+                            link.rel = 'noopener';
+                        }
+                        item.appendChild(link);
+                    } else {
+                        item.appendChild(el('span', null, row[1]));
+                    }
+                    list.appendChild(item);
+                });
+            }
+        }
+    }
+
     function renderHome(data, root) {
+        renderHomeChrome(data, root);
         var panels = root.querySelector('#gate-panels');
         if (panels) {
             (data.gates || []).forEach(function (gate, position) {

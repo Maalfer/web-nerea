@@ -265,6 +265,72 @@ def scaled(image, max_width):
 # Draft, publishing and revisions
 # ---------------------------------------------------------------------------
 
+DEFAULT_CHROME = {
+    "header": {
+        "brand": "Nerea González",
+        "accent": "López",
+        "links": [
+            {"label": "Inicio", "href": "index.html"},
+            {"label": "Ilustración", "href": "ilustracion.html"},
+            {"label": "Escultura", "href": "escultura.html"},
+            {"label": "Teatro", "href": "teatro.html"},
+            {"label": "Sobre mí", "href": "index.html#sobre-mi"},
+            {"label": "Descargas", "href": "index.html#descargas"},
+            {"label": "Contacto", "href": "index.html#contacto"},
+        ],
+    },
+    "footer": {
+        "aboutTitle": "SOBRE MÍ",
+        "about": "Soy Nerea González López, artista y diseñadora especializada en ilustración "
+                 "y escultura. Este portfolio reúne mi trabajo en las tres disciplinas que me definen.",
+        "portfolioTitle": "PORTFOLIO",
+        "portfolio": [
+            {"label": "Ilustración", "href": "ilustracion.html"},
+            {"label": "Escultura", "href": "escultura.html"},
+            {"label": "Teatro", "href": "teatro.html"},
+            {"label": "CV y portfolios en PDF", "href": "index.html#descargas"},
+        ],
+        "contactTitle": "CONTACTO",
+        "rights": "Todos los derechos reservados.",
+    },
+    "home": {
+        "title": "Nerea González",
+        "accent": "López",
+        "tagline": "Ilustración · Escultura · Teatro",
+        "downloads": {
+            "eyebrow": "Descarga directa",
+            "title": "Currículums y portfolios",
+            "text": "Todo el material en PDF, listo para descargar: el CV de ilustración junto a "
+                    "su portfolio y el CV de escultura junto al suyo.",
+        },
+        "references": {"eyebrow": "Han trabajado conmigo", "title": "Referencias"},
+        "contact": {"eyebrow": "Hablemos", "title": "Contacto"},
+    },
+}
+
+
+def with_defaults(data):
+    """Adds the header, footer and home texts the first time they are missing."""
+    changed = False
+    for key, value in DEFAULT_CHROME.items():
+        if key not in data:
+            data[key] = json.loads(json.dumps(value))
+            changed = True
+    return changed
+
+
+def seed_chrome():
+    if CONTENT_JSON.exists():
+        published = load_content()
+        if with_defaults(published):
+            write_json_atomic(CONTENT_JSON, published)
+            regenerate_content_js(published)
+    if DRAFT_JSON.exists():
+        draft = json.loads(DRAFT_JSON.read_text())
+        if with_defaults(draft):
+            write_json_atomic(DRAFT_JSON, draft)
+
+
 def load_draft():
     if DRAFT_JSON.exists():
         return json.loads(DRAFT_JSON.read_text())
@@ -563,6 +629,7 @@ def account(request: Request,
 @app.on_event("startup")
 def on_startup():
     try:
+        seed_chrome()
         sync_static()
     except Exception:
         pass

@@ -1374,3 +1374,16 @@ textarea {
     outline: 1px dashed var(--ng-gold);
     outline-offset: -1px;
 }
+
+.ng-media-card[draggable="true"] {
+    cursor: grab;
+}
+
+.ng-media-card.is-dragging {
+    opacity: .35;
+}
+
+.ng-media-card.is-over {
+    border-color: var(--ng-gold);
+    box-shadow: -4px 0 0 var(--ng-gold);
+}

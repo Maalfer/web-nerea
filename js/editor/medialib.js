@@ -253,10 +253,46 @@
         main.appendChild(foot);
     }
 
+    var cardDrag = null;
+
+    function wireCardDrag(card, index, main) {
+        card.draggable = true;
+
+        card.addEventListener('dragstart', function (event) {
+            cardDrag = index;
+            card.classList.add('is-dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', String(index));
+        });
+        card.addEventListener('dragend', function () {
+            cardDrag = null;
+            main.querySelectorAll('.ng-media-card').forEach(function (node) {
+                node.classList.remove('is-dragging', 'is-over');
+            });
+        });
+        card.addEventListener('dragover', function (event) {
+            if (cardDrag === null || cardDrag === index) return;
+            event.preventDefault();
+            card.classList.add('is-over');
+        });
+        card.addEventListener('dragleave', function () {
+            card.classList.remove('is-over');
+        });
+        card.addEventListener('drop', function (event) {
+            event.preventDefault();
+            card.classList.remove('is-over');
+            if (cardDrag === null || cardDrag === index) return;
+            var desde = cardDrag;
+            cardDrag = null;
+            reorderTo(desde, index, main);
+        });
+    }
+
     function mediaCard(entry, index, main) {
         var kind = session.kind;
         var card = el('figure', 'ng-media-card');
         card.setAttribute('data-index', index);
+        wireCardDrag(card, index, main);
 
         var picked = session.mode === 'items'
             ? (session.items || []).indexOf(index) !== -1
@@ -343,15 +379,28 @@
     }
 
     function shift(index, delta, main) {
+        reorderTo(index, index + delta, main);
+    }
+
+    function reorderTo(index, to, main) {
         var kind = session.kind;
         var items = entries(kind, session.group);
-        var to = index + delta;
-        if (to < 0 || to >= items.length) return;
+        if (to < 0 || to >= items.length || to === index) return;
 
         var order = items.map(function (unused, n) {
             return n;
         });
         order.splice(to, 0, order.splice(index, 1)[0]);
+
+        if (session.mode === 'items' && session.items) {
+            var lugar = {};
+            order.forEach(function (viejo, nuevo) {
+                lugar[viejo] = nuevo;
+            });
+            session.items = session.items.map(function (i) {
+                return lugar[i];
+            });
+        }
 
         window.Auth.reorderMedia(kind, session.group, order).then(function () {
             return window.Auth.getState();

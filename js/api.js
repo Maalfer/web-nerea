@@ -41,6 +41,7 @@
                 var data = local();
                 return {
                     site: data.site,
+                    home: data.home || {},
                     gates: data.gates || [],
                     downloads: data.downloads || [],
                     about: data.about || null,

@@ -9,6 +9,9 @@ from fastapi.staticfiles import StaticFiles
 
 import app as api
 
+api.seed_chrome()
+api.sync_static()
+
 root = FastAPI()
 root.mount("/api", api.app)
 root.mount("/", StaticFiles(directory=str(Path(os.environ["NG_WEB"])), html=True))

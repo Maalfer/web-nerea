@@ -751,6 +751,18 @@ window.CONTENT = {
       "subtitle": "Escenografía y diseño artístico",
       "projects": [
         {
+          "id": "hansel-gretel",
+          "title": "Hansel y Gretel",
+          "subtitle": "Producción propia",
+          "flip": false,
+          "reel": "https://www.instagram.com/reel/DOgmXpjDF_U/",
+          "videoGroup": "teatro/hansel-gretel",
+          "gallery": "teatro/hansel-gretel",
+          "mainCount": 3,
+          "text": "Producción propia en la que participé en la creación de los elementos escenográficos. Me ocupé del envejecido de los muebles, las cajas y el resto de piezas que pueblan la escena, así como de la creación de otros elementos como una jarra que se pudiera romper (y arreglar) durante la opera, hasta componer el ambiente degradado que pedía el montaje.",
+          "reelPosition": "bottom"
+        },
+        {
           "id": "carmen",
           "title": "Carmen",
           "subtitle": "Dirigida por Emilio Sagi",
@@ -795,20 +807,85 @@ window.CONTENT = {
           "gallery": "teatro/romeo-julieta",
           "mainCount": 4,
           "text": "Trabajo de utilería y acabados para Romeo y Julieta. Me encargué de la construcción y el tratamiento de los elementos de escena, aplicando texturizados y pátinas con efecto de piedra envejecida para que resultasen creíbles bajo la luz del escenario, además del montaje y el mantenimiento de las piezas durante los ensayos y las funciones."
-        },
-        {
-          "id": "hansel-gretel",
-          "title": "Hansel y Gretel",
-          "subtitle": "Producción propia",
-          "flip": false,
-          "reel": "https://www.instagram.com/reel/DOgmXpjDF_U/",
-          "videoGroup": "teatro/hansel-gretel",
-          "gallery": "teatro/hansel-gretel",
-          "mainCount": 3,
-          "text": "Producción propia en la que participé en la creación de los elementos escenográficos. Me ocupé del envejecido de los muebles, las cajas y el resto de piezas que pueblan la escena, así como de la creación de otros elementos como una jarra que se pudiera romper (y arreglar) durante la opera, hasta componer el ambiente degradado que pedía el montaje.",
-          "reelPosition": "bottom"
         }
       ]
+    }
+  },
+  "header": {
+    "brand": "Nerea González",
+    "accent": "López",
+    "links": [
+      {
+        "label": "Inicio",
+        "href": "index.html"
+      },
+      {
+        "label": "Ilustración",
+        "href": "ilustracion.html"
+      },
+      {
+        "label": "Escultura",
+        "href": "escultura.html"
+      },
+      {
+        "label": "Teatro",
+        "href": "teatro.html"
+      },
+      {
+        "label": "Sobre mí",
+        "href": "index.html#sobre-mi"
+      },
+      {
+        "label": "Descargas",
+        "href": "index.html#descargas"
+      },
+      {
+        "label": "Contacto",
+        "href": "index.html#contacto"
+      }
+    ]
+  },
+  "footer": {
+    "aboutTitle": "SOBRE MÍ",
+    "about": "Soy Nerea González López, artista y diseñadora especializada en ilustración y escultura. Este portfolio reúne mi trabajo en las tres disciplinas que me definen.",
+    "portfolioTitle": "PORTFOLIO",
+    "portfolio": [
+      {
+        "label": "Ilustración",
+        "href": "ilustracion.html"
+      },
+      {
+        "label": "Escultura",
+        "href": "escultura.html"
+      },
+      {
+        "label": "Teatro",
+        "href": "teatro.html"
+      },
+      {
+        "label": "CV y portfolios en PDF",
+        "href": "index.html#descargas"
+      }
+    ],
+    "contactTitle": "CONTACTO",
+    "rights": "Todos los derechos reservados."
+  },
+  "home": {
+    "title": "Nerea González",
+    "accent": "López",
+    "tagline": "Ilustración · Escultura · Teatro",
+    "downloads": {
+      "eyebrow": "Descarga directa",
+      "title": "Currículums y portfolios",
+      "text": "Todo el material en PDF, listo para descargar: el CV de ilustración junto a su portfolio y el CV de escultura junto al suyo."
+    },
+    "references": {
+      "eyebrow": "Han trabajado conmigo",
+      "title": "Referencias"
+    },
+    "contact": {
+      "eyebrow": "Hablemos",
+      "title": "Contacto"
     }
   }
 };

@@ -205,11 +205,17 @@
         host.appendChild(el('h4', 'ng-panel-title', 'Elementos generales'));
         var quick = el('div', 'ng-quick');
         var extras = [
+            { path: 'header', label: 'Cabecera y menú', icon: 'bi-menu-button-wide' },
+            { path: 'footer', label: 'Pie de página', icon: 'bi-layout-text-window-reverse' },
             { path: 'site.theme', label: 'Diseño global', icon: 'bi-palette2' },
             { path: 'site', label: 'Datos de contacto', icon: 'bi-envelope' }
         ];
-        if (page === 'home') extras.push({ path: 'about', label: 'Sobre mí', icon: 'bi-person' });
-        else extras.unshift({ path: 'pages.' + page, label: 'Ajustes de la página', icon: 'bi-sliders' });
+        if (page === 'home') {
+            extras.unshift({ path: 'home', label: 'Titular de portada', icon: 'bi-house' });
+            extras.push({ path: 'about', label: 'Sobre mí', icon: 'bi-person' });
+        } else {
+            extras.unshift({ path: 'pages.' + page, label: 'Ajustes de la página', icon: 'bi-sliders' });
+        }
 
         extras.forEach(function (entry) {
             var row = el('button', 'ng-layer' + (entry.path === selected ? ' is-on' : ''),

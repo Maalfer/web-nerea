@@ -467,6 +467,13 @@
             ],
             blank: { value: '', label: '' }
         },
+        navLinks: {
+            columns: [
+                { key: 'label', label: 'Texto', type: 'text' },
+                { key: 'href', label: 'Enlace', type: 'text', placeholder: 'teatro.html' }
+            ],
+            blank: { label: 'Nuevo enlace', href: 'index.html' }
+        },
         pageIndex: {
             columns: [
                 { key: 'label', label: 'Texto', type: 'text' },

@@ -8,9 +8,43 @@
         { label: 'Teatro', href: 'teatro.html', key: 'teatro' },
         { label: 'Sobre mí', href: 'index.html#sobre-mi', key: '' },
         { label: 'Descargas', href: 'index.html#descargas', key: '' },
-        { label: 'Contacto', href: 'index.html#contacto', key: '' },
-        { label: 'Acceder', href: 'login.html', key: 'login', id: 'nav-account' }
+        { label: 'Contacto', href: 'index.html#contacto', key: '' }
     ];
+
+    var FOOTER = {
+        aboutTitle: 'SOBRE MÍ',
+        about: 'Soy Nerea González López, artista y diseñadora especializada en ilustración y ' +
+            'escultura. Este portfolio reúne mi trabajo en las tres disciplinas que me definen.',
+        portfolioTitle: 'PORTFOLIO',
+        portfolio: [
+            { label: 'Ilustración', href: 'ilustracion.html' },
+            { label: 'Escultura', href: 'escultura.html' },
+            { label: 'Teatro', href: 'teatro.html' },
+            { label: 'CV y portfolios en PDF', href: 'index.html#descargas' }
+        ],
+        contactTitle: 'CONTACTO',
+        rights: 'Todos los derechos reservados.'
+    };
+
+    function handleOf(url) {
+        var name = String(url || '').replace(/\/+$/, '').split('/').pop();
+        return name ? '@' + name : '';
+    }
+
+    function escape(text) {
+        return String(text == null ? '' : text)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function settings(key, fallback) {
+        var value = (window.CONTENT || {})[key];
+        return value && typeof value === 'object' ? value : fallback;
+    }
+
+    function stamp(path) {
+        return window.NG_EDIT ? ' data-ng-path="' + path + '"' : '';
+    }
 
     function currentKey() {
         var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -23,54 +57,81 @@
 
     function header() {
         var active = currentKey();
-        var links = NAV.map(function (item) {
-            var cls = 'nav-link' + (item.key && item.key === active ? ' active' : '');
-            var id = item.id ? ' id="' + item.id + '"' : '';
-            return '<li><a class="' + cls + '"' + id + ' href="' + item.href + '">' + item.label + '</a></li>';
+        var config = settings('header', {});
+        var items = Array.isArray(config.links) && config.links.length ? config.links : NAV;
+
+        var links = items.map(function (item) {
+            var key = item.key != null ? item.key : keyForHref(item.href);
+            var cls = 'nav-link' + (key && key === active ? ' active' : '');
+            return '<li><a class="' + cls + '" href="' + escape(item.href) + '">' +
+                escape(item.label) + '</a></li>';
         }).join('');
 
+        links += '<li><a class="nav-link' + (active === 'login' ? ' active' : '') +
+            '" id="nav-account" href="login.html">Acceder</a></li>';
+
+        var brand = config.brand != null ? config.brand : 'Nerea González';
+        var accent = config.accent != null ? config.accent : 'López';
+
         return '' +
-            '<header class="site-header" id="site-header">' +
+            '<header class="site-header" id="site-header"' + stamp('header') + '>' +
             '  <nav aria-label="Navegación principal">' +
-            '    <a class="brand" href="index.html">Nerea González <span>López</span></a>' +
+            '    <a class="brand" href="index.html">' + escape(brand) +
+            ' <span>' + escape(accent) + '</span></a>' +
             '    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>' +
             '    <ul class="nav-list" id="nav-list">' + links + '</ul>' +
             '  </nav>' +
             '</header>';
     }
 
+    function keyForHref(href) {
+        var file = String(href || '').split('#')[0].toLowerCase();
+        if (file.indexOf('ilustracion') === 0) return 'ilustracion';
+        if (file.indexOf('escultura') === 0) return 'escultura';
+        if (file.indexOf('teatro') === 0) return 'teatro';
+        if (file.indexOf('index') === 0 && String(href).indexOf('#') === -1) return 'home';
+        return '';
+    }
+
     function footer(site) {
+        var config = settings('footer', {});
+        var about = config.about != null ? config.about : FOOTER.about;
+        var links = Array.isArray(config.portfolio) && config.portfolio.length
+            ? config.portfolio : FOOTER.portfolio;
+        var rights = config.rights != null ? config.rights : FOOTER.rights;
+
+        var portfolio = links.map(function (item) {
+            return '<li><a href="' + escape(item.href) + '">' + escape(item.label) + '</a></li>';
+        }).join('');
+
         return '' +
-            '<footer class="footer">' +
+            '<footer class="footer"' + stamp('footer') + '>' +
             '  <div class="footer-overlay"></div>' +
             '  <div class="footer-grid">' +
             '    <div class="footer-col">' +
-            '      <h2>SOBRE MÍ</h2>' +
-            '      <p>Soy Nerea González López, artista y diseñadora especializada en ilustración y escultura. Este portfolio reúne mi trabajo en las tres disciplinas que me definen.</p>' +
+            '      <h2>' + escape(config.aboutTitle != null ? config.aboutTitle : FOOTER.aboutTitle) + '</h2>' +
+            '      <p>' + escape(about) + '</p>' +
             '    </div>' +
             '    <div class="footer-col">' +
-            '      <h2>PORTFOLIO</h2>' +
-            '      <ul>' +
-            '        <li><a href="ilustracion.html">Ilustración</a></li>' +
-            '        <li><a href="escultura.html">Escultura</a></li>' +
-            '        <li><a href="teatro.html">Teatro</a></li>' +
-            '        <li><a href="index.html#descargas">CV y portfolios en PDF</a></li>' +
-            '      </ul>' +
+            '      <h2>' + escape(config.portfolioTitle != null ? config.portfolioTitle : FOOTER.portfolioTitle) + '</h2>' +
+            '      <ul>' + portfolio + '</ul>' +
             '    </div>' +
             '    <div class="footer-col">' +
-            '      <h2>CONTACTO</h2>' +
+            '      <h2>' + escape(config.contactTitle != null ? config.contactTitle : FOOTER.contactTitle) + '</h2>' +
             '      <ul>' +
-            '        <li><a href="mailto:' + site.email + '">' + site.email + '</a></li>' +
-            '        <li><a href="tel:+34689040797">+34 689 040 797</a></li>' +
-            '        <li><a href="' + site.instagram + '" target="_blank" rel="noopener">@ren_d_vincent</a></li>' +
-            '        <li><a href="' + site.linkedin + '" target="_blank" rel="noopener">LinkedIn</a></li>' +
+            '        <li><a href="mailto:' + escape(site.email) + '">' + escape(site.email) + '</a></li>' +
+            '        <li><a href="tel:' + escape(String(site.phone || '').replace(/\s+/g, '')) + '">' +
+            escape(site.phone) + '</a></li>' +
+            '        <li><a href="' + escape(site.instagram) + '" target="_blank" rel="noopener">' +
+            escape(handleOf(site.instagram)) + '</a></li>' +
+            '        <li><a href="' + escape(site.linkedin) + '" target="_blank" rel="noopener">LinkedIn</a></li>' +
             '      </ul>' +
             '    </div>' +
             '  </div>' +
             '  <div class="footer-bottom">' +
-            '    <p>&copy; ' + new Date().getFullYear() + ' Nerea González López — Todos los derechos reservados. ' +
+            '    <p>&copy; ' + new Date().getFullYear() + ' ' + escape(site.name) + ' — ' + escape(rights) + ' ' +
             '    Diseñado por <a href="https://www.linkedin.com/in/maalfer1" target="_blank" rel="noopener">Mario Álvarez</a>' +
-            '    &amp; <a href="' + site.linkedin + '" target="_blank" rel="noopener">Nerea González</a></p>' +
+            '    &amp; <a href="' + escape(site.linkedin) + '" target="_blank" rel="noopener">Nerea González</a></p>' +
             '  </div>' +
             '</footer>';
     }

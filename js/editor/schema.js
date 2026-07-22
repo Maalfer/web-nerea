@@ -441,6 +441,58 @@
             }
         },
 
+        header: {
+            label: 'Cabecera y menú',
+            icon: 'bi-menu-button-wide',
+            hint: 'El nombre de arriba y los enlaces del menú, en todas las páginas. ' +
+                'El botón «Acceder» se añade solo.',
+            fields: [
+                { key: 'brand', label: 'Nombre', type: 'text' },
+                { key: 'accent', label: 'Parte en dorado', type: 'text' },
+                { key: 'links', label: 'Enlaces del menú', type: 'navLinks' }
+            ],
+            inline: { brand: '.brand' }
+        },
+
+        footer: {
+            label: 'Pie de página',
+            icon: 'bi-layout-text-window-reverse',
+            hint: 'Las tres columnas del final. Los datos de contacto salen de «Datos de contacto».',
+            fields: [
+                { key: 'aboutTitle', label: 'Título de la 1ª columna', type: 'text' },
+                { key: 'about', label: 'Texto de presentación', type: 'textarea' },
+                { key: 'portfolioTitle', label: 'Título de la 2ª columna', type: 'text' },
+                { key: 'portfolio', label: 'Enlaces del portfolio', type: 'navLinks' },
+                { key: 'contactTitle', label: 'Título de la 3ª columna', type: 'text' },
+                { key: 'rights', label: 'Aviso de derechos', type: 'text',
+                    hint: 'El año se pone solo cada 1 de enero.' }
+            ]
+        },
+
+        home: {
+            label: 'Portada',
+            icon: 'bi-house',
+            hint: 'El titular grande de la página de inicio.',
+            fields: [
+                { key: 'title', label: 'Titular', type: 'text' },
+                { key: 'accent', label: 'Parte en dorado', type: 'text' },
+                { key: 'tagline', label: 'Lema', type: 'text' }
+            ],
+            inline: { tagline: 'p' }
+        },
+
+        homeHead: {
+            label: 'Encabezado de sección',
+            icon: 'bi-textarea-t',
+            hint: 'Antetítulo, título y descripción de este bloque de la portada.',
+            fields: [
+                { key: 'eyebrow', label: 'Antetítulo', type: 'text' },
+                { key: 'title', label: 'Título', type: 'text' },
+                { key: 'text', label: 'Descripción', type: 'textarea' }
+            ],
+            inline: { eyebrow: '.eyebrow', title: 'h2', text: 'p' }
+        },
+
         theme: {
             label: 'Diseño global',
             icon: 'bi-palette2',
@@ -498,6 +550,10 @@
     };
 
     function kindForPath(path) {
+        if (path === 'header') return 'header';
+        if (path === 'footer') return 'footer';
+        if (path === 'home') return 'home';
+        if (/^home\.(downloads|references|contact)$/.test(path)) return 'homeHead';
         if (path === 'site.theme') return 'theme';
         if (path === 'site') return 'site';
         if (path === 'about') return 'about';
@@ -518,6 +574,7 @@
         /** True for elements that live alone: they cannot be moved, copied or deleted. */
         singleton: function (path) {
             return path === 'site' || path === 'site.theme' || path === 'about' ||
+                path === 'header' || path === 'footer' || path.indexOf('home') === 0 ||
                 /^pages\.[a-z-]+$/.test(path);
         },
 
